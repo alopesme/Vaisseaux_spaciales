@@ -10,7 +10,7 @@ Main.o: Main.c Test.h Monde.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
 
 Deplacement.o: Deplacement.c Deplacement.h
 
-Monde.o: Monde.c Monde.h
+Monde.o: Monde.c Monde.h Bonus.h
 
 Test.o: Test.c Test.h Monde.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
 
@@ -19,6 +19,8 @@ Tires.o: Tires.c Tires.h
 Vaisseaux.o: Vaisseaux.c Vaisseaux.h Deplacement.h Tires.h Vitesse.h
 
 Vitesse.o: Vitesse.c Vitesse.h
+
+Bonus.o: Bonus.c Bonus.h
 
 clean:
 	rm -f *.o
