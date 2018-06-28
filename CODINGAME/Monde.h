@@ -23,7 +23,7 @@ typedef struct {
 /* Initialise un monde par adresse, avec le vaisseau du joueur + NB_BOTS_DEBUT bots ainsi que 0 bonus. */
 void initialiser_monde(Monde* monde);
 /* Ajoute un vaisseau au monde `monde`. */
-void ajouter_vaisseau_monde(Monde* monde);
+void ajouter_vaisseau_monde(Monde* monde, Vaisseau vaisseau);
 /* Ajoute un bonus au monde `monde`. */
 void ajouter_bonus_monde(Monde* monde, Bonus bonus);
 

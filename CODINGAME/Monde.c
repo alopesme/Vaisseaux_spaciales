@@ -19,9 +19,7 @@ void initialiser_monde(Monde* monde) {
 	monde->nb_bonus = 0;
 }
 
-void ajouter_vaisseau_monde(Monde* monde) {
-	Vaisseau bot_defaut = {nb_vaisseaux, nb_vaisseaux, BOT, STOP, LENT, RIEN};
-
+void ajouter_vaisseau_monde(Monde* monde, Vaisseau vaisseau) {
 	assert(NULL != monde);
 
 	/* Si on a atteint la capacité maximum de vaisseau, on la double. */
@@ -32,7 +30,7 @@ void ajouter_vaisseau_monde(Monde* monde) {
 			exit(EXIT_FAILURE);
 	}
 
-	monde->vaisseaux[monde->nb_vaisseaux] = bot_defaut;
+	monde->vaisseaux[monde->nb_vaisseaux] = vaisseau;
 	monde->nb_vaisseaux += 1;
 }
 
