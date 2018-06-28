@@ -8,6 +8,12 @@ typedef enum {
 	BONUS1,
 	BONUS2,
 	BONUS3,
+} Type_bonus;
+
+typedef struct {
+	int x;
+	int y;
+	Type_bonus type;
 } Bonus;
 
 #endif
