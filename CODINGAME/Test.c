@@ -8,11 +8,12 @@
 #include "Vaisseaux.h"
 #include "Test.h"
 
-int test_allouer_vaisseaux(Vaisseaux *vaisseaux, const int nb_vaisseaux) {
+int test_allouer_vaisseaux(const int nb_vaisseaux) {
+	Vaisseau* vaisseaux = NULL;
 
 	assert(nb_vaisseaux > 0);
 
-	allouer_vaisseaux(nb_vaisseaux, vaisseaux);
+	vaisseaux = allouer_vaisseaux(nb_vaisseaux);
 	afficher_vaisseaux_details(vaisseaux, nb_vaisseaux);
 	libere_vaisseaux(vaisseaux, nb_vaisseaux);
 

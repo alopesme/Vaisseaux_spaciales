@@ -4,6 +4,6 @@
 #ifndef __TEST__
 #define __TEST__
 
-int test_allouer_vaisseaux(Vaisseaux *vaisseaux, const int nb_vaisseaux);
+int test_allouer_vaisseaux(const int nb_vaisseaux);
 
 #endif

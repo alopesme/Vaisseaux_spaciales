@@ -4,6 +4,10 @@
 #ifndef __VAISSEAU__
 #define __VAISSEAU__
 
+#include "Deplacement.h"
+#include "Vitesse.h"
+#include "Tires.h"
+
 typedef enum {
     JOUEUR,
     BOT,
@@ -11,7 +15,6 @@ typedef enum {
     BOSSFINALE
     
 }Type_vaisseau;
-
 
 typedef struct {
 	int x;
@@ -22,29 +25,24 @@ typedef struct {
 	Tires tires;
 }Vaisseau;
 
-typedef struct {
-	Vaisseau *vaisseaux;
-	int nb_vaisseaux;
-}Vaisseaux;
-
 /* Cette fonction sert à afficher un vaisseau.*/
 void afficher_vaisseau(const Type_vaisseau vaisseau);
 
 /* Cette fonction sert à afficher tous les vaisseaux.*/
-void afficher_vaisseaux(const Vaisseaux *vaisseaux, const int nb_vaisseaux);
+void afficher_vaisseaux(const Vaisseau* vaisseaux, const int nb_vaisseaux);
 
 /* Cette fonction affiche tous les details d'un vaisseau.*/
 void afficher_vaisseau_details(const Vaisseau vaisseau);
  
 /* Cette fonction affiche tous les details de tous les vaisseaux.*/
-void afficher_vaisseaux_details(const Vaisseaux *vaisseaux, const int nb_vaisseaux);
+void afficher_vaisseaux_details(const Vaisseau* vaisseaux, const int nb_vaisseaux);
 
 
 /*Cette fonction alloue les vaisseaux.*/
-int allouer_vaisseaux(const int nb_vaisseaux, Vaisseaux *vaisseaux);
+Vaisseau* allouer_vaisseaux(const int nb_vaisseaux);
 
 
 /* Libere les vaisseaux.*/
-void libere_vaisseaux(Vaisseaux *vaisseaux, const int nb_vaisseaux);
+void libere_vaisseaux(Vaisseau* vaisseaux, const int nb_vaisseaux);
 
 #endif
