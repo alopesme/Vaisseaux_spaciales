@@ -10,8 +10,8 @@
 #include <MLV/MLV_all.h>
 
 int main(int argc, char const *argv[]) {
-	Vaisseaux vaisseaux;
 
-	test_allouer_vaisseaux(&vaisseaux, atoi(argv[1]));
+	test_allouer_vaisseaux(atoi(argv[1]));
+	
 	return 0;
 }
