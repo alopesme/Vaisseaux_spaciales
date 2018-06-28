@@ -16,3 +16,24 @@ void afficher_vitesse(Vitesse vi) {
 
 	}
 }
+
+
+int mutiple_vitesse(const Vitesse *vi, int *mut) {
+	int var = 1;
+	assert(NULL != vi);
+	assert(NULL != mut);
+
+	switch (*vi) {
+		case RALENTI_TEMPS : var = 2; break;
+
+		case LENT : *mut *= LENT; break;
+
+		case MOYEN : *mut *= MOYEN; break;
+
+		case RAPIDE : *mut *= RAPIDE; break;
+
+		default : var = 0; break;
+	}
+
+	return var;
+}
