@@ -8,13 +8,19 @@ void initialiser_monde(Monde* monde) {
 	assert(NULL != monde);
 	assert(BLOC_VAISSEAUX > NB_BOTS_DEBUT);
 
+	/* Allocation du tableau de vaisseaux. */
 	monde->vaisseaux = allouer_vaisseaux(BLOC_VAISSEAUX);
 	monde->nb_vaisseaux_max = BLOC_VAISSEAUX;
 	monde->nb_vaisseaux = 1 + NB_BOTS_DEBUT;
 
+	/* Allocation du tableau de bonus. */
 	monde->bonus = allouer_bonus(BLOC_BONUS);
 	monde->nb_bonus_max = BLOC_BONUS;
 	monde->nb_bonus = 0;
+
+	/* Définition des dimensions de la fenêtre. */
+	monde->largeur_fenetre = LARGEUR_FENETRE_INI;
+	monde->hauteur_fenetre = HAUTEUR_FENETRE_INI;
 }
 
 void afficher_monde_details(Monde monde) {

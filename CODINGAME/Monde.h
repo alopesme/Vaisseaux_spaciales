@@ -10,14 +10,20 @@
 #define NB_BOTS_DEBUT 0
 #define BLOC_VAISSEAUX 16 /* Bloc de mémoire alloué au début pour les vaisseaux. */
 #define BLOC_BONUS 8 /* Bloc de mémoire alloué au début pour les bonus. */
+#define LARGEUR_FENETRE_INI 800
+#define HAUTEUR_FENETRE_INI 600
 
 typedef struct {
 	Vaisseau* vaisseaux;
 	int nb_vaisseaux;
 	int nb_vaisseaux_max;
+
 	Bonus* bonus;
 	int nb_bonus;
 	int nb_bonus_max;
+
+	int largeur_fenetre;
+	int hauteur_fenetre;
 } Monde;
 
 /* Initialise un monde par adresse, avec le vaisseau du joueur + NB_BOTS_DEBUT bots ainsi que 0 bonus. */
