@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wfatal-errors -O3
-OBJ = Main.o Deplacement.o  Monde.o  Test.o  Tires.o  Vaisseaux.o  Vitesse.o
+OBJ = Main.o Deplacement.o  Monde.o  Test.o  Tires.o  Vaisseaux.o  Vitesse.o Bonus.o
 LDFLAGS = -lMLV
 
 Vaisseaux_spaciales: $(OBJ)

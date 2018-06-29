@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "Bonus.h"
 #include "Monde.h"
 
 void initialiser_monde(Monde* monde) {
@@ -8,15 +9,22 @@ void initialiser_monde(Monde* monde) {
 	assert(BLOC_VAISSEAUX > NB_BOTS_DEBUT);
 
 	monde->vaisseaux = allouer_vaisseaux(BLOC_VAISSEAUX);
+	monde->nb_vaisseaux_max = BLOC_VAISSEAUX;
 	monde->nb_vaisseaux = 1 + NB_BOTS_DEBUT;
 
-	monde->bonus = (Bonus*)malloc(sizeof(Bonus) * BLOC_BONUS);
-	if (monde->bonus == NULL) {
-		printf("Malloc rate \t\tinitialiser_monde -> bonus\n");
-		exit(EXIT_FAILURE);
-	}
-
+	monde->bonus = allouer_bonus(BLOC_BONUS);
+	monde->nb_bonus_max = BLOC_BONUS;
 	monde->nb_bonus = 0;
+}
+
+void afficher_monde_details(Monde monde) {
+	printf("Adresse du tableau de vaisseau : %p\n", monde.vaisseaux);
+	printf("Nombre de vaisseaux : %d\n", monde.nb_vaisseaux);
+	printf("Capacité max de vaisseaux : %d\n", monde.nb_vaisseaux_max);
+	printf("----------------\n");
+	printf("Adresse du tableau de bonus : %p\n", monde.bonus);
+	printf("Nombre de bonus : %d\n", monde.nb_bonus);
+	printf("Capacité max de bonus : %d\n", monde.nb_bonus_max);
 }
 
 void ajouter_vaisseau_monde(Monde* monde, Vaisseau vaisseau) {
