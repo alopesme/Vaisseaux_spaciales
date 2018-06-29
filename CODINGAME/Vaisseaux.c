@@ -6,7 +6,7 @@
 #include "Deplacement.h"
 #include "Vaisseaux.h"
 
-void afficher_vaisseau(const Type_vaisseau vaisseau) {
+void afficher_vaisseau_debug(const Type_vaisseau vaisseau) {
 
     switch(vaisseau) {
 
@@ -42,7 +42,7 @@ void afficher_vaisseaux_details(const Vaisseau* vaisseaux, const int nb_vaisseau
     
 }
 
-void afficher_vaisseaux(const Vaisseau* vaisseaux, const int nb_vaisseaux) {
+void afficher_vaisseaux_debug(const Vaisseau* vaisseaux, const int nb_vaisseaux) {
      int i;
      assert(nb_vaisseaux > 0);
      assert(NULL != vaisseaux);
