@@ -30,6 +30,16 @@ void init_coord_tir(const int x, const int y, Coord_Tir *coord_t) {
 
 }
 
+int init_tirs(Tirs *tirs, const int nb_tires) {
+    assert(NULL != nb_tires);
+
+    if (NULL == (tirs = (Tirs*)malloc(sizeof(Tirs) * nb_tires))) {
+        printf("Malloc rate init_tirs\n");
+        exit(EXIT_FAILURE);
+    }
+    return 1;
+}
+
 int calculer_tir(Coord_Tir *coord_t, const int xf_t, const int yf_t) {
     float a, b;
     assert(NULL != coord_t);
@@ -46,5 +56,10 @@ int calculer_tir(Coord_Tir *coord_t, const int xf_t, const int yf_t) {
 
     coord_t->tir_x = (coord_t->tir_y - b) / a;
     return 1;
+}
 
+void libere_tirs(Tirs *tirs) {
+    assert(NULL != tirs);
+    free(tirs);
+    tirs = NULL;
 }
