@@ -25,6 +25,7 @@ typedef struct {
 	Deplacement dep;
 	Vitesse vi;
 	Tir tir;
+	int vie;
 }Vaisseau;
 
 /* Cette fonction sert à afficher un vaisseau.*/
@@ -44,6 +45,9 @@ Vaisseau* allouer_vaisseaux(const int nb_vaisseaux);
 
 /* Libere les vaisseaux.*/
 void libere_vaisseaux(Vaisseau* vaisseaux, const int nb_vaisseaux);
+
+/* Renvoie 1 si le vaisseau peut se déplacer dans sa direction. */
+int peux_se_deplacer(Vaisseau* vaisseau, int largeur_fenetre, int hauteur_fenetre);
 
 /* Déplace le vaisseau d'un cran en fonction de sa vitesse et de sa direction. */
 void deplacer_vaisseau(Vaisseau* vaisseau);

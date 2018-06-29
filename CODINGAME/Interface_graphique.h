@@ -2,6 +2,7 @@
 #define __INTERFACE_GRAPHIQUE__
 
 #include "Vaisseaux.h"
+#include "Monde.h"
 
 #define LARGEUR_VAISSEAU 0.07
 #define HAUTEUR_VAISSEAU 0.15
@@ -13,5 +14,8 @@ void afficher_background();
 
 /* Affiche le vaisseau à l'écran dont le point (x, y) correspond au centre du vaisseau. */
 void afficher_vaisseau(Vaisseau vaisseau, int largeur_fenetre, int hauteur_fenetre, int x, int y);
+
+/* Affiche tous les vaisseaux du monde. */
+void afficher_vaisseaux(Monde* monde);
 
 #endif
