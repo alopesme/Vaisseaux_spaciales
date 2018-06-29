@@ -1,6 +1,8 @@
 /* Auteurs: LOPES MENDES Ailton
+			Lin Gerald
+			Wadan Samy
 *  Creation: 26/06/2018
-*  Modification: 27/06/2018*/
+*  Modification: 28/06/2018*/
 #ifndef __VAISSEAU__
 #define __VAISSEAU__
 
@@ -22,7 +24,7 @@ typedef struct {
 	Type_vaisseau vaisseau;
 	Deplacement dep;
 	Vitesse vi;
-	Tires tires;
+	Tir tir;
 }Vaisseau;
 
 /* Cette fonction sert à afficher un vaisseau.*/

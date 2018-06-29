@@ -27,7 +27,7 @@ void afficher_vaisseau_details(const Vaisseau vaisseau) {
     afficher_vaisseau(vaisseau.vaisseau);
     afficher_deplacement(vaisseau.dep);
     afficher_vitesse(vaisseau.vi);
-    afficher_tires(vaisseau.tires);
+    afficher_tir(vaisseau.tir);
     printf("\n");
     
 }
