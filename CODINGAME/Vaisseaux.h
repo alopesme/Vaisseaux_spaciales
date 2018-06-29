@@ -21,7 +21,7 @@ typedef enum {
 typedef struct {
 	int x;
 	int y;
-	Type_vaisseau vaisseau;
+	Type_vaisseau type;
 	Deplacement dep;
 	Vitesse vi;
 	Tir tir;
