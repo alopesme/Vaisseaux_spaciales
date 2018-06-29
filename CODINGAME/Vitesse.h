@@ -5,10 +5,10 @@
 #define __VITESSE__
 
 typedef enum {
-	RALENTI_TEMPS = 0,
-	LENT = 1,
-	MOYEN = 2,
-	RAPIDE = 3
+	TRES_LENT = 1,
+	LENT = 3,
+	MOYEN = 5,
+	RAPIDE = 7
 }Vitesse;
 
 /* Cette fonction sert à afficher la vitesse.*/
