@@ -10,7 +10,7 @@ Main.o: Main.c Test.h Monde.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h Interf
 
 Deplacement.o: Deplacement.c Deplacement.h
 
-Monde.o: Monde.c Monde.h Bonus.h Vaisseaux.h Deplacement.h Tires.h Vitesse.h
+Monde.o: Monde.c Monde.h Bonus.h Vaisseaux.h
 
 Test.o: Test.c Test.h Monde.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
 
@@ -22,7 +22,7 @@ Vitesse.o: Vitesse.c Vitesse.h
 
 Bonus.o: Bonus.c Bonus.h
 
-Interface_graphique.o: Interface_graphique.c Interface_graphique.h
+Interface_graphique.o: Interface_graphique.c Interface_graphique.h Vaisseaux.h
 
 clean:
 	rm -f *.o

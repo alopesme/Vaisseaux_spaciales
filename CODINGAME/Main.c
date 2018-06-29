@@ -8,7 +8,7 @@
 #include "Vaisseaux.h"
 #include "Monde.h"
 #include "Test.h"
-#include "interface_graphique.h"
+#include "Interface_graphique.h"
 #include <MLV/MLV_all.h>
 
 int main(int argc, char const *argv[]) {
@@ -19,6 +19,7 @@ int main(int argc, char const *argv[]) {
 	MLV_create_window("Wesh zoulette", "Bien ou quoi", monde.largeur_fenetre, monde.hauteur_fenetre);
 
 	afficher_background();
+	afficher_vaisseau(monde.vaisseaux[0], monde.largeur_fenetre, monde.hauteur_fenetre, monde.largeur_fenetre/2, monde.hauteur_fenetre*0.8);
 
 	MLV_actualise_window();
 	MLV_wait_mouse(NULL, NULL);
