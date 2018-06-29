@@ -6,4 +6,6 @@
 
 int test_allouer_vaisseaux(const int nb_vaisseaux);
 
+int test_tirs(const int x, const int y);
+
 #endif

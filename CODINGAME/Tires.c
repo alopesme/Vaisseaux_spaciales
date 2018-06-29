@@ -20,24 +20,51 @@ void afficher_tir(Tir t) {
     }
 }
 
+void afficher_coord_tir(Coord_Tir coord_t) {
+    printf("d_x : %d // d_y : %d\n", coord_t.d_x, coord_t.d_y);
+    printf("tir_x : %f // tir_y : %f\n\n", coord_t.tir_x, coord_t.tir_y);
+}
+
+void afficher_tirs(Tirs *tirs) {
+    int i;
+    for (i = 0; i < NB_TIRES_DEF; ++i) {
+        afficher_tir(tirs[i].tir);
+
+        if (tirs[i].tir != 0) {
+            afficher_coord_tir(tirs[i].coord_t);
+        }
+
+    }
+}
+
 void init_coord_tir(const int x, const int y, Coord_Tir *coord_t) {
     assert(x >= 0);
     assert(y >= 0);
     assert(NULL != coord_t);
 
-    coord_t->d_x = coord_t->tir_x = (float)x;
-    coord_t->d_y = coord_t->tir_y = (float)y;
+    coord_t->tir_x = (float)x;
+    coord_t->d_x = x;
+    coord_t->tir_y = (float)y;
+    coord_t->d_y = y;
 
 }
 
-int init_tirs(Tirs *tirs, const int nb_tires) {
-    assert(NULL != nb_tires);
+Tirs* init_tirs(const Tir tir, const int x, const int y) {
+    int j;
+    Tirs *tirs = NULL;
+    assert(x >= 0);
+    assert(y >= 0);
 
-    if (NULL == (tirs = (Tirs*)malloc(sizeof(Tirs) * nb_tires))) {
+    if (NULL == (tirs = (Tirs*)malloc(sizeof(Tirs) * NB_TIRES_DEF))) {
         printf("Malloc rate init_tirs\n");
         exit(EXIT_FAILURE);
     }
-    return 1;
+    for (j = 0; j < NB_TIRES_DEF; ++j) {
+        tirs[j].tir = tir;
+        init_coord_tir(x, y, &(tirs[j].coord_t));    
+    }
+
+    return tirs;
 }
 
 int calculer_tir(Coord_Tir *coord_t, const int xf_t, const int yf_t) {

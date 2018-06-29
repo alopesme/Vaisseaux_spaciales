@@ -19,3 +19,14 @@ int test_allouer_vaisseaux(const int nb_vaisseaux) {
 
 	return 1;
 }
+
+int test_tirs(const int x, const int y) {
+	Tirs *tirs;
+	assert(x >= 0);
+	assert(y >= 0);
+
+	tirs = init_tirs(SIMPLE, x, y);
+	afficher_tirs(tirs);
+	libere_tirs(tirs);
+	return 1;
+}
