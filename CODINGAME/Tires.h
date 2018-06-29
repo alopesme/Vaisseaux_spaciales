@@ -18,9 +18,10 @@ typedef enum {
 }Tir;
 
 typedef struct {
-    
-    int tir_x;
-    int tir_y;
+   	int d_x;
+   	int d_y;
+    float tir_x;
+    float tir_y;
     
 }Coord_Tir;
 
@@ -30,9 +31,9 @@ void afficher_tir(Tir t);
 /* Initialise les variables dans `coord_t`*/
 void init_coord_tir(const int x, const int y, Coord_Tir *coord_t);
 
-/* Sert à calculer les coordonnees du tir.
- * Elles vont dependre de `xf_t` et `ỳf_t`.
- * Tout d'abord elle calcule jusqu'aux `limite_x` et `limite_y` par rapport à `xf_t` et `yf_t`.*/
-int calculer_tir(Coord_Tir *coord_t, const int xf_t, const int yf_t, const int limite_x, const int limite_y);
+/* Calculer l'équation de la droite `ỳ=ax+b`.
+ * Obtient `a` et `b` decale les tir_x et tir_y de 1.
+ * Recalcule tir_x et tir_y.*/
+int calculer_tir(Coord_Tir *coord_t, const int xf_t, const int yf_t);
 
 #endif

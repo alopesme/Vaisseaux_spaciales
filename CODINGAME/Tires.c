@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <math.h>
 #include "Tires.h"
 
 void afficher_tir(Tir t) {
@@ -24,27 +25,26 @@ void init_coord_tir(const int x, const int y, Coord_Tir *coord_t) {
     assert(y >= 0);
     assert(NULL != coord_t);
 
-    coord_t->tir_x = x;
-    coord_t->tir_y = y;
+    coord_t->d_x = coord_t->tir_x = (float)x;
+    coord_t->d_y = coord_t->tir_y = (float)y;
 
 }
 
-int calculer_tir(Coord_Tir *coord_t, const int xf_t, const int yf_t, const int limite_x, const int limite_y) {
-    int cond1, cond2, d_x, d_y;
+int calculer_tir(Coord_Tir *coord_t, const int xf_t, const int yf_t) {
+    float a, b;
     assert(NULL != coord_t);
     assert(xf_t >= 0);
     assert(yf_t >= 0);
 
-    d_x = coord_t->tir_x;
-    d_y = coord_t->tir_y;
-    cond1 = coord_t->tir_x > 0 && coord_t->tir_x < limite_x;
-    cond2 = coord_t->tir_y > 0 && coord_t->tir_y < limite_y;
+    a = (float)((yf_t - coord_t->tir_y) / (xf_t - coord_t->tir_x));
+    b = (coord_t->tir_y - a * coord_t->tir_x);
 
-    while (cond1 && cond2) {
-        (d_x < xf_t ? --coord_t->tir_x : ++coord_t->tir_x);
-        (d_y < yf_t ? --coord_t->tir_y : ++coord_t->tir_y);
-   }
+    coord_t->tir_x = (coord_t->d_x < xf_t ? coord_t->tir_x + 1 : coord_t->tir_x - 1);
+    coord_t->tir_y = (coord_t->d_y < yf_t ? coord_t->tir_y + 1 : coord_t->tir_y - 1);
 
-   return 1;
+    coord_t->tir_y = a * coord_t->tir_x + b;
+
+    coord_t->tir_x = (coord_t->tir_y - b) / a;
+    return 1;
 
 }
