@@ -24,7 +24,7 @@ void afficher_vaisseau(const Type_vaisseau vaisseau) {
 
 void afficher_vaisseau_details(const Vaisseau vaisseau) {
     printf("[x : %d // y : %d] ", vaisseau.x, vaisseau.y);
-    afficher_vaisseau(vaisseau.vaisseau);
+    afficher_vaisseau(vaisseau.type);
     afficher_deplacement(vaisseau.dep);
     afficher_vitesse(vaisseau.vi);
     afficher_tir(vaisseau.tir);
@@ -48,7 +48,7 @@ void afficher_vaisseaux(const Vaisseau* vaisseaux, const int nb_vaisseaux) {
      assert(NULL != vaisseaux);
 
      for (i = 0; i < nb_vaisseaux; ++i) {
-        afficher_vaisseau(vaisseaux[i].vaisseau);
+        afficher_vaisseau(vaisseaux[i].type);
         printf("\n");
     }
 }
