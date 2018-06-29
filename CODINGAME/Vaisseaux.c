@@ -87,3 +87,24 @@ void libere_vaisseaux(Vaisseau* vaisseaux, const int nb_vaisseaux) {
     vaisseaux = NULL;
 
 }
+
+void deplacer_vaisseau(Vaisseau* vaisseau) {
+    assert(NULL != vaisseau);
+
+    switch ( vaisseau->dep ) {
+        case NORD:
+            vaisseau->y -= vaisseau->vi;
+            break;
+        case EST:
+            vaisseau->x += vaisseau->vi;
+            break;
+        case SUD:
+            vaisseau->y += vaisseau->vi;
+            break;
+        case OUEST:
+            vaisseau->x -= vaisseau->vi;
+            break;
+        default:
+            break;
+    }
+}
