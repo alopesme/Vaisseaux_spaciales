@@ -28,10 +28,10 @@ typedef struct {
 }Vaisseau;
 
 /* Cette fonction sert à afficher un vaisseau.*/
-void afficher_vaisseau(const Type_vaisseau vaisseau);
+void afficher_vaisseau_debug(const Type_vaisseau vaisseau);
 
 /* Cette fonction sert à afficher tous les vaisseaux.*/
-void afficher_vaisseaux(const Vaisseau* vaisseaux, const int nb_vaisseaux);
+void afficher_vaisseaux_debug(const Vaisseau* vaisseaux, const int nb_vaisseaux);
 
 /* Cette fonction affiche tous les details d'un vaisseau.*/
 void afficher_vaisseau_details(const Vaisseau vaisseau);
