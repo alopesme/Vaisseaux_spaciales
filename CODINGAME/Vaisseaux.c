@@ -88,27 +88,6 @@ void libere_vaisseaux(Vaisseau* vaisseaux, const int nb_vaisseaux) {
 
 }
 
-int peux_se_deplacer(Vaisseau* vaisseau, int largeur_fenetre, int hauteur_fenetre) {
-    int a;
-
-    assert(NULL != vaisseau);
-
-    switch ( vaisseau->dep ) {
-        case NORD:
-            a = vaisseau->y - vaisseau->vi; /* Pour des raisons très très bizarre, je suis obligé de passer par la variable `a` car si je remplace `a` par `(vaisseau->y - vaisseau->vi)` ca ne marche pas. */
-            return ( 0 <= a );
-        case EST:
-            return ( vaisseau->x + vaisseau->vi <= largeur_fenetre );
-        case SUD:
-            return ( vaisseau->y + vaisseau->vi <= hauteur_fenetre );
-        case OUEST:
-            a = vaisseau->x - vaisseau->vi;
-            return ( 0 <= a );
-        default:
-            return 0;
-    }
-}
-
 void deplacer_vaisseau(Vaisseau* vaisseau) {
     assert(NULL != vaisseau);
 

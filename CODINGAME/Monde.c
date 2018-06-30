@@ -62,3 +62,101 @@ void ajouter_bonus_monde(Monde* monde, Bonus bonus) {
 	monde->bonus[monde->nb_bonus] = bonus;
 	monde->nb_bonus += 1;
 }
+
+int dans_la_carte(Monde* monde, int x, int y) {
+    if ( !( 0 <= x && x <= monde->largeur_fenetre &&
+            0 <= y && y <= monde->hauteur_fenetre ) )
+
+        return 0;
+
+    else
+
+        return 1;
+}
+
+int collision(Monde* monde, int x, int y) {
+    int i;
+
+    for (i = 0; i < monde->nb_vaisseaux; i++) {
+        if ( monde->vaisseaux[i].x == x && monde->vaisseaux[i].y == y )
+            return i;
+    }
+
+    return -1;
+}
+
+void calculer_prochaine_case(Vaisseau* vaisseau, int* x, int* y) {
+    switch ( vaisseau->dep ) {
+        case NORD:
+            *x = vaisseau->x;
+            *y = vaisseau->y - vaisseau->vi;
+            break;
+        case EST:
+            *x = vaisseau->x + vaisseau->vi;
+            *y = vaisseau->y;
+            break;
+        case SUD:
+            *x = vaisseau->x;
+            *y = vaisseau->y + vaisseau->vi;
+            break;
+        case OUEST:
+            *x = vaisseau->x - vaisseau->vi;
+            *y = vaisseau->y;
+            break;
+        default:
+            *x = -1;
+            *y = -1;
+            break;
+    }
+}
+
+int peux_se_deplacer(Monde* monde, int indice_v) {
+    int nouvelles_coords_x, nouvelles_coords_y;
+    int vaisseau_touche;
+    int x, y;
+
+    assert(NULL != monde);
+    assert(indice_v >= 0);
+
+    calculer_prochaine_case( &(monde->vaisseaux[indice_v]), &nouvelles_coords_x, &nouvelles_coords_y );
+
+    /* Si les nouvelles coordonnées sont hors de la carte, on renvoie 0. */
+    if ( !dans_la_carte(monde, nouvelles_coords_x, nouvelles_coords_y) )
+        return 0;
+
+    x = monde->vaisseaux[indice_v].x;
+    y = monde->vaisseaux[indice_v].y;
+
+    /* On regarde si sur le chemin de mouvement du vaisseau, on ne rentre pas en collision avec un autre vaisseau. */
+    if ( x < nouvelles_coords_x ) {
+    	while ( x <= nouvelles_coords_x ) {
+		    vaisseau_touche = collision(monde, x, y);
+		    if ( vaisseau_touche != -1 && vaisseau_touche != indice_v )
+		        return 0;
+		    x += 1;
+    	}
+    } else if ( x > nouvelles_coords_x ) {
+    	while ( x >= nouvelles_coords_x ) {
+		    vaisseau_touche = collision(monde, x, y);
+		    if ( vaisseau_touche != -1 && vaisseau_touche != indice_v )
+		        return 0;
+		    x -= 1;
+    	}
+    } else if ( y < nouvelles_coords_y ) {
+    	while ( y <= nouvelles_coords_y ) {
+		    vaisseau_touche = collision(monde, x, y);
+		    if ( vaisseau_touche != -1 && vaisseau_touche != indice_v )
+		        return 0;
+		    y += 1;
+    	}
+    } else if ( y > nouvelles_coords_y ) {
+    	while ( y >= nouvelles_coords_y ) {
+		    vaisseau_touche = collision(monde, x, y);
+		    if ( vaisseau_touche != -1 && vaisseau_touche != indice_v )
+		        return 0;
+		    y -= 1;
+    	}
+    }
+
+    return 1;
+}
