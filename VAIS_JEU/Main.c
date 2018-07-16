@@ -16,10 +16,11 @@ int main(int argc, char const *argv[]) {
 	
 	/*test_monde(atoi(argv[1]), atoi(argv[2]));
 
-	test_affichage_image(atoi(argv[1]), atoi(argv[1]), "../Images/v_joueur.png");*/
+	test_affichage_image(atoi(argv[1]), atoi(argv[1]), "../Images/v_joueur.png");
 
 	test_rotation_image(atoi(argv[1]), atoi(argv[1]), "../Images/v_joueur.png");
-
+	*/
+	test_un_tir_image(atoi(argv[1]), atoi(argv[1]), "../Images/v_beam.png");
 
 	return 0;
 }
