@@ -13,7 +13,6 @@ Espace commentaire : Tout objet aura une vie, si des objets avec une vie se renc
 					 L'unique tableau qu'on gere sera celui des vaisseaux donc on garde l'indice sinon indice sert à rien.
 */
 
-#define NB_BOTS_DEBUT 0
 #define BLOC_VAISSEAUX 16 /* Bloc de mémoire alloué au début pour les vaisseaux. */
 #define BLOC_BONUS 8 /* Bloc de mémoire alloué au début pour les bonus. */
 
@@ -41,6 +40,9 @@ typedef struct {
 	int taille_x;
 	int taille_y;
 	Element **tab;
+	Vaisseau *vaisseaux;
+	int nb_vaisseaux;
+	int nb_vaisseaux_max;
 }Monde;
 
 
@@ -51,7 +53,8 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
 
 void configure_tir_monde(Monde* monde, Coord_Tir coord_t, Etats etats, Degat degat);
 
-void configure_vaisseau_monde(Monde* monde, Vaisseau vaisseau, Etats etats, const int indice);
+/* Ajoute un vaisseau aux coordonnées (x, y) dont le type et sa vie est donné. */
+void ajouter_vaisseau_monde(Monde* monde, Vaisseau vaisseau, int x, int y, Etats type, int vie);
 
 /* Libere monde.*/
 void libere_monde(Monde* monde);

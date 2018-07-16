@@ -14,9 +14,6 @@ Espace commentaire : Rien modifie
 */
 
 typedef struct {
-	int x;
-	int y;
-	int vie;
 	Deplacement dep;
 	Vitesse vi;
 }Vaisseau;
@@ -32,8 +29,5 @@ Vaisseau* allouer_vaisseaux(const int nb_vaisseaux);
 
 /* Libere les vaisseaux.*/
 void libere_vaisseaux(Vaisseau* vaisseaux, const int nb_vaisseaux);
-
-/* Déplace le vaisseau d'un cran en fonction de sa vitesse et de sa direction. */
-void deplacer_vaisseau(Vaisseau* vaisseau);
 
 #endif

@@ -43,6 +43,10 @@ void initialiser_monde(Monde* monde, const int t_x, const int t_y) {
         }
     }
 
+    monde->vaisseaux = allouer_vaisseaux(BLOC_VAISSEAUX);
+    monde->nb_vaisseaux_max = BLOC_VAISSEAUX;
+    monde->nb_vaisseaux = 1;
+
     monde->taille_x = t_x;
     monde->taille_y = t_y;
 }
@@ -66,18 +70,29 @@ void configure_tir_monde(Monde* monde, Coord_Tir coord_t, Etats etats, Degat deg
         monde->tab[(int)(coord_t.tir_x)][(int)(coord_t.tir_y)].etats = etats;
         monde->tab[(int)(coord_t.tir_x)][(int)(coord_t.tir_y)].indice = -1;
         monde->tab[(int)(coord_t.tir_x)][(int)(coord_t.tir_y)].vie = degat;
-
-
     }
 }
 
-void configure_vaisseau_monde(Monde* monde, Vaisseau vaisseau, Etats etats, const int indice) {
+void ajouter_vaisseau_monde(Monde* monde, Vaisseau vaisseau, int x, int y, Etats type, int vie) {
     assert(NULL != monde);
-    if (etats < BONUS1 && etats > TIR) {
-        monde->tab[vaisseau.x][vaisseau.y].etats = etats;
-        monde->tab[vaisseau.x][vaisseau.y].indice = indice;
-        monde->tab[vaisseau.x][vaisseau.y].vie = vaisseau.vie;
+    assert(x > 0);
+    assert(y > 0);
+    assert(JOUEUR <= type && type <= BOSSFINALE);
+    assert(vie > 0);
+
+    /* Si on a atteint la capacité maximum de vaisseau, on la double. */
+    if ( monde->nb_vaisseaux >= monde->nb_vaisseaux_max ) {
+        monde->nb_vaisseaux_max *= 2;
+        monde->vaisseaux = (Vaisseau*)realloc(monde->vaisseaux, sizeof(Vaisseau) * monde->nb_vaisseaux_max);
+        if ( NULL == monde->vaisseaux )
+            exit(EXIT_FAILURE);
     }
+
+    monde->tab[x][y].etats = type;
+    monde->tab[x][y].vie = vie;
+    monde->tab[x][y].indice = monde->nb_vaisseaux;
+
+    monde->nb_vaisseaux += 1;
 }
 
 void libere_monde(Monde* monde) {
