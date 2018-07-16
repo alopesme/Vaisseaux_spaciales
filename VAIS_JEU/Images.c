@@ -15,12 +15,16 @@ void charger_image(MLV_Image** image, const char* nom_image, const int l_fen, co
 }
 
 void dessiner_image(MLV_Image* image, const int x, const int y, const int largeur) {
+	int largeur_image, hauteur_image;
+
 	assert(NULL != image);
 	assert(x >= 0);
 	assert(y >= 0);
 	assert(largeur >= 0);
 
-	MLV_draw_image(image, x - largeur, y - largeur);
+	MLV_get_image_size(image, &largeur_image, &hauteur_image);
+
+	MLV_draw_image(image, (x - largeur_image/2) - largeur, (y - hauteur_image/2) - largeur);
 }
 
 void dessiner_vaisseau(MLV_Image** image, const char* nom_image, const int l_fen, const int h_fen, const int x, const int y, const int largeur) {
