@@ -5,6 +5,8 @@
 #ifndef __IMAGES__
 #define __IMAGES__
 
+#include <MLV/MLV_all.h>
+
 #define PI 3.14159265
 
 /*
