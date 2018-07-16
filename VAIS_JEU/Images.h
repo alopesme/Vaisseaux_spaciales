@@ -5,8 +5,10 @@
 #ifndef __IMAGES__
 #define __IMAGES__
 
+#define PI 3.14159265
+
 /*
-Espace commentaire : 
+Espace commentaire : Ficher sere a gere images fonction `rotation_vaisseau` pas fini.
 */
 
 /* Cette fois permet de charger l'image et la redimisionner.*/
@@ -16,7 +18,7 @@ void charger_image(MLV_Image** image, const char* nom_image, const int l_fen, co
 void dessiner_image(MLV_Image* image, const int x, const int y, const int largeur);
 
 /* Tourne l'image par rapport à la position de la souris.*/
-void rotation_vaisseau(MLV_Image* image, const int x, const int y);
+void rotation_vaisseau(MLV_Image* image, const int x, const int y, const int largeur);
 
 /*Libere image.*/
 void liberer_image(MLV_Image** image);

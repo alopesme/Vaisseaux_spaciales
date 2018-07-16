@@ -23,16 +23,18 @@ void dessiner_image(MLV_Image* image, const int x, const int y, const int largeu
 	MLV_draw_image(image, x - largeur, y - largeur);
 }
 
-void rotation_vaisseau(MLV_Image* image, const int x, const int y) {
+void rotation_vaisseau(MLV_Image* image, const int x, const int y, const int largeur) {
 	int x_souris, y_souris;
-	double res;
+	double res, val = 180 / PI, yl, xl;
 	assert(NULL != image);
 	assert(x >= 0);
 	assert(y >= 0);
 
 	MLV_get_mouse_position(&x_souris, &y_souris);
-	res = 180;
-	printf("%lf\n", res);
+	yl = (y - y_souris); xl = (x - x_souris);
+	res = atan2(xl, yl) * val;
+
+	printf("[%d %d] [%lf %lf] %lf\n", x_souris, y_souris, xl, yl, res);
 
 	MLV_rotate_image(image, res);
 }

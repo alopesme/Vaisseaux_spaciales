@@ -36,12 +36,14 @@ void test_rotation_image(const int l_fen, const int h_fen, const char* nom_im) {
 	
 	MLV_create_window("rotation_image", "rotation_image", l_fen, h_fen);
 	charger_image(&image, nom_im, l_fen, h_fen);
+	/*while (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) != MLV_PRESSED) {*/
 	afficher_background();
 	MLV_wait_mouse(NULL, NULL);
-	rotation_vaisseau(image, l_fen / 2, h_fen / 2);
-	dessiner_image(image, l_fen / 2, h_fen / 2, 0);
+
+	rotation_vaisseau(image, 400, 400, 400 / 10);
+	dessiner_image(image, 400 , 400, 0);
 	MLV_actualise_window();
-	
+	/*}*/
 
 	MLV_wait_mouse(NULL, NULL);
 	liberer_image(&image);
