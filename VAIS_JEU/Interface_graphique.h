@@ -17,4 +17,7 @@ Espace commentaire : Rien
 /* Affiche le background du jeu. */
 void afficher_background();
 
+/* Cette fonction permet de dessiner le monde*/
+void dessiner_monde(const Monde monde, const int l_fen, const int h_fen);
+
 #endif
