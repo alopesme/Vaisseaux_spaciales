@@ -44,6 +44,7 @@ void initialiser_monde(Monde* monde, const int t_x, const int t_y) {
     }
 
     monde->vaisseaux = allouer_vaisseaux(BLOC_VAISSEAUX);
+    monde->tab[t_x][t_y].indice = 0;
     monde->nb_vaisseaux_max = BLOC_VAISSEAUX;
     monde->nb_vaisseaux = 1;
 
