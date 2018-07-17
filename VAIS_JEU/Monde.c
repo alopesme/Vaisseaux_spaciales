@@ -35,8 +35,8 @@ void initialiser_monde(Monde* monde, const int t_x, const int t_y) {
     assert(t_y > 0);
     
     monde->tab = initialise_tab(t_x, t_y);
-    for (i = 0; i < t_x; ++i) {
-        for (j = 0; j < t_y; ++j) {
+    for (i = 0; i < t_y; ++i) {
+        for (j = 0; j < t_x; ++j) {
             monde->tab[i][j].etats = VIDE;
             monde->tab[i][j].vie = 0;
             monde->tab[i][j].indice = -1;
@@ -54,6 +54,17 @@ void initialiser_monde(Monde* monde, const int t_x, const int t_y) {
     monde->taille_y = t_y;
 }
 
+void afficher_monde_details(Monde monde) {
+    printf("taille_x = %d\n", monde.taille_x);
+    printf("taille_y = %d\n", monde.taille_y);
+    printf("---------------------\n");
+    printf("Adresse tab = %p\n", monde.tab);
+    printf("---------------------\n");
+    printf("Adresse vaisseaux = %p\n", monde.vaisseaux);
+    printf("Nb vaisseaux = %d\n", monde.nb_vaisseaux);
+    printf("capacité vaisseaux = %d\n", monde.nb_vaisseaux_max);
+}
+
 void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie) {
     assert(NULL != monde);
     assert(x > 0);
@@ -67,13 +78,12 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
 
 }
 
-void configure_tir_monde(Monde* monde, Tir tir, Etats etats) {
+void configure_tir_monde(Monde* monde, Coord_Tir coord_t, Etats etats, Degat degat) {
     assert(NULL != monde);
     if (etats == TIR) {
-        monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].etats = etats;
-        monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].indice = -1;
-        monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].vie = tir.degat;
-        monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].tir = tir;
+        monde->tab[(int)(coord_t.tir_y)][(int)(coord_t.tir_x)].etats = etats;
+        monde->tab[(int)(coord_t.tir_y)][(int)(coord_t.tir_x)].indice = -1;
+        monde->tab[(int)(coord_t.tir_y)][(int)(coord_t.tir_x)].vie = degat;
     }
 }
 
@@ -120,19 +130,24 @@ void calculer_prochaine_case_vaisseau(int x, int y, Vaisseau v, int* out_x, int*
     switch ( v.dep ) {
         case NORD:
             *out_x = x;
-            *out_y -= v.vi;
+            *out_y = y - v.vi;
+            break;
         case OUEST:
-            *out_x += v.vi;
+            *out_x = x + v.vi;
             *out_y = y;
+            break;
         case SUD:
             *out_x = x;
-            *out_y += v.vi;
+            *out_y = y + v.vi;
+            break;
         case EST:
-            *out_x -= v.vi;
+            *out_x = x - v.vi;
             *out_y = y;
+            break;
         default:
             *out_x = -1;
             *out_y = -1;
+            break;
     }
 }
 
@@ -145,11 +160,10 @@ int peut_se_deplacer(Monde* monde, int x, int y, int indice_vaisseau) {
 
     /* On vérifie si on ne va pas en hors map. */
     calculer_prochaine_case_vaisseau(x, y, monde->vaisseaux[indice_vaisseau], &nouvelle_case_x, &nouvelle_case_y);
-    if ( nouvelle_case_x < 0 || nouvelle_case_x > monde->taille_x ||
-         nouvelle_case_y < 0 || nouvelle_case_y > monde->taille_y )
+    if ( nouvelle_case_x < 0 || nouvelle_case_x >= monde->taille_x ||
+         nouvelle_case_y < 0 || nouvelle_case_y >= monde->taille_y )
 
         return 0;
-
 
     /* On regarde case par case si il n'y a pas quelque chose qui barre la route du vaisseau. */
     switch ( monde->vaisseaux[indice_vaisseau].dep ) {
