@@ -18,5 +18,8 @@ void test_rotation_image(const int l_fen, const int h_fen, const char* nom_im);
 /* Affiche le tir.*/
 void test_un_tir_image(const int l_fen, const int h_fen, const char* nom_im);
 
+/* Déplace le vaisseau avec les flèches directionnelles. */
+void test_deplacement_vaisseau(const int l_fen, const int h_fen);
+
 
 #endif
