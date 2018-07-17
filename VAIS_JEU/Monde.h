@@ -9,8 +9,7 @@
 #include "Bonus.h"
 
 /*
-Espace commentaire : Tout objet aura une vie, si des objets avec une vie se rencontre ils perdent la vie de l'autre.
-					 L'unique tableau qu'on gere sera celui des vaisseaux donc on garde l'indice sinon indice sert à rien.
+Espace commentaire : Modifie `configure_tir_monde`.
 */
 
 #define BLOC_VAISSEAUX 16 /* Bloc de mémoire alloué au début pour les vaisseaux. */
@@ -32,6 +31,7 @@ typedef enum {
 
 typedef struct {
 	Etats etats;
+	Tir tir;
 	int vie;
 	int indice;
 }Element;
@@ -51,7 +51,7 @@ void initialiser_monde(Monde* monde, const int t_x, const int t_y);
 
 void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie);
 
-void configure_tir_monde(Monde* monde, Coord_Tir coord_t, Etats etats, Degat degat);
+void configure_tir_monde(Monde* monde, Tir tir, Etats etats);
 
 /* Ajoute un vaisseau aux coordonnées (x, y) dont le type et sa vie est donné. */
 void ajouter_vaisseau_monde(Monde* monde, Vaisseau vaisseau, int x, int y, Etats type, int vie);

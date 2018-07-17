@@ -65,12 +65,13 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
 
 }
 
-void configure_tir_monde(Monde* monde, Coord_Tir coord_t, Etats etats, Degat degat) {
+void configure_tir_monde(Monde* monde, Tir tir, Etats etats) {
     assert(NULL != monde);
     if (etats == TIR) {
-        monde->tab[(int)(coord_t.tir_x)][(int)(coord_t.tir_y)].etats = etats;
-        monde->tab[(int)(coord_t.tir_x)][(int)(coord_t.tir_y)].indice = -1;
-        monde->tab[(int)(coord_t.tir_x)][(int)(coord_t.tir_y)].vie = degat;
+        monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].etats = etats;
+        monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].indice = -1;
+        monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].vie = tir.degat;
+        monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].tir = tir;
     }
 }
 
