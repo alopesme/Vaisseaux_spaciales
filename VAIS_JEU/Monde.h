@@ -59,4 +59,13 @@ void ajouter_vaisseau_monde(Monde* monde, Vaisseau vaisseau, int x, int y, Etats
 /* Libere monde.*/
 void libere_monde(Monde* monde);
 
+/* Renvoie par adresse les coordonnées du vaisseau après un déplacement. */
+void calculer_prochaine_case_vaisseau(int x, int y, Vaisseau v, int* out_x, int* out_y);
+
+/* Renvoie 1 si le vaisseau à l'indice `indice_vaisseau` et aux coordonnées (x, y) peut se déplacer dans sa direction et 0 sinon. */
+int peut_se_deplacer(Monde* monde, int x, int y, int indice_vaisseau);
+
+/* Déplace d'un cran le vaisseau situé aux coordonnées (x, y). */
+void deplacer_vaisseau(Monde* monde, int x, int y);
+
 #endif
