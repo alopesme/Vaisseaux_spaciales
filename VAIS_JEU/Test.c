@@ -30,7 +30,7 @@ int test_tirs(const int x, const int y) {
 	return 1;
 }
 
-int test_monde(const int t_x, const int t_y) {
+int test_monde_vide(const int t_x, const int t_y) {
 	Monde mo;
 	int i, j;
 	initialiser_monde(&mo, t_x, t_y);
@@ -45,7 +45,18 @@ int test_monde(const int t_x, const int t_y) {
 	}
 
 	libere_monde(&mo);
-
 	return 1;
+}
 
+int test_monde_tir(const int t_x, const int t_y, const int x_f, const int y_f) {
+	Monde mo;
+	int i = 0;
+	initialiser_monde(&mo, t_x, t_y);
+
+	mo.tab[t_x / 2][t_y].tir = init_tirs(t_x / 2, t_y, x_f, y_f);
+	while (i < 10) {
+		afficher_monde(mo);
+		++i;
+	}
+	return 1;
 }

@@ -35,8 +35,8 @@ void initialiser_monde(Monde* monde, const int t_x, const int t_y) {
     assert(t_y > 0);
     
     monde->tab = initialise_tab(t_x, t_y);
-    for (i = 0; i < t_y; ++i) {
-        for (j = 0; j < t_x; ++j) {
+    for (i = 0; i < t_x; ++i) {
+        for (j = 0; j < t_y; ++j) {
             monde->tab[i][j].etats = VIDE;
             monde->tab[i][j].vie = 0;
             monde->tab[i][j].indice = -1;
@@ -44,25 +44,26 @@ void initialiser_monde(Monde* monde, const int t_x, const int t_y) {
     }
 
     monde->vaisseaux = allouer_vaisseaux(BLOC_VAISSEAUX);
-    monde->tab[t_y / 2][t_x / 2].etats = JOUEUR;
-    monde->tab[t_y / 2][t_x / 2].vie = 500;
     monde->tab[t_y / 2][t_x / 2].indice = 0;
     monde->nb_vaisseaux_max = BLOC_VAISSEAUX;
     monde->nb_vaisseaux = 1;
-
     monde->taille_x = t_x;
     monde->taille_y = t_y;
+
 }
 
-void afficher_monde_details(Monde monde) {
-    printf("taille_x = %d\n", monde.taille_x);
-    printf("taille_y = %d\n", monde.taille_y);
-    printf("---------------------\n");
-    printf("Adresse tab = %p\n", monde.tab);
-    printf("---------------------\n");
-    printf("Adresse vaisseaux = %p\n", monde.vaisseaux);
-    printf("Nb vaisseaux = %d\n", monde.nb_vaisseaux);
-    printf("capacité vaisseaux = %d\n", monde.nb_vaisseaux_max);
+void afficher_monde(Monde mo) {
+    int i, j;
+    for (i = 0; mo.taille_x; ++i) {
+        for (j = 0; j < mo.taille_y; ++j) {
+            if (mo.tab[i][j].etats == TIR)
+                afficher_tir(mo.tab[i][j].tir);
+            printf("[%d vie %d] ", mo.tab[i][j].etats, mo.tab[i][j].vie);
+        }
+        printf("\n");
+    }
+    printf("\n\n\nVaisseaux\n\n\n");
+    afficher_vaisseaux_details(mo.vaisseaux, mo.nb_vaisseaux);
 }
 
 void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie) {
@@ -75,15 +76,15 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
         monde->tab[x][y].vie = vie;
         monde->tab[x][y].indice = -1;
     }
-
 }
 
-void configure_tir_monde(Monde* monde, Coord_Tir coord_t, Etats etats, Degat degat) {
+void configure_tir_monde(Monde* monde, Tir tir, Etats etats) {
     assert(NULL != monde);
     if (etats == TIR) {
-        monde->tab[(int)(coord_t.tir_y)][(int)(coord_t.tir_x)].etats = etats;
-        monde->tab[(int)(coord_t.tir_y)][(int)(coord_t.tir_x)].indice = -1;
-        monde->tab[(int)(coord_t.tir_y)][(int)(coord_t.tir_x)].vie = degat;
+        monde->tab[(int)(tir.coord_t.tir_x)][(int)(tir.coord_t.tir_y)].etats = etats;
+        monde->tab[(int)(tir.coord_t.tir_x)][(int)(tir.coord_t.tir_y)].indice = -1;
+        monde->tab[(int)(tir.coord_t.tir_x)][(int)(tir.coord_t.tir_y)].vie = tir.degat;
+        monde->tab[(int)(tir.coord_t.tir_x)][(int)(tir.coord_t.tir_y)].tir = tir;
     }
 }
 
@@ -130,24 +131,19 @@ void calculer_prochaine_case_vaisseau(int x, int y, Vaisseau v, int* out_x, int*
     switch ( v.dep ) {
         case NORD:
             *out_x = x;
-            *out_y = y - v.vi;
-            break;
+            *out_y -= v.vi;
         case OUEST:
-            *out_x = x + v.vi;
+            *out_x += v.vi;
             *out_y = y;
-            break;
         case SUD:
             *out_x = x;
-            *out_y = y + v.vi;
-            break;
+            *out_y += v.vi;
         case EST:
-            *out_x = x - v.vi;
+            *out_x -= v.vi;
             *out_y = y;
-            break;
         default:
             *out_x = -1;
             *out_y = -1;
-            break;
     }
 }
 
@@ -160,10 +156,11 @@ int peut_se_deplacer(Monde* monde, int x, int y, int indice_vaisseau) {
 
     /* On vérifie si on ne va pas en hors map. */
     calculer_prochaine_case_vaisseau(x, y, monde->vaisseaux[indice_vaisseau], &nouvelle_case_x, &nouvelle_case_y);
-    if ( nouvelle_case_x < 0 || nouvelle_case_x >= monde->taille_x ||
-         nouvelle_case_y < 0 || nouvelle_case_y >= monde->taille_y )
+    if ( nouvelle_case_x < 0 || nouvelle_case_x > monde->taille_x ||
+         nouvelle_case_y < 0 || nouvelle_case_y > monde->taille_y )
 
         return 0;
+
 
     /* On regarde case par case si il n'y a pas quelque chose qui barre la route du vaisseau. */
     switch ( monde->vaisseaux[indice_vaisseau].dep ) {

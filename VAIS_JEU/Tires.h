@@ -2,14 +2,13 @@
             Lin Gerald
             Wadan Samy
 *  Creation: 26/06/2018
-*  Modification: 14/07/2018*/
+*  Modification: 17/07/2018*/
 #ifndef __TIRES__
 #define __TIRES__
 
 
 /*
-Espace commentaire : Plus de tableau de tires. 
-                     `Degat` coorespond à la vie d'un tir (voir Monde.h)
+Espace commentaire : Ajout de fonction `validation_tir`
 */
 
 typedef struct {
@@ -50,6 +49,10 @@ Tir init_tirs(const int x, const int y, const int x_f, const int y_f);
  * Obtient `a` et `b` decale les tir_x et tir_y de 1.
  * Recalcule tir_x et tir_y.*/
 int calculer_tir(Coord_Tir *coord_t, const int xf_t, const int yf_t);
+
+/* Verifie si le tir n'est pas sorti du cadre.
+ * Renvoie 1 si dans le cadre 0 sinon.*/
+int validation_tir(Coord_Tir *coord_t, const int t_x, const int t_y);
 
 
 #endif

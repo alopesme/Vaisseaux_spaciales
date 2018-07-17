@@ -49,6 +49,8 @@ typedef struct {
 /* Initialise un Monde.*/
 void initialiser_monde(Monde* monde, const int t_x, const int t_y);
 
+void afficher_monde(Monde mo);
+
 void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie);
 
 void configure_tir_monde(Monde* monde, Tir tir, Etats etats);
