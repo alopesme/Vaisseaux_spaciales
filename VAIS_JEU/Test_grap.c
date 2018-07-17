@@ -72,3 +72,49 @@ void test_un_tir_image(const int l_fen, const int h_fen, const char* nom_im) {
 	MLV_free_window();
 }
 
+void test_deplacement_vaisseau(const int l_fen, const int h_fen) {
+	MLV_Image* im;
+	Monde monde;
+	int x, y;
+
+	assert(l_fen > 0);
+	assert(h_fen > 0);
+
+	initialiser_monde(&monde, l_fen, h_fen);
+
+	MLV_create_window("Déplacement vaisseau", "Déplacement vaisseau", l_fen, h_fen);
+	charger_image(&im, "../Images/v_joueur.png", l_fen, h_fen, h_fen / 8);
+
+	while ( 1 ) {
+		afficher_background();
+
+		if ( MLV_get_keyboard_state(MLV_KEYBOARD_z) == MLV_PRESSED )
+			monde.vaisseaux[0].dep = NORD;
+		if ( MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED )
+			monde.vaisseaux[0].dep = OUEST;
+		if ( MLV_get_keyboard_state(MLV_KEYBOARD_s) == MLV_PRESSED )
+			monde.vaisseaux[0].dep = SUD;
+		if ( MLV_get_keyboard_state(MLV_KEYBOARD_q) == MLV_PRESSED )
+			monde.vaisseaux[0].dep = EST;
+
+		for (y = 0; y < monde.taille_y; y++) {
+			for (x = 0; x < monde.taille_x; x++) {
+				if ( monde.tab[y][x].etats == JOUEUR ) {
+					dessiner_image(im, x, y, 0);
+					if ( monde.vaisseaux[0].dep != STOP ) {
+						if ( peut_se_deplacer(&monde, x, y, monde.tab[y][x].indice) ) {
+							deplacer_vaisseau(&monde, x, y);
+							monde.vaisseaux[0].dep = STOP;
+						}
+					}
+				}
+			}
+		}
+
+		MLV_actualise_window();
+	}
+
+	libere_monde(&monde);
+	liberer_image(&im);
+	MLV_free_window();
+}
