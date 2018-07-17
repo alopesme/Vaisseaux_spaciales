@@ -65,6 +65,20 @@ void afficher_monde_details(Monde monde) {
     printf("capacité vaisseaux = %d\n", monde.nb_vaisseaux_max);
 }
 
+void afficher_monde(Monde mo) {
+    int i, j;
+    for (i = 0; mo.taille_x; ++i) {
+        for (j = 0; j < mo.taille_y; ++j) {
+            if (mo.tab[i][j].etats == TIR)
+                afficher_tir(mo.tab[i][j].tir);
+            printf("[%d vie %d] ", mo.tab[i][j].etats, mo.tab[i][j].vie);
+        }
+        printf("\n");
+    }
+    printf("\n\n\nVaisseaux\n\n\n");
+    afficher_vaisseaux_details(mo.vaisseaux, mo.nb_vaisseaux);
+}
+
 void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie) {
     assert(NULL != monde);
     assert(x > 0);
