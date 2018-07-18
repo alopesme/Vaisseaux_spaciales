@@ -47,20 +47,6 @@ Tir init_tirs(const int x, const int y, const int x_f, const int y_f) {
 }
 
 int calculer_tir(Coord_Tir *coord_t) {
-    /*float a, b, num = 1;
-    assert(NULL != coord_t);
-    printf("[[[[[[[[[[[[[[[[[[[[[[[[%d %f]]]]]]]]]]]]]]]]]]]]\n\n\n", coord_t->x_f, coord_t->tir_x);
-    a = (float)((coord_t->y_f - coord_t->tir_y) / (coord_t->x_f - coord_t->tir_x));
-    printf("[[[[[[[[[[[[[[[[[[[[[[[[%d %f]]]]]]]]]]]]]]]]]]]]\n\n\n", coord_t->y_f, coord_t->tir_x);
-    b = (coord_t->tir_y - a * coord_t->tir_x);
-
-    coord_t->tir_x = (coord_t->d_x < coord_t->x_f ? coord_t->tir_x + num : coord_t->tir_x - num);
-
-    coord_t->tir_y = (coord_t->d_y < coord_t->y_f ? coord_t->tir_y + num : coord_t->tir_y - num);
-    coord_t->tir_y = a * coord_t->tir_x + b;
-    if (a != 0)
-        coord_t->tir_x = (coord_t->tir_y - b) / a;
-    afficher_coord_tir(*coord_t);*/
 
     float sum_x, sum_y;
     assert(NULL != coord_t);
@@ -76,8 +62,18 @@ int calculer_tir(Coord_Tir *coord_t) {
         sum_x = 1;
     }
 
-    sum_x = (coord_t->d_x > coord_t->x_f && sum_x > 0 ? -sum_x : sum_x);
-    sum_y = (coord_t->d_y > coord_t->y_f && sum_y > 0 ? -sum_y : sum_y);
+    if (coord_t->d_x > coord_t->x_f)
+        sum_x = sum_x > 0 ? -sum_x : sum_x;
+
+    else
+        sum_x = sum_x < 0 ? -sum_x : sum_x;
+
+    if (coord_t->d_y > coord_t->y_f)
+        sum_y = sum_y > 0 ? -sum_y : sum_y;
+
+    else
+        sum_y = sum_y < 0 ? -sum_y : sum_y;
+
 
     coord_t->tir_x += sum_x;
     coord_t->tir_y += sum_y;
