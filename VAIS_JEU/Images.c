@@ -38,13 +38,13 @@ void dessiner_vaisseau(MLV_Image** image, const char* nom_image, const int l_fen
 	assert(largeur >= 0);
 
 	charger_image(image, nom_image, l_fen, h_fen, largeur);
-	rotation_vaisseau(image, x, y, largeur);
+	rotation_vaisseau(image, x, y);
 	dessiner_image(*image, x , y, largeur / 2);
 	liberer_image(image);
 
 }
 	
-void rotation_vaisseau(MLV_Image** image, const int x, const int y, const int largeur) {
+void rotation_vaisseau(MLV_Image** image, const int x, const int y) {
 	int x_souris, y_souris;
 	double res, val = 180 / PI, yl, xl;
 	assert(NULL != image);
