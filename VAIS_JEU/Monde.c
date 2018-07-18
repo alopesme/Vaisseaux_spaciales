@@ -118,6 +118,9 @@ void ajouter_vaisseau_monde(Monde* monde, int x, int y, Etats type, int vie) {
     monde->tab[y][x].etats = type;
     monde->tab[y][x].vie = vie;
     monde->tab[y][x].indice = monde->nb_vaisseaux;
+    
+    monde->vaisseaux[monde->nb_vaisseaux].dep = STOP;
+    monde->vaisseaux[monde->nb_vaisseaux].vi = LENT;
 
     monde->nb_vaisseaux += 1;
 }
