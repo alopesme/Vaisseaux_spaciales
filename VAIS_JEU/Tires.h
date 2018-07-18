@@ -48,7 +48,7 @@ Tir init_tirs(const int x, const int y, const int x_f, const int y_f);
 /* Calculer l'équation de la droite `y=ax+b`.
  * Obtient `a` et `b` decale les tir_x et tir_y de 1.
  * Recalcule tir_x et tir_y.*/
-int calculer_tir(Coord_Tir *coord_t, const int xf_t, const int yf_t);
+int calculer_tir(Coord_Tir *coord_t);
 
 /* Verifie si le tir n'est pas sorti du cadre.
  * Renvoie 1 si dans le cadre 0 sinon.*/

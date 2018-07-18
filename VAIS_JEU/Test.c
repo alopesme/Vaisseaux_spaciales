@@ -50,13 +50,27 @@ int test_monde_vide(const int t_x, const int t_y) {
 
 int test_monde_tir(const int t_x, const int t_y, const int x_f, const int y_f) {
 	Monde mo;
-	int i = 0;
-	initialiser_monde(&mo, t_x, t_y);
+	Tir tir;
+	int i, j, var = 1;
+	initialiser_monde(&mo, t_x + 1, t_y + 1);
 
-	mo.tab[t_x / 2][t_y].tir = init_tirs(t_x / 2, t_y, x_f, y_f);
-	while (i < 10) {
-		afficher_monde(mo);
-		++i;
+	tir = init_tirs(t_x / 2, t_y, x_f, y_f);
+	configure_tir_monde(&mo, tir, TIR);
+	afficher_monde(mo);
+
+	while (var) {
+		for(i = 0; i < mo.taille_x; ++i) {
+			for (j = 0; j < mo.taille_y; ++j) {
+				if(mo.tab[i][j].etats == TIR) {
+					var = validation_tir(&(mo.tab[i][j].tir.coord_t), mo.taille_x, mo.taille_y);
+					configure_tir_monde(&mo, mo.tab[i][j].tir, TIR);
+					mo.tab[i][j].etats = VIDE;
+					mo.tab[i][j].vie = VIDE;
+					afficher_monde(mo);
+				}
+			}
+		}
 	}
+	
 	return 1;
 }

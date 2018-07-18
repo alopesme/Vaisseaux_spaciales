@@ -54,16 +54,17 @@ void test_un_tir_image(const int l_fen, const int h_fen, const char* nom_im) {
 	assert(h_fen > 0);
 	assert(NULL != nom_im);
 
-	tir = init_tirs(l_fen / 2, h_fen / 2, l_fen / 2, h_fen / 2);
 	MLV_create_window("tir_image", "tir_image", l_fen, h_fen);
 
 
 	MLV_wait_mouse(&x, &y);
-	charger_image(&im, nom_im, l_fen, h_fen, h_fen / 8);
+	tir = init_tirs(l_fen / 2, h_fen / 2, x, y);
+
+	charger_image(&im, nom_im, l_fen, h_fen, h_fen / 17);
 	while ((tir.coord_t.tir_x < l_fen && tir.coord_t.tir_x >= 0) && (tir.coord_t.tir_y < l_fen && tir.coord_t.tir_y >= 0)) {
 		afficher_background();
-		dessiner_image(im, (int)(tir.coord_t.tir_x), (int)(tir.coord_t.tir_y), h_fen / 8);
-		calculer_tir(&(tir.coord_t), x, y);
+		dessiner_image(im, (int)(tir.coord_t.tir_x + h_fen / 17), (int)(tir.coord_t.tir_y + h_fen / 17), h_fen / 17);
+		calculer_tir(&(tir.coord_t));
 		MLV_actualise_window();
 	}
 
@@ -102,7 +103,7 @@ void test_deplacement_vaisseau(const int l_fen, const int h_fen) {
 				if ( monde.tab[y][x].etats == JOUEUR ) {
 					dessiner_image(im, x, y, 0);
 					if ( monde.vaisseaux[0].dep != STOP ) {
-						if ( peut_se_deplacer(&monde, x, y, monde.tab[y][x].indice) ) {
+						if (peut_se_deplacer(&monde, x, y, monde.tab[y][x].indice) ) {
 							deplacer_vaisseau(&monde, x, y);
 							monde.vaisseaux[0].dep = STOP;
 						}

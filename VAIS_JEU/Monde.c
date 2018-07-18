@@ -67,10 +67,8 @@ void afficher_monde_details(Monde monde) {
 
 void afficher_monde(Monde mo) {
     int i, j;
-    for (i = 0; mo.taille_x; ++i) {
+    for (i = 0; i < mo.taille_x; ++i) {
         for (j = 0; j < mo.taille_y; ++j) {
-            if (mo.tab[i][j].etats == TIR)
-                afficher_tir(mo.tab[i][j].tir);
             printf("[%d vie %d] ", mo.tab[i][j].etats, mo.tab[i][j].vie);
         }
         printf("\n");
