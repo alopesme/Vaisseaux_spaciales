@@ -100,7 +100,7 @@ void configure_tir_monde(Monde* monde, Tir tir, Etats etats) {
     }
 }
 
-void ajouter_vaisseau_monde(Monde* monde, Vaisseau vaisseau, int x, int y, Etats type, int vie) {
+void ajouter_vaisseau_monde(Monde* monde, int x, int y, Etats type, int vie) {
     assert(NULL != monde);
     assert(x > 0);
     assert(y > 0);
