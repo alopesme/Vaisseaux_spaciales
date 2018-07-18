@@ -5,16 +5,14 @@
 #include <math.h>
 #include "Images.h"
 
-void charger_image(MLV_Image** image, const char* nom_image, const int l_fen, const int h_fen, const int largeur) {
+void charger_image(MLV_Image** image, const char* nom_image, const int largeur) {
 	assert(NULL != nom_image);
-	assert(l_fen > 0);
-	assert(h_fen > 0);
 
 	*image = MLV_load_image(nom_image);
 	MLV_resize_image_with_proportions(*image, largeur, largeur);
 }
 
-void dessiner_image(MLV_Image* image, const int x, const int y, const int largeur) {
+void dessiner_image(MLV_Image** image, const char* nom_image, const int x, const int y, const int largeur) {
 	int largeur_image, hauteur_image;
 
 	assert(NULL != image);
@@ -22,24 +20,28 @@ void dessiner_image(MLV_Image* image, const int x, const int y, const int largeu
 	assert(y >= 0);
 	assert(largeur >= 0);
 
-	MLV_get_image_size(image, &largeur_image, &hauteur_image);
+	charger_image(image, nom_image, largeur);
 
-	MLV_draw_image(image, (x - largeur_image/2) - largeur, (y - hauteur_image/2) - largeur);
+	MLV_get_image_size(*image, &largeur_image, &hauteur_image);
+
+	MLV_draw_image(*image, (x - largeur_image/2), (y - hauteur_image/2));
+
+	liberer_image(image);
 }
 
-void dessiner_vaisseau(MLV_Image** image, const char* nom_image, const int l_fen, const int h_fen, const int x, const int y, const int largeur) {
+void dessiner_vaisseau(MLV_Image** image, const char* nom_image, const int x, const int y, const int largeur) {
+	int largeur_image, hauteur_image;
+
 	assert(NULL != nom_image);
-	assert(l_fen > 0);
-	assert(h_fen > 0);
 	assert(x >= 0);
-	assert(x <= l_fen);
 	assert(y >= 0);
-	assert(y <= h_fen);
 	assert(largeur >= 0);
 
-	charger_image(image, nom_image, l_fen, h_fen, largeur);
+	charger_image(image, nom_image, largeur);
 	rotation_vaisseau(image, x, y);
-	dessiner_image(*image, x , y, largeur / 2);
+	MLV_get_image_size(*image, &largeur_image, &hauteur_image);
+
+	MLV_draw_image(*image, (x - largeur_image/2) - largeur, (y - hauteur_image/2) - largeur);
 	liberer_image(image);
 
 }

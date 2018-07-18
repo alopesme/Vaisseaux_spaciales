@@ -19,12 +19,10 @@ void test_affichage_image(const int l_fen, const int h_fen, const char* nom_im) 
 	assert(h_fen > 0);
 
 	MLV_create_window("affichage_image", "affichage_image", l_fen, h_fen);
-	charger_image(&image, nom_im, l_fen, h_fen, l_fen / 20);
-	dessiner_image(image, l_fen / 2, h_fen / 2, 0);
+	dessiner_image(&image, nom_im, l_fen / 2, h_fen / 2, 0);
 	MLV_actualise_window();
 
 	MLV_wait_mouse(NULL, NULL);
-	liberer_image(&image);
 
 	MLV_free_window();
 }
@@ -37,7 +35,7 @@ void test_rotation_image(const int l_fen, const int h_fen, const char* nom_im) {
 	MLV_create_window("rotation_image", "rotation_image", l_fen, h_fen);
 	while (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) != MLV_PRESSED) {
 		afficher_background();
-		dessiner_vaisseau(&image, nom_im, l_fen, h_fen, l_fen / 2, h_fen / 2, h_fen / 15);
+		dessiner_vaisseau(&image, nom_im, l_fen / 2, h_fen / 2, h_fen / 15);
 		MLV_actualise_window();
 	}
 
@@ -60,16 +58,14 @@ void test_un_tir_image(const int l_fen, const int h_fen, const char* nom_im) {
 	MLV_wait_mouse(&x, &y);
 	tir = init_tirs(l_fen / 2, h_fen / 2, x, y);
 
-	charger_image(&im, nom_im, l_fen, h_fen, h_fen / 17);
 	while ((tir.coord_t.tir_x < l_fen && tir.coord_t.tir_x >= 0) && (tir.coord_t.tir_y < l_fen && tir.coord_t.tir_y >= 0)) {
 		afficher_background();
-		dessiner_image(im, (int)(tir.coord_t.tir_x + h_fen / 17), (int)(tir.coord_t.tir_y + h_fen / 17), h_fen / 17);
+		dessiner_image(&im, nom_im ,(int)(tir.coord_t.tir_x), (int)(tir.coord_t.tir_y), h_fen / 17);
 		calculer_tir(&(tir.coord_t));
 		MLV_actualise_window();
 	}
 
 	MLV_wait_mouse(NULL, NULL);
-	liberer_image(&im);
 	MLV_free_window();
 }
 
@@ -84,7 +80,6 @@ void test_deplacement_vaisseau(const int l_fen, const int h_fen) {
 	initialiser_monde(&monde, l_fen, h_fen);
 
 	MLV_create_window("Déplacement vaisseau", "Déplacement vaisseau", l_fen, h_fen);
-	charger_image(&im, "../Images/v_joueur.png", l_fen, h_fen, h_fen / 8);
 
 	while ( 1 ) {
 		afficher_background();
@@ -101,7 +96,7 @@ void test_deplacement_vaisseau(const int l_fen, const int h_fen) {
 		for (y = 0; y < monde.taille_y; y++) {
 			for (x = 0; x < monde.taille_x; x++) {
 				if ( monde.tab[y][x].etats == JOUEUR ) {
-					dessiner_image(im, x, y, 0);
+					dessiner_image(&im, "../Images/v_joueur.png", x, y, 0);
 					if ( monde.vaisseaux[0].dep != STOP ) {
 						if (peut_se_deplacer(&monde, x, y, monde.tab[y][x].indice) ) {
 							deplacer_vaisseau(&monde, x, y);

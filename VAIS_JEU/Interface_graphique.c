@@ -18,8 +18,7 @@ void afficher_background() {
 void dessiner_element(Monde* monde, int x, int y) {
 	char nom_image[20] = "../Images/";
 	MLV_Image* image = NULL;
-	int largeur_image, hauteur_image;
-	char dim; /* Dimension de l'image par rapport à la taille de la carte (entre 0 et 100). */
+	/*int largeur_image, hauteur_image;*/
 
 	assert(NULL != monde);
 
@@ -29,11 +28,12 @@ void dessiner_element(Monde* monde, int x, int y) {
 		case OBSTACLE:
 			return;
 		case TIR:
-			return;
+			strcat(nom_image, "v_beam.png");
+			break;
 		case JOUEUR:
 			strcat(nom_image, "v_joueur.png");
-			dim = 10;
-			break;
+			dessiner_vaisseau(&image, nom_image, x, y, monde->taille_y / 17);
+			return;
 		case BOT:
 			return;
 		case MIBOSS:
@@ -49,17 +49,17 @@ void dessiner_element(Monde* monde, int x, int y) {
 		default:
 			return;
 	}
-
-	image = MLV_load_image(nom_image);
+	dessiner_image(&image, nom_image, x, y, monde->taille_y / 17);
+	/*image = MLV_load_image(nom_image);
 	
-	MLV_resize_image_with_proportions(image, (int) monde->taille_x*(dim/100.0), (int) monde->taille_y*(dim/100.0));
+	MLV_resize_image_with_proportions(image, (int) monde->taille_x * (dim / 100.0), (int) monde->taille_y * (dim / 100.0));
 
 	if ( monde->tab[y][x].etats == JOUEUR )
 		rotation_vaisseau(&image, x, y);
 
 	MLV_get_image_size(image, &largeur_image, &hauteur_image);
 
-	MLV_draw_image(image, x - largeur_image/2, y - hauteur_image/2);
+	MLV_draw_image(image, x - largeur_image / 2, y - hauteur_image / 2);
 
-	liberer_image(&image);
+	liberer_image(&image);*/
 }

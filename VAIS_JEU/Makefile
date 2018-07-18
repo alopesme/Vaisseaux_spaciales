@@ -28,7 +28,7 @@ Bonus.o: Bonus.c Bonus.h
 
 Interface_graphique.o: Interface_graphique.c Interface_graphique.h Vaisseaux.h Deplacement.h Tires.h Vitesse.h Images.h Monde.h
 
-Jeu.o: Jeu.c Jeu.h Monde.h
+Jeu.o: Jeu.c Jeu.h Monde.h Bonus.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
 
 clean:
 	rm -f *.o

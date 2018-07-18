@@ -9,7 +9,7 @@
 #include "Monde.h"
 
 /*
-Espace commentaire : Rien
+Espace commentaire : Utilise les fontions d'Images directement
 */
 
 #define FOND /*MLV_rgba(0, 4, 40, 255)*/ MLV_COLOR_BLACK
