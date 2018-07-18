@@ -58,7 +58,7 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
 void configure_tir_monde(Monde* monde, Tir tir, Etats etats);
 
 /* Ajoute un vaisseau aux coordonnées (x, y) dont le type et sa vie est donné. */
-void ajouter_vaisseau_monde(Monde* monde, Vaisseau vaisseau, int x, int y, Etats type, int vie);
+void ajouter_vaisseau_monde(Monde* monde, int x, int y, Etats type, int vie);
 
 /* Libere monde.*/
 void libere_monde(Monde* monde);
