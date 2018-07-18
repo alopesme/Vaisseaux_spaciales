@@ -67,12 +67,12 @@ int calculer_tir(Coord_Tir *coord_t) {
 
     sum_x = coord_t->x_f - coord_t->d_x; sum_y = coord_t->y_f - coord_t->d_y;
     if (pow(sum_x, 2) < pow(sum_y, 2)) {
-        sum_x = 1 / sum_x;
+        sum_x = 1 / (sum_y / sum_x);
         sum_y = 1;
     }
 
     else {
-        sum_y = 1 / sum_y;
+        sum_y = 1 / (sum_x / sum_y);
         sum_x = 1;
     }
 
