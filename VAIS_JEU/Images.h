@@ -26,7 +26,7 @@ void dessiner_image(MLV_Image* image, const int x, const int y, const int largeu
 void dessiner_vaisseau(MLV_Image** image, const char* nom_image, const int l_fen, const int h_fen, const int x, const int y, const int largeur);
 
 /* Tourne l'image par rapport à la position de la souris.*/
-void rotation_vaisseau(MLV_Image** image, const int x, const int y, const int largeur);
+void rotation_vaisseau(MLV_Image** image, const int x, const int y);
 
 /*Libere image.*/
 void liberer_image(MLV_Image** image);
