@@ -10,6 +10,7 @@
 #include "Test.h"
 #include "Test_grap.h"
 #include "Interface_graphique.h"
+#include "Jeu.h"
 #include <MLV/MLV_all.h>
 
 int main(int argc, char const *argv[]) {
@@ -22,9 +23,15 @@ int main(int argc, char const *argv[]) {
 	
 	test_un_tir_image(atoi(argv[1]), atoi(argv[1]), "../Images/v_beam.png"); 
 	
-	test_deplacement_vaisseau(atoi(argv[1]), atoi(argv[1]));*/
+	test_deplacement_vaisseau(atoi(argv[1]), atoi(argv[1]));
 
-	test_monde_tir(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+	test_monde_tir(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]), atoi(argv[3])); */
+	
+	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", atoi(argv[1]), atoi(argv[1]));
+
+	jouer(atoi(argv[1]), atoi(argv[1]));
+
+	MLV_free_window();
 
 	return 0;
 }
