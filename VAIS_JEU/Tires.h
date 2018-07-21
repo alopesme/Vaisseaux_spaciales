@@ -52,7 +52,7 @@ int calculer_tir(Coord_Tir *coord_t);
 
 /* Verifie si le tir n'est pas sorti du cadre.
  * Renvoie 1 si dans le cadre 0 sinon.*/
-int validation_tir(Coord_Tir *coord_t, const int t_x, const int t_y);
+int validation_tir(Coord_Tir *coord_t, const int d_x, const int d_y, const int t_x, const int t_y);
 
 
 #endif

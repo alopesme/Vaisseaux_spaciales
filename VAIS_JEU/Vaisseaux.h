@@ -14,6 +14,8 @@ Espace commentaire : Rien modifie
 */
 
 typedef struct {
+	int x;
+	int y;
 	Deplacement dep;
 	Vitesse vi;
 }Vaisseau;
@@ -25,7 +27,10 @@ void afficher_vaisseau_details(const Vaisseau vaisseau);
 void afficher_vaisseaux_details(const Vaisseau* vaisseaux, const int nb_vaisseaux);
 
 /*Cette fonction alloue les vaisseaux.*/
-Vaisseau* allouer_vaisseaux(const int nb_vaisseaux);
+Vaisseau* allouer_vaisseaux(const int nb_vaisseaux, const int x, const int y, const int larg);
+
+/* Cette fonction deplace le vaisseau (par rapport aux coordonnees fenetre graphique).*/
+void calculer_prochaine_case_vaisseau(Vaisseau *v);
 
 /* Libere les vaisseaux.*/
 void libere_vaisseaux(Vaisseau* vaisseaux, const int nb_vaisseaux);

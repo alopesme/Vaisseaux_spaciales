@@ -14,7 +14,7 @@ Monde.o: Monde.c Monde.h Bonus.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
 
 Test.o: Test.c Test.h Monde.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
 
-Test_grap.o: Test_grap.c Test_grap.h Interface_graphique.c Interface_graphique.h Vaisseaux.h Deplacement.h Tires.h Vitesse.h Images.h Monde.h
+Test_grap.o: Test_grap.c Test_grap.h Interface_graphique.h Vaisseaux.h Deplacement.h Tires.h Vitesse.h Images.h Monde.h Jeu.h
 
 Tires.o: Tires.c Tires.h
 
@@ -28,7 +28,7 @@ Bonus.o: Bonus.c Bonus.h
 
 Interface_graphique.o: Interface_graphique.c Interface_graphique.h Vaisseaux.h Deplacement.h Tires.h Vitesse.h Images.h Monde.h
 
-Jeu.o: Jeu.c Jeu.h Monde.h Bonus.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
+Jeu.o: Jeu.c Jeu.h Monde.h Bonus.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h Interface_graphique.h
 
 clean:
 	rm -f *.o

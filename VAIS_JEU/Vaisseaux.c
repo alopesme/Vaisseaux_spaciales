@@ -22,10 +22,13 @@ void afficher_vaisseaux_details(const Vaisseau* vaisseaux, const int nb_vaisseau
     
 }
 
-Vaisseau* allouer_vaisseaux(const int nb_vaisseaux) {
+Vaisseau* allouer_vaisseaux(const int nb_vaisseaux, const int x, const int y, const int larg) {
     int i;
-    Vaisseau vais_defaut = {STOP, LENT};
+    Vaisseau vais_defaut = {x, y, STOP, LENT};
     Vaisseau* vaisseaux = NULL;
+    assert(larg > 0);
+    assert(x >= larg / 2);
+    assert(y >= larg / 2);
 
     assert(nb_vaisseaux > 0);
 
@@ -38,9 +41,31 @@ Vaisseau* allouer_vaisseaux(const int nb_vaisseaux) {
 
     for (i = 1; i < nb_vaisseaux; ++i) {
         vaisseaux[i] = vais_defaut;
+        vaisseaux[i].x = i * larg;
+        vaisseaux[i].y = larg;
     }
 
     return vaisseaux;
+}
+
+void calculer_prochaine_case_vaisseau(Vaisseau *v) {
+    assert(NULL != v);
+    switch ( v->dep ) {
+        case NORD:
+            v->y -= v->vi;
+            break;
+        case OUEST:
+            v->x += v->vi;
+            break;
+        case SUD:
+            v->y += v->vi;
+            break;
+        case EST:
+            v->x -= v->vi;
+            break;
+        default:
+            break;
+    }
 }
 
 

@@ -21,17 +21,19 @@ int main(int argc, char const *argv[]) {
 
 	test_rotation_image(atoi(argv[1]), atoi(argv[1]), "../Images/v_joueur.png");
 	
-	test_un_tir_image(atoi(argv[1]), atoi(argv[1]), "../Images/v_beam.png"); 
+	test_un_tir_image(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]), "../Images/v_beam.png"); 
 	
 	test_deplacement_vaisseau(atoi(argv[1]), atoi(argv[1]));
 
-	test_monde_tir(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]), atoi(argv[3])); */
-	
+	test_monde_tir(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]), atoi(argv[3])); 
+
 	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", atoi(argv[1]), atoi(argv[1]));
 
 	jouer(atoi(argv[1]), atoi(argv[1]));
 
 	MLV_free_window();
-
+*/
+	test_monde(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]));
+	
 	return 0;
 }

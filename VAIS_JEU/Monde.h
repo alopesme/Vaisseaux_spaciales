@@ -1,8 +1,8 @@
 /* Auteurs: LOPES MENDES Ailton
 *  Creation: 30/06/2018
 *  Modification: 14/07/2018*/
-#ifndef __MONDE2__
-#define __MONDE2__
+#ifndef __MONDE__
+#define __MONDE__
 
 #include "Tires.h"
 #include "Vaisseaux.h"
@@ -47,7 +47,7 @@ typedef struct {
 
 
 /* Initialise un Monde.*/
-void initialiser_monde(Monde* monde, const int t_x, const int t_y);
+void initialiser_monde(Monde* monde, const int t_x, const int t_y, const int larg);
 
 void afficher_monde(Monde mo);
 
@@ -55,21 +55,22 @@ void afficher_monde_details(Monde monde);
 
 void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie);
 
-void configure_tir_monde(Monde* monde, Tir tir, Etats etats);
+void configure_tir_monde(Monde* monde, Tir tir, Etats etats, const int larg);
 
 /* Ajoute un vaisseau aux coordonnées (x, y) dont le type et sa vie est donné. */
-void ajouter_vaisseau_monde(Monde* monde, int x, int y, Etats type, int vie);
+void ajouter_vaisseau_monde(Monde* monde, const int x, const int y, const int vie, const int larg, const Etats type);
+
+/* Permet d'ajouter un tir dans monde. Ajoute d'abord dans le tableau.
+ * Puis converti les coordonnees aux coordonnees de la fenetre graĥique.*/
+int ajouter_tir_monde(Monde* monde, const int x, const int y, const int larg, const int indice_v);
 
 /* Libere monde.*/
 void libere_monde(Monde* monde);
 
-/* Renvoie par adresse les coordonnées du vaisseau après un déplacement. */
-void calculer_prochaine_case_vaisseau(int x, int y, Vaisseau v, int* out_x, int* out_y);
-
 /* Renvoie 1 si le vaisseau à l'indice `indice_vaisseau` et aux coordonnées (x, y) peut se déplacer dans sa direction et 0 sinon. */
-int peut_se_deplacer(Monde* monde, int x, int y, int indice_vaisseau);
+int peut_se_deplacer(Monde* monde, const int x, const int y, const int indice_vaisseau, const int larg);
 
 /* Déplace d'un cran le vaisseau situé aux coordonnées (x, y). */
-void deplacer_vaisseau(Monde* monde, int x, int y);
+void deplacer_vaisseau(Monde* monde, const int x, const int y, const int larg);
 
 #endif

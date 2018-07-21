@@ -15,7 +15,8 @@ void afficher_background() {
 	MLV_clear_window(FOND);
 }
 
-void dessiner_element(Monde* monde, int x, int y) {
+void dessiner_element(Monde* monde, int x, int y, const int larg) {
+	int dessin_x = 0, dessin_y = 0;
 	char nom_image[20] = "../Images/";
 	MLV_Image* image = NULL;
 	/*int largeur_image, hauteur_image;*/
@@ -28,11 +29,15 @@ void dessiner_element(Monde* monde, int x, int y) {
 		case OBSTACLE:
 			return;
 		case TIR:
+			dessin_x = (int)monde->tab[y][x].tir.coord_t.tir_x;
+			dessin_y = (int)monde->tab[y][x].tir.coord_t.tir_y;
 			strcat(nom_image, "v_beam.png");
 			break;
 		case JOUEUR:
+			dessin_x = monde->vaisseaux[monde->tab[y][x].indice].x;
+			dessin_y = monde->vaisseaux[monde->tab[y][x].indice].y;
 			strcat(nom_image, "v_joueur.png");
-			dessiner_vaisseau(&image, nom_image, x, y, monde->taille_y / 17);
+			dessiner_vaisseau(&image, nom_image, dessin_x, dessin_y, larg);
 			return;
 		case BOT:
 			return;
@@ -49,7 +54,7 @@ void dessiner_element(Monde* monde, int x, int y) {
 		default:
 			return;
 	}
-	dessiner_image(&image, nom_image, x, y, monde->taille_y / 17);
+	dessiner_image(&image, nom_image, dessin_x, dessin_y, larg);
 	/*image = MLV_load_image(nom_image);
 	
 	MLV_resize_image_with_proportions(image, (int) monde->taille_x * (dim / 100.0), (int) monde->taille_y * (dim / 100.0));

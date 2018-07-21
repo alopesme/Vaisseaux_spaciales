@@ -82,7 +82,7 @@ int calculer_tir(Coord_Tir *coord_t) {
 }
 
 
-int validation_tir(Coord_Tir *coord_t, const int t_x, const int t_y) {
+int validation_tir(Coord_Tir *coord_t, const int d_x, const int d_y, const int t_x, const int t_y) {
     Coord_Tir tmp;
     int x, y;
     assert(NULL != coord_t);
@@ -90,7 +90,7 @@ int validation_tir(Coord_Tir *coord_t, const int t_x, const int t_y) {
 
     calculer_tir(&tmp);
     x = (int)tmp.tir_x; y = (int)tmp.tir_y;
-    if ((x < 0 || x > t_x) || (y < 0 || y > t_y))
+    if ((x < d_x || x > t_x) || (y < d_y || y > t_y))
         return 0;
     *coord_t = tmp;
     return 1;

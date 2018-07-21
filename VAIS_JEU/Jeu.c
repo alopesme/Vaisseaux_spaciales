@@ -1,10 +1,14 @@
-#include "Jeu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <MLV/MLV_all.h>
-#include "Interface_graphique.h"
+#include "Vitesse.h"
+#include "Tires.h"
+#include "Deplacement.h"
+#include "Vaisseaux.h"
 #include "Monde.h"
+#include "Interface_graphique.h"
+#include "Jeu.h"
 
 static void matiere_monde(Monde *mo, const int x, const int y) {
 	assert(NULL != mo);
@@ -28,7 +32,7 @@ static void matiere_monde(Monde *mo, const int x, const int y) {
 	}
 }
 
-static void tir_monde(Monde *mo, const int x, const int y) {
+static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
 	assert(NULL != mo);
 	assert(x >= 0);
 	assert(x < mo->taille_x);
@@ -37,16 +41,16 @@ static void tir_monde(Monde *mo, const int x, const int y) {
 
 	switch (mo->tab[y][x].etats) {
 		case TIR: 
-			if(validation_tir(&(mo->tab[y][x].tir.coord_t), mo->taille_x, mo->taille_y))
-				configure_tir_monde(mo, mo->tab[y][x].tir, TIR);
 			mo->tab[y][x].etats = VIDE;
 			mo->tab[y][x].vie = VIDE;
+			if(validation_tir(&(mo->tab[y][x].tir.coord_t), larg / 2, larg / 2, mo->taille_x * larg - larg / 2, mo->taille_y * larg - larg / 2))
+				configure_tir_monde(mo, mo->tab[y][x].tir, TIR, larg);
 			break;
 		default: break;
 	}
 }
 
-static void vaisseaux_monde(Monde *mo, const int x, const int y, int *a_bouge) {
+static void vaisseaux_monde(Monde *mo, const int x, const int y, const int larg, int *a_bouge) {
 	int i_vaisseau;
 	assert(NULL != mo);
 	assert(x >= 0);
@@ -68,8 +72,8 @@ static void vaisseaux_monde(Monde *mo, const int x, const int y, int *a_bouge) {
 		case BOSSFINALE:
 			i_vaisseau = mo->tab[y][x].indice;
 			if ( mo->vaisseaux[i_vaisseau].dep != STOP ) {
-				if ( peut_se_deplacer(mo, x, y, i_vaisseau) && !(*a_bouge) ) {
-					deplacer_vaisseau(mo, x, y);
+				if (peut_se_deplacer(mo, x, y, i_vaisseau, larg) && !(*a_bouge) ) {
+					deplacer_vaisseau(mo, x, y, larg);
 					mo->vaisseaux[i_vaisseau].dep = STOP;
 					*a_bouge = 1;
 				}
@@ -98,7 +102,7 @@ static void bonus_monde(Monde *mo, const int x, const int y) {
 	}
 }
 
-static void action_element(Monde *mo, const int x, const int y, int *a_bouge) {
+void action_element(Monde *mo, const int x, const int y, const int larg, int *a_bouge) {
 	assert(NULL != mo);
 	assert(NULL != a_bouge);
 	assert(x >= 0);
@@ -110,45 +114,28 @@ static void action_element(Monde *mo, const int x, const int y, int *a_bouge) {
 		matiere_monde(mo, x, y);
 
 	if (mo->tab[y][x].etats > OBSTACLE && mo->tab[y][x].etats <= TIR) 
-		tir_monde(mo, x, y);
+		tir_monde(mo, x, y, larg);
 				
-	if (mo->tab[y][x].etats > TIR && mo->tab[y][x].etats <= BOSSFINALE)
-		vaisseaux_monde(mo, x, y, a_bouge);
+	if (mo->tab[y][x].etats > TIR && mo->tab[y][x].etats <= BOSSFINALE) 
+		vaisseaux_monde(mo, x, y, larg, a_bouge);
 
 	if (mo->tab[y][x].etats > BOSSFINALE)
 		bonus_monde(mo, x, y);
 }
 
 void jouer(int taille_x, int taille_y) {
-	int x, y, tir_x, tir_y, var/*, larg = 17*/;
+	int x, y, larg = 20;
 	Monde monde;
-	Tir tir;
 	int a_bouge;
-	initialiser_monde(&monde, taille_x, taille_y);
+	initialiser_monde(&monde, taille_x, taille_y, larg);
 	while ( 1 ) {
 		a_bouge = 0;
-		var = 0;
 		afficher_background();
-		while (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED) {
-			var = 1;
-			MLV_get_mouse_position(&tir_x, &tir_y);
-		}
 		/* On parcours tous le tableau, et selon l'élément de la case, on effectue une action. */
 		for (y = 0; y < monde.taille_y; y++) {
 			for (x = 0; x < monde.taille_x; x++) {
-				/*
-					pas fini la partie tir encore des bugs
-				*/
-				if (var == 1 && monde.tab[y][x].etats == JOUEUR) {
-					tir = init_tirs(x, y, tir_x, tir_y);
-					afficher_tir(tir);
-					if (validation_tir(&(tir.coord_t), monde.taille_x, monde.taille_y))
-						configure_tir_monde(&monde, tir, TIR);
-					var = 0;
-					
-				}
-				dessiner_element(&monde, x, y);
-				action_element(&monde, x, y, &a_bouge);
+				dessiner_element(&monde, x, y, larg);
+				action_element(&monde, x, y, larg, &a_bouge);
 			}
 		}
 		MLV_actualise_window();

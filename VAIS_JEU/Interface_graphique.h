@@ -18,6 +18,6 @@ Espace commentaire : Utilise les fontions d'Images directement
 void afficher_background();
 
 /* Déssine l'élément dont le centre est situé aux coordonnées (x, y). */
-void dessiner_element(Monde* monde, int x, int y);
+void dessiner_element(Monde* monde, int x, int y, const int larg);
 
 #endif
