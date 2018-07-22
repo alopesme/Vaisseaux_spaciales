@@ -40,12 +40,20 @@ static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
 	assert(y < mo->taille_y);
 
 	switch (mo->tab[y][x].etats) {
-		case TIR: 
-			mo->tab[y][x].etats = VIDE;
-			mo->tab[y][x].vie = VIDE;
-			if(validation_tir(&(mo->tab[y][x].tir.coord_t), larg / 2, larg / 2, mo->taille_x * larg - larg / 2, mo->taille_y * larg - larg / 2))
-				configure_tir_monde(mo, mo->tab[y][x].tir, TIR, larg);
+		case TIR:
+		
+			if(validation_tir(&(mo->tab[y][x].tir.coord_t), larg / 2, larg / 2, mo->taille_x * larg - larg / 2, mo->taille_y * larg - larg / 2)) {
+				if (configure_tir_monde(mo, mo->tab[y][x].tir, TIR, larg)) {
+					mo->tab[y][x].etats = VIDE;
+					mo->tab[y][x].vie = VIDE;
+				}
+			}
+			else {
+				mo->tab[y][x].etats = VIDE;
+				mo->tab[y][x].vie = VIDE;
+			}
 			break;
+			
 		default: break;
 	}
 }

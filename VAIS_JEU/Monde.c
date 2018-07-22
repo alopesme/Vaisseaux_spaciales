@@ -89,14 +89,18 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
 
 }
 
-void configure_tir_monde(Monde* monde, Tir tir, Etats etats, const int larg) {
+int configure_tir_monde(Monde* monde, Tir tir, Etats etats, const int larg) {
     assert(NULL != monde);
-    if (etats == TIR) {
-        monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].etats = etats;
-        monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].indice = -1;
-        monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].vie = tir.degat;
-        monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir = tir;
+    if (etats <= TIR && etats > OBSTACLE) {
+        if (monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].etats == VIDE) {
+            monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].etats = etats;
+            monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].indice = -1;
+            monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].vie = tir.degat;
+            monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir = tir;
+            return 1;
+        }
     }
+    return 0;
 }
 
 void ajouter_vaisseau_monde(Monde* monde, const int x, const int y, const int vie, const int larg, const Etats type) {
@@ -138,7 +142,9 @@ int ajouter_tir_monde(Monde* monde, const int x, const int y, const int larg, co
     if (!validation_tir(&(tir.coord_t), 0, 0, monde->taille_x, monde->taille_y))
         return 0;
 
-    configure_tir_monde(monde, tir, TIR, 1);
+    if (!configure_tir_monde(monde, tir, TIR, 1))
+        return 0; 
+    
     monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].tir.coord_t.d_x = monde->vaisseaux[indice_v].x;
     monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].tir.coord_t.d_y = monde->vaisseaux[indice_v].y;
     monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].tir.coord_t.x_f = x;
