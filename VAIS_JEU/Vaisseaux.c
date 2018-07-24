@@ -53,6 +53,8 @@ void calculer_prochaine_case_vaisseau(Vaisseau *v) {
     switch ( v->dep ) {
         case NORD:
             v->y -= v->vi;
+            if ( v->y < 0 )
+                v->y = 0;
             break;
         case OUEST:
             v->x += v->vi;
@@ -62,6 +64,8 @@ void calculer_prochaine_case_vaisseau(Vaisseau *v) {
             break;
         case EST:
             v->x -= v->vi;
+            if ( v->x < 0)
+               v->x = 0;
             break;
         default:
             break;
