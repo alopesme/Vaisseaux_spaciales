@@ -54,5 +54,8 @@ int calculer_tir(Coord_Tir *coord_t, const int num);
  * Renvoie 1 si dans le cadre 0 sinon.*/
 int validation_tir(Coord_Tir *coord_t, const int d_x, const int d_y, const int t_x, const int t_y);
 
+/* Verifie si les coordonnees du `tir` est entre les coordonnees du parametre.
+ * Si oui renvoie 1 sinon 0.*/
+int coord_tir_touche(Tir tir, const int x1, const int y1, const int x2, const int y2, const int larg);
 
 #endif
