@@ -106,8 +106,8 @@ int configure_tir_monde(Monde* monde, Tir tir, Etats etats, const int larg) {
 
 void ajouter_vaisseau_monde(Monde* monde, const int x, const int y, const int vie, const int larg, const Etats type) {
     assert(NULL != monde);
-    assert(x > 0);
-    assert(y > 0);
+    assert(x >= 0);
+    assert(y >= 0);
     assert(JOUEUR <= type && type <= BOSSFINALE);
     assert(vie > 0);
 
