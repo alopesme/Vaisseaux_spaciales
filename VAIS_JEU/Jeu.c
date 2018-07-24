@@ -132,21 +132,27 @@ void action_element(Monde *mo, const int x, const int y, const int larg, int *a_
 }
 
 void jouer(int taille_x, int taille_y) {
-	int x, y, larg = 20;
 	Monde monde;
-	int a_bouge;
-	initialiser_monde(&monde, taille_x, taille_y, larg);
-	while ( 1 ) {
+	int a_bouge, x, y, tir_x, tir_y, larg = 30;
+	assert(taille_x > 0);
+	assert(taille_y > 0);
+	initialiser_monde(&monde, taille_x / larg, taille_y / larg, larg);
+	while(MLV_get_mouse_button_state( MLV_BUTTON_RIGHT ) != MLV_PRESSED)  {
 		a_bouge = 0;
 		afficher_background();
-		/* On parcours tous le tableau, et selon l'élément de la case, on effectue une action. */
-		for (y = 0; y < monde.taille_y; y++) {
-			for (x = 0; x < monde.taille_x; x++) {
+		if (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED) {
+			MLV_get_mouse_position(&tir_x, &tir_y);
+			ajouter_tir_monde(&monde, tir_x, tir_y, larg, 0);
+		}
+
+		for (y = 0; y < monde.taille_y; ++y) {
+			for (x = 0; x < monde.taille_x; ++x) {
 				dessiner_element(&monde, x, y, larg);
 				action_element(&monde, x, y, larg, &a_bouge);
 			}
+			
 		}
 		MLV_actualise_window();
 	}
-
+	libere_monde(&monde);
 }
