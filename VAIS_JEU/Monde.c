@@ -139,20 +139,20 @@ int ajouter_tir_monde(Monde* monde, const int x, const int y, const int larg, co
     assert(y >= 0);
     assert(larg > 0);
 
-    tir = init_tirs(monde->vaisseaux[indice_v].x / larg, monde->vaisseaux[indice_v].y / larg, x / larg, y / larg);
     tir2 = init_tirs(monde->vaisseaux[indice_v].x, monde->vaisseaux[indice_v].y, x, y);
-    if (!validation_tir(&(tir.coord_t), 0, 0, monde->taille_x, monde->taille_y))
+    tir = tir2;
+    if (!calculer_tir(&(tir2.coord_t), larg))
         return 0;
 
-    if (!configure_tir_monde(monde, tir, TIR, 1))
+    if (!configure_tir_monde(monde, tir2, TIR, larg))
         return 0; 
     
-    monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].tir.coord_t.d_x = tir2.coord_t.d_x;
-    monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].tir.coord_t.d_y = tir2.coord_t.d_y;
-    monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].tir.coord_t.x_f = tir2.coord_t.x_f;
-    monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].tir.coord_t.y_f = tir2.coord_t.y_f;
-    monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].tir.coord_t.tir_x = tir2.coord_t.tir_x;
-    monde->tab[(int)(tir.coord_t.tir_y)][(int)(tir.coord_t.tir_x)].tir.coord_t.tir_y = tir2.coord_t.tir_y;
+    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.d_x = tir2.coord_t.d_x;
+    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.d_y = tir2.coord_t.d_y;
+    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.x_f = tir2.coord_t.x_f;
+    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.y_f = tir2.coord_t.y_f;
+    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.tir_x = tir.coord_t.tir_x;
+    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.tir_y = tir.coord_t.tir_y;
     return 1;
 }
 
