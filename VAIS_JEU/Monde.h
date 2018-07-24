@@ -53,25 +53,35 @@ void afficher_monde(Monde mo);
 
 void afficher_monde_details(Monde monde);
 
-void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie);
+
 
 int configure_tir_monde(Monde* monde, Tir tir, Etats etats, const int larg);
-
-/* Ajoute un vaisseau aux coordonnées (x, y) dont le type et sa vie est donné. */
-void ajouter_vaisseau_monde(Monde* monde, const int x, const int y, const int vie, const int larg, const Etats type);
 
 /* Permet d'ajouter un tir dans monde. Ajoute d'abord dans le tableau.
  * Puis converti les coordonnees aux coordonnees de la fenetre graĥique.*/
 int ajouter_tir_monde(Monde* monde, const int x, const int y, const int larg, const int indice_v);
 
-/* Libere monde.*/
-void libere_monde(Monde* monde);
+/* Verifie si le tir touche un element.
+ * Si la vie de l'element est positif on enleve la vie de l'element avec la vie du tir.
+ * Verifie les cases au tour si pas vide verifie les coordonnees.*/
+int tir_touche_element(Monde *monde, const int x, const int y, const int larg);
+
+/* Ajoute un vaisseau aux coordonnées (x, y) dont le type et sa vie est donné. */
+void ajouter_vaisseau_monde(Monde* monde, const int x, const int y, const int vie, const int larg, const Etats type);
+
+
 
 /* Renvoie 1 si le vaisseau à l'indice `indice_vaisseau` et aux coordonnées (x, y) peut se déplacer dans sa direction et 0 sinon. */
 int peut_se_deplacer(Monde* monde, const int x, const int y, const int indice_vaisseau, const int larg);
 
 /* Déplace d'un cran le vaisseau situé aux coordonnées (x, y). */
 void deplacer_vaisseau(Monde* monde, const int x, const int y, const int larg);
+
+/* Libere monde.*/
+void libere_monde(Monde* monde);
+
+
+void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie);
 
 /* Ajoute un bonus aléatoire dans le monde en fonction d'un taux de probabilité. */
 void ajouter_bonus_aleatoire(Monde* monde);

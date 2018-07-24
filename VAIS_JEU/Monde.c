@@ -27,7 +27,67 @@ static Element **initialise_tab(const int t_x, const int t_y) {
         }
     }
     return tab;
+}
 
+static int controle_vie(Element *elem, const int vie) {
+    assert(NULL != elem);
+    if (vie < 0)
+        return 0;
+
+    elem->vie -= vie;
+    if (elem->vie < 0) {
+        elem->vie = 0;
+        elem->etats = VIDE;
+        elem->indice = -1;
+    }
+    return 1;
+}
+
+static int condition_tir(Monde* monde, const int x, const int y, const int larg) {
+    assert(NULL != monde);
+    assert(x >= 0);
+    assert(y >= 0);
+    assert(x < monde->taille_x);
+    assert(y < monde->taille_y);
+
+    if (monde->tab[y - 1][x].etats != VIDE && monde->tab[y][x].vie > 0 && (y - 1 >= 0)) {
+
+        if (coord_tir_touche(monde->tab[y][x].tir, x * larg, (y - 1) * larg, x * larg + larg, y * larg))
+            controle_vie(&(monde->tab[y - 1][x]), monde->tab[y][x].vie);
+        return 1;
+    }
+
+    else if (monde->tab[y - 1][x - 1].etats != VIDE && monde->tab[y][x].vie > 0 && (y - 1 >= 0 && x - 1 >= 0)) {
+        if (coord_tir_touche(monde->tab[y][x].tir, (x - 1) * larg, (y - 1) * larg, x * larg, y * larg))
+            controle_vie(&(monde->tab[y - 1][x - 1]), monde->tab[y][x].vie);
+        return 1;
+    }
+
+    else if (monde->tab[y - 1][x + 1].etats != VIDE && monde->tab[y][x].vie > 0 && (y - 1 >= 0 && x + 1 < monde->taille_x)) {
+        if (coord_tir_touche(monde->tab[y][x].tir, (x + 1) * larg, (y - 1) * larg, (x + 1) * larg + larg, y * larg))
+            controle_vie(&(monde->tab[y - 1][x + 1]), monde->tab[y][x].vie);
+        return 1;
+    }
+    
+    else if (monde->tab[y + 1][x].etats != VIDE && monde->tab[y][x].vie > 0 && (y + 1 < monde->taille_y)) {
+        if (coord_tir_touche(monde->tab[y][x].tir, x * larg, (y + 1) * larg, x * larg + larg, (y + 1)  * larg + larg))
+            controle_vie(&(monde->tab[y + 1][x]), monde->tab[y][x].vie);
+        return 1;
+    }
+
+    else if (monde->tab[y + 1][x - 1].etats != VIDE && monde->tab[y][x].vie > 0 && (y + 1 < monde->taille_y && x - 1 >= 0)) {
+        if (coord_tir_touche(monde->tab[y][x].tir, (x - 1) * larg, (y + 1) * larg, x * larg, (y + 1)  * larg + larg))
+            controle_vie(&(monde->tab[y + 1][x - 1]), monde->tab[y][x].vie);
+        return 1;
+    }
+
+    else if (monde->tab[y + 1][x + 1].etats != VIDE && monde->tab[y][x].vie > 0 && (y + 1 < monde->taille_y && x + 1 < monde->taille_x)) { 
+        if (coord_tir_touche(monde->tab[y][x].tir, (x + 1) * larg, (y - 1) * larg, (x + 1) * larg + larg, (y + 1)  * larg + larg))
+            controle_vie(&(monde->tab[y + 1][x + 1]), monde->tab[y][x].vie);
+        return 1;
+    }
+    
+    return 0;
 }
 
 void initialiser_monde(Monde* monde, const int t_x, const int t_y, const int larg) {
@@ -154,6 +214,24 @@ int ajouter_tir_monde(Monde* monde, const int x, const int y, const int larg, co
     monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.tir_x = tir.coord_t.tir_x;
     monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.tir_y = tir.coord_t.tir_y;
     return 1;
+}
+
+int tir_touche_element(Monde *monde, const int x, const int y, const int larg) {
+    assert(x >= 0);
+    assert(y >= 0);
+    assert(larg > 0);
+    assert(x < monde->taille_x);
+    assert(y < monde->taille_y);
+
+    if (monde->tab[y][x].etats <= OBSTACLE && monde->tab[y][x].etats > TIR)
+        return 0;
+
+    if (condition_tir(monde, x, y, larg))
+        return 1;
+    
+    if (condition_tir(monde, y, x, larg))
+        return 1;
+    return 0;
 }
 
 
