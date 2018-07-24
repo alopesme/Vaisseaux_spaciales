@@ -46,11 +46,14 @@ void dessiner_element(Monde* monde, int x, int y, const int larg) {
 		case BOSSFINALE:
 			return;
 		case BONUS1:
-			return;
+			strcat(nom_image, "bonus_1.png");
+			break;
 		case BONUS2:
-			return;
+			strcat(nom_image, "bonus_2.png");
+			break;
 		case BONUS3:
-			return;
+			strcat(nom_image, "bonus_3.png");
+			break;
 		default:
 			return;
 	}
