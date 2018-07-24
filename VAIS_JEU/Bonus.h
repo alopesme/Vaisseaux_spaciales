@@ -4,15 +4,14 @@
 #ifndef __BONUS__
 #define __BONUS__
 
+#define DUREE_BONUS 3 /* Durée d'apparition d'un bonus en seconde. */
+
+#include "Monde.h"
+
 /*
 Espace commentaire : On utilise plus un tableau dynamique pour les bonus.
 */
 
-typedef struct {
-	int x;
-	int y;
-}Bonus;
-
-void afficher_bonus(Bonus bonus);
+int doit_detruire_bonus(Element bonus);
 
 #endif

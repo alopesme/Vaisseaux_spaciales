@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
+#include <MLV/MLV_random.h>
+#include <MLV/MLV_time.h>
 #include "Vitesse.h"
 #include "Tires.h"
 #include "Deplacement.h"
 #include "Vaisseaux.h"
-#include "Bonus.h"
 #include "Monde.h"
 
 static Element **initialise_tab(const int t_x, const int t_y) {
@@ -226,5 +227,27 @@ void deplacer_vaisseau(Monde* monde, const int x, const int y, const int larg) {
         monde->tab[y][x].etats = VIDE;
         monde->tab[y][x].vie = 0;
         monde->tab[y][x].indice = -1;
+    }
+}
+
+
+void ajouter_bonus_aleatoire(Monde* monde) {
+    Element elem;
+    int proba, x, y;
+
+    assert(NULL != monde);
+
+    proba = PROBA_BONUS; /* Pourcentage de chance qu'un bonus apparaisse. */
+
+    if ( proba > MLV_get_random_integer(0, 100) ) {
+        elem.etats = MLV_get_random_integer(BONUS1, BONUS3);
+        elem.vie = MLV_get_time();
+
+        do {
+            x = MLV_get_random_integer(0, monde->taille_x);
+            y = MLV_get_random_integer(0, monde->taille_y);
+        } while ( monde->tab[y][x].etats != VIDE );
+
+        monde->tab[y][x] = elem;
     }
 }

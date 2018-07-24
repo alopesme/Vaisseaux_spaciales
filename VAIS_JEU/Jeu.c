@@ -9,6 +9,7 @@
 #include "Monde.h"
 #include "Interface_graphique.h"
 #include "Jeu.h"
+#include "Bonus.h"
 
 static void matiere_monde(Monde *mo, const int x, const int y) {
 	assert(NULL != mo);
@@ -100,10 +101,10 @@ static void bonus_monde(Monde *mo, const int x, const int y) {
 	switch(mo->tab[y][x].etats) {
 		/* Si c'est un bonus. */
 		case BONUS1:
-			break;
 		case BONUS2:
-			break;
 		case BONUS3:
+			if ( doit_detruire_bonus(mo->tab[y][x]) )
+				mo->tab[y][x].etats = VIDE;
 			break;
 
 		default: break;
@@ -134,15 +135,30 @@ void action_element(Monde *mo, const int x, const int y, const int larg, int *a_
 void jouer(int taille_x, int taille_y) {
 	Monde monde;
 	int a_bouge, x, y, tir_x, tir_y, larg = 30;
+	int debut, temps1, temps2;
+
 	assert(taille_x > 0);
 	assert(taille_y > 0);
+
 	initialiser_monde(&monde, taille_x / larg, taille_y / larg, larg);
+
+	debut = MLV_get_time() / 1000;
+	temps1 = debut;
+
 	while(MLV_get_mouse_button_state( MLV_BUTTON_RIGHT ) != MLV_PRESSED)  {
 		a_bouge = 0;
 		afficher_background();
+
 		if (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED) {
 			MLV_get_mouse_position(&tir_x, &tir_y);
 			ajouter_tir_monde(&monde, tir_x, tir_y, larg, 0);
+		}
+
+		/* On tente d'ajouter un bonus toutes les secondes. */
+		temps2 = MLV_get_time() / 1000;
+		if ( temps2 != temps1 ) {
+			temps1 = temps2;
+			ajouter_bonus_aleatoire(&monde);
 		}
 
 		for (y = 0; y < monde.taille_y; ++y) {
@@ -152,7 +168,9 @@ void jouer(int taille_x, int taille_y) {
 			}
 			
 		}
+
 		MLV_actualise_window();
 	}
+
 	libere_monde(&monde);
 }

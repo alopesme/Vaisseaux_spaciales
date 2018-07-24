@@ -6,7 +6,6 @@
 
 #include "Tires.h"
 #include "Vaisseaux.h"
-#include "Bonus.h"
 
 /*
 Espace commentaire : Modifie `configure_tir_monde`.
@@ -14,6 +13,7 @@ Espace commentaire : Modifie `configure_tir_monde`.
 
 #define BLOC_VAISSEAUX 16 /* Bloc de mémoire alloué au début pour les vaisseaux. */
 #define BLOC_BONUS 8 /* Bloc de mémoire alloué au début pour les bonus. */
+#define PROBA_BONUS 10 /* Pourcentage de chance de faire apparaître un bonus à chaque seconde. */
 
 typedef enum {
 	VIDE,
@@ -55,7 +55,7 @@ void afficher_monde_details(Monde monde);
 
 void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie);
 
-void configure_tir_monde(Monde* monde, Tir tir, Etats etats, const int larg);
+int configure_tir_monde(Monde* monde, Tir tir, Etats etats, const int larg);
 
 /* Ajoute un vaisseau aux coordonnées (x, y) dont le type et sa vie est donné. */
 void ajouter_vaisseau_monde(Monde* monde, const int x, const int y, const int vie, const int larg, const Etats type);
@@ -72,5 +72,8 @@ int peut_se_deplacer(Monde* monde, const int x, const int y, const int indice_va
 
 /* Déplace d'un cran le vaisseau situé aux coordonnées (x, y). */
 void deplacer_vaisseau(Monde* monde, const int x, const int y, const int larg);
+
+/* Ajoute un bonus aléatoire dans le monde en fonction d'un taux de probabilité. */
+void ajouter_bonus_aleatoire(Monde* monde);
 
 #endif
