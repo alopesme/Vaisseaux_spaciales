@@ -98,14 +98,14 @@ int validation_tir(Coord_Tir *coord_t, const int d_x, const int d_y, const int t
 
 int coord_tir_touche(Tir tir, const int x1, const int y1, const int x2, const int y2) {
     int t_x, t_y;
-    assert(x1 >= larg / 2);
-    assert(y1 >= larg / 2);
-    assert(x2 >= larg / 2);
-    assert(y2 >= larg / 2);
+    assert(x1 >= 0);
+    assert(y1 >= 0);
+    assert(x2 >= 0);
+    assert(y2 >= 0);
 
     t_x = (int)tir.coord_t.tir_x; t_y = (int)tir.coord_t.tir_y;
 
-    if (x1 <= t_x && t_x <= x2) && (y1 <= t_y && t_y <= y2)
+    if ((x1 <= t_x && t_x <= x2) && (y1 <= t_y && t_y <= y2))
         return 1;
 
     return 0;
