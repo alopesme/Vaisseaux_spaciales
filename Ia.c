@@ -31,3 +31,13 @@ void ajouter_vaisseau_bot(Monde* monde, int larg) {
 
 	ajouter_vaisseau_monde(monde, x, y, 50, larg, BOT);
 }
+
+void changer_direction_aleatoirement(Monde* monde, int i_vaisseau) {
+	assert(NULL != monde);
+	assert(i_vaisseau >= 0);
+
+	if ( PROBA_DEPLACEMENT_BOT < MLV_get_random_integer(0, 100) )
+		return;
+
+	monde->vaisseaux[i_vaisseau].dep = MLV_get_random_integer(NORD, OUEST + 1);
+}

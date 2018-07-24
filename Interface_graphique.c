@@ -42,6 +42,8 @@ void dessiner_element(Monde* monde, int x, int y, const int larg) {
 			dessiner_vaisseau(&image, nom_image, dessin_x, dessin_y, larg);
 			return;
 		case BOT:
+			dessin_x = monde->vaisseaux[monde->tab[y][x].indice].x;
+			dessin_y = monde->vaisseaux[monde->tab[y][x].indice].y;
 			strcat(nom_image, "v_joueur.png");
 			break;
 		case MIBOSS:
