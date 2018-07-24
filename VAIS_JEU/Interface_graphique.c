@@ -22,6 +22,8 @@ void dessiner_element(Monde* monde, int x, int y, const int larg) {
 	/*int largeur_image, hauteur_image;*/
 
 	assert(NULL != monde);
+	dessin_x = x * larg;
+	dessin_y = y * larg;
 
 	switch ( monde->tab[y][x].etats ) {
 		case MUR:
