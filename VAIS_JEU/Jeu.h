@@ -4,7 +4,7 @@
 Espace commentaire : pas fini la partie tir encore des bugs
 */
 
-void action_element(Monde *mo, const int x, const int y, const int larg, int *a_bouge);
+void action_element(Monde *mo, const int x, const int y, const int larg);
 
 
 /* Phase de jeu. */

@@ -10,6 +10,7 @@
 #include "Interface_graphique.h"
 #include "Jeu.h"
 #include "Bonus.h"
+#include "Ia.h"
 
 static void matiere_monde(Monde *mo, const int x, const int y) {
 	assert(NULL != mo);
@@ -59,13 +60,17 @@ static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
 	}
 }
 
-static void vaisseaux_monde(Monde *mo, const int x, const int y, const int larg, int *a_bouge) {
+static void vaisseaux_monde(Monde *mo, const int x, const int y, const int larg) {
 	int i_vaisseau;
+
 	assert(NULL != mo);
 	assert(x >= 0);
 	assert(x < mo->taille_x);
 	assert(y >= 0);
 	assert(y < mo->taille_y);
+
+	i_vaisseau = mo->tab[y][x].indice;
+
 	switch (mo->tab[y][x].etats) {
 		case JOUEUR:
 			if ( MLV_get_keyboard_state(MLV_KEYBOARD_z) == MLV_PRESSED )
@@ -76,20 +81,22 @@ static void vaisseaux_monde(Monde *mo, const int x, const int y, const int larg,
 				mo->vaisseaux[0].dep = SUD;
 			if ( MLV_get_keyboard_state(MLV_KEYBOARD_q) == MLV_PRESSED )
 				mo->vaisseaux[0].dep = EST;
+			break;
 		case BOT:
 		case MIBOSS:
 		case BOSSFINALE:
-			i_vaisseau = mo->tab[y][x].indice;
-			if ( mo->vaisseaux[i_vaisseau].dep != STOP ) {
-				if (peut_se_deplacer(mo, x, y, i_vaisseau, larg) && !(*a_bouge) ) {
-					deplacer_vaisseau(mo, x, y, larg);
-					mo->vaisseaux[i_vaisseau].dep = STOP;
-					*a_bouge = 1;
-				}
-			}
+			changer_direction_aleatoirement(mo, i_vaisseau);
 			break;
-		default: break;
+		default: return;
 	}
+
+	if ( mo->vaisseaux[i_vaisseau].dep != STOP ) {
+		if (peut_se_deplacer(mo, x, y, i_vaisseau, larg)) {
+			deplacer_vaisseau(mo, x, y, larg);
+		}
+	}
+
+	mo->vaisseaux[0].dep = STOP;
 }
 
 static void bonus_monde(Monde *mo, const int x, const int y) {
@@ -111,9 +118,8 @@ static void bonus_monde(Monde *mo, const int x, const int y) {
 	}
 }
 
-void action_element(Monde *mo, const int x, const int y, const int larg, int *a_bouge) {
+void action_element(Monde *mo, const int x, const int y, const int larg) {
 	assert(NULL != mo);
-	assert(NULL != a_bouge);
 	assert(x >= 0);
 	assert(x < mo->taille_x);
 	assert(y >= 0);
@@ -126,7 +132,7 @@ void action_element(Monde *mo, const int x, const int y, const int larg, int *a_
 		tir_monde(mo, x, y, larg);
 				
 	if (mo->tab[y][x].etats > TIR && mo->tab[y][x].etats <= BOSSFINALE) 
-		vaisseaux_monde(mo, x, y, larg, a_bouge);
+		vaisseaux_monde(mo, x, y, larg);
 
 	if (mo->tab[y][x].etats > BOSSFINALE)
 		bonus_monde(mo, x, y);
@@ -134,7 +140,7 @@ void action_element(Monde *mo, const int x, const int y, const int larg, int *a_
 
 void jouer(int taille_x, int taille_y) {
 	Monde monde;
-	int a_bouge, x, y, tir_x, tir_y, larg = 30;
+	int x, y, tir_x, tir_y, larg = 30;
 	int debut, temps1, temps2;
 
 	assert(taille_x > 0);
@@ -146,7 +152,6 @@ void jouer(int taille_x, int taille_y) {
 	temps1 = debut;
 
 	while(MLV_get_mouse_button_state( MLV_BUTTON_RIGHT ) != MLV_PRESSED)  {
-		a_bouge = 0;
 		afficher_background();
 
 		if (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED) {
@@ -154,17 +159,18 @@ void jouer(int taille_x, int taille_y) {
 			ajouter_tir_monde(&monde, tir_x, tir_y, larg, 0);
 		}
 
-		/* On tente d'ajouter un bonus toutes les secondes. */
+		/* On tente d'ajouter un bonus et un bot toutes les secondes. */
 		temps2 = MLV_get_time() / 1000;
 		if ( temps2 != temps1 ) {
 			temps1 = temps2;
 			ajouter_bonus_aleatoire(&monde);
+			ajouter_vaisseau_bot(&monde, larg);
 		}
 
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
 				dessiner_element(&monde, x, y, larg);
-				action_element(&monde, x, y, larg, &a_bouge);
+				action_element(&monde, x, y, larg);
 			}
 			
 		}

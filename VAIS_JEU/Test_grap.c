@@ -124,13 +124,12 @@ void test_deplacement_vaisseau(const int l_fen, const int h_fen) {
 
 void test_monde(const int l_fen, const int h_fen, const int larg) {
 	Monde monde;
-	int a_bouge, x, y, tir_x, tir_y;
+	int x, y, tir_x, tir_y;
 	assert(l_fen > 0);
 	assert(h_fen > 0);
 	initialiser_monde(&monde, l_fen / larg, h_fen / larg, larg);
 	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", l_fen, h_fen);
 	while(MLV_get_mouse_button_state( MLV_BUTTON_RIGHT ) != MLV_PRESSED)  {
-		a_bouge = 0;
 		afficher_background();
 		if (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED) {
 			MLV_get_mouse_position(&tir_x, &tir_y);
@@ -140,7 +139,7 @@ void test_monde(const int l_fen, const int h_fen, const int larg) {
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
 				dessiner_element(&monde, x, y, larg);
-				action_element(&monde, x, y, larg, &a_bouge);
+				action_element(&monde, x, y, larg);
 			}
 			
 		}

@@ -21,7 +21,7 @@ void dessiner_element(Monde* monde, int x, int y, const int larg) {
 	MLV_Image* image = NULL;
 	/*int largeur_image, hauteur_image;*/
 
-	assert(NULL != monde);
+	assert(NULL != monde);	
 	dessin_x = x * larg;
 	dessin_y = y * larg;
 
@@ -42,7 +42,10 @@ void dessiner_element(Monde* monde, int x, int y, const int larg) {
 			dessiner_vaisseau(&image, nom_image, dessin_x, dessin_y, larg);
 			return;
 		case BOT:
-			return;
+			dessin_x = monde->vaisseaux[monde->tab[y][x].indice].x;
+			dessin_y = monde->vaisseaux[monde->tab[y][x].indice].y;
+			strcat(nom_image, "v_joueur.png");
+			break;
 		case MIBOSS:
 			return;
 		case BOSSFINALE:
