@@ -67,7 +67,7 @@ void test_un_tir_image(const int l_fen, const int h_fen, const int larg, const c
 		if ((tir.coord_t.tir_x < l_fen && tir.coord_t.tir_x >= larg / 2) && (tir.coord_t.tir_y < l_fen && tir.coord_t.tir_y >= larg / 2)) {
 			afficher_background();
 			dessiner_image(&im, nom_im ,(int)(tir.coord_t.tir_x), (int)(tir.coord_t.tir_y), larg);
-			calculer_tir(&(tir.coord_t));
+			calculer_tir(&(tir.coord_t), 1);
 			MLV_actualise_window();
 		}
 	}

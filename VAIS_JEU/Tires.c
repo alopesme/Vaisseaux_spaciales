@@ -46,20 +46,20 @@ Tir init_tirs(const int x, const int y, const int x_f, const int y_f) {
     return tir;
 }
 
-int calculer_tir(Coord_Tir *coord_t) {
+int calculer_tir(Coord_Tir *coord_t, const int num) {
 
     float sum_x, sum_y;
     assert(NULL != coord_t);
 
     sum_x = coord_t->x_f - coord_t->d_x; sum_y = coord_t->y_f - coord_t->d_y;
     if (pow(sum_x, 2) < pow(sum_y, 2)) {
-        sum_x = 1 / (sum_y / sum_x);
-        sum_y = 1;
+        sum_x = num / (sum_y / sum_x);
+        sum_y = num;
     }
 
     else {
-        sum_y = 1 / (sum_x / sum_y);
-        sum_x = 1;
+        sum_y = num / (sum_x / sum_y);
+        sum_x = num;
     }
 
     if (coord_t->d_x > coord_t->x_f)
@@ -88,7 +88,7 @@ int validation_tir(Coord_Tir *coord_t, const int d_x, const int d_y, const int t
     assert(NULL != coord_t);
     tmp = *coord_t;
 
-    calculer_tir(&tmp);
+    calculer_tir(&tmp, 1);
     x = (int)tmp.tir_x; y = (int)tmp.tir_y;
     if ((x < d_x || x > t_x) || (y < d_y || y > t_y))
         return 0;
