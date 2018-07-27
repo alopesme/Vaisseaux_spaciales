@@ -129,17 +129,25 @@ void test_monde(const int l_fen, const int h_fen, const int larg) {
 	assert(h_fen > 0);
 	initialiser_monde(&monde, l_fen / larg, h_fen / larg, larg);
 	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", l_fen, h_fen);
+	ajouter_vaisseau_monde(&monde, 4, 1, 10, larg, BOT);
 	while(MLV_get_mouse_button_state( MLV_BUTTON_RIGHT ) != MLV_PRESSED)  {
 		afficher_background();
+		if( MLV_get_keyboard_state( MLV_KEYBOARD_k ) == MLV_PRESSED ) {
+			afficher_monde(monde);
+			while(MLV_get_keyboard_state( MLV_KEYBOARD_k ) != MLV_RELEASED );
+		}
+		
 		if (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED) {
 			MLV_get_mouse_position(&tir_x, &tir_y);
 			ajouter_tir_monde(&monde, tir_x, tir_y, larg, 0);
+
 		}
 
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
 				dessiner_element(&monde, x, y, larg);
 				action_element(&monde, x, y, larg);
+				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 			}
 			
 		}

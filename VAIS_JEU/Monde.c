@@ -29,63 +29,120 @@ static Element **initialise_tab(const int t_x, const int t_y) {
     return tab;
 }
 
-static int controle_vie(Element *elem, const int vie) {
+static int controle_vie(Element *elem, Element *elem_modifiable) {
+    int temp;
     assert(NULL != elem);
-    if (vie < 0)
+    if (elem->vie < 0 || elem_modifiable->vie < 0)
         return 0;
+    temp = elem->vie;
 
-    elem->vie -= vie;
-    if (elem->vie < 0) {
+    elem->vie -= elem_modifiable->vie;
+    elem_modifiable->vie -= temp;
+    if (elem->vie <= 0) {
         elem->vie = 0;
         elem->etats = VIDE;
         elem->indice = -1;
     }
+    if (elem_modifiable->vie <= 0) {
+        elem_modifiable->etats = VIDE;
+        elem_modifiable->vie = 0;
+        elem_modifiable->indice = -1;
+
+    }
     return 1;
 }
 
-static int condition_tir(Monde* monde, const int x, const int y, const int larg) {
+static int condition_tir_vaisseau(Monde* monde, int x, int y, const int larg) {
+    Tir tir;
+    int t_x, t_y, l, x1, x2, y1, y2;
     assert(NULL != monde);
     assert(x >= 0);
     assert(y >= 0);
     assert(x < monde->taille_x);
     assert(y < monde->taille_y);
+    tir = monde->tab[y][x].tir;
+    tir.coord_t.tir_x -= larg / 4;
+    tir.coord_t.tir_y -= larg / 4;
+    t_x = (int)tir.coord_t.tir_x; 
+    t_y = (int)tir.coord_t.tir_y;
+    l = larg / 2;
 
-    if (monde->tab[y - 1][x].etats != VIDE && monde->tab[y][x].vie > 0 && (y - 1 >= 0)) {
-
-        if (coord_tir_touche(monde->tab[y][x].tir, x * larg, (y - 1) * larg, x * larg + larg, y * larg))
-            controle_vie(&(monde->tab[y - 1][x]), monde->tab[y][x].vie);
-        return 1;
+    if ((monde->tab[t_y / larg][t_x / larg].etats >= JOUEUR && monde->tab[t_y / larg][t_x / larg].etats <= BOSSFINALE)) {
+        if (monde->tab[t_y / larg][t_x / larg].indice < 0 || monde->tab[t_y / larg][t_x / larg].indice > monde->nb_vaisseaux_max)
+            return 0;
+        x1 = monde->vaisseaux[monde->tab[t_y / larg][t_x / larg].indice].x - larg / 2;
+        y1 = monde->vaisseaux[monde->tab[t_y / larg][t_x / larg].indice].y - larg / 2;
+        x2 = x1 + larg;
+        y2 = y1 + larg;
+        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(&(monde->tab[t_y / larg][t_x / larg]), &(monde->tab[y][x]));
     }
 
-    else if (monde->tab[y - 1][x - 1].etats != VIDE && monde->tab[y][x].vie > 0 && (y - 1 >= 0 && x - 1 >= 0)) {
-        if (coord_tir_touche(monde->tab[y][x].tir, (x - 1) * larg, (y - 1) * larg, x * larg, y * larg))
-            controle_vie(&(monde->tab[y - 1][x - 1]), monde->tab[y][x].vie);
-        return 1;
-    }
-
-    else if (monde->tab[y - 1][x + 1].etats != VIDE && monde->tab[y][x].vie > 0 && (y - 1 >= 0 && x + 1 < monde->taille_x)) {
-        if (coord_tir_touche(monde->tab[y][x].tir, (x + 1) * larg, (y - 1) * larg, (x + 1) * larg + larg, y * larg))
-            controle_vie(&(monde->tab[y - 1][x + 1]), monde->tab[y][x].vie);
-        return 1;
+    if ((monde->tab[t_y / larg][(t_x + l) / larg].etats >= JOUEUR || monde->tab[t_y / larg][(t_x + l) / larg].etats <= BOSSFINALE)) {
+        if (monde->tab[t_y / larg][(t_x + l) / larg].indice < 0 || monde->tab[t_y / larg][(t_x + l) / larg].indice > monde->nb_vaisseaux_max)
+            return 0;
+        tir.coord_t.tir_x += l;
+        x1 = monde->vaisseaux[monde->tab[t_y / larg][(t_x + l) / larg].indice].x - larg / 2;
+        y1 = monde->vaisseaux[monde->tab[t_y / larg][(t_x + l) / larg].indice].y - larg / 2;
+        x2 = x1 + larg;
+        y2 = y1 + larg;
+        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(&(monde->tab[t_y / larg][(t_x + l) / larg]), &(monde->tab[y][x]));
     }
     
-    else if (monde->tab[y + 1][x].etats != VIDE && monde->tab[y][x].vie > 0 && (y + 1 < monde->taille_y)) {
-        if (coord_tir_touche(monde->tab[y][x].tir, x * larg, (y + 1) * larg, x * larg + larg, (y + 1)  * larg + larg))
-            controle_vie(&(monde->tab[y + 1][x]), monde->tab[y][x].vie);
-        return 1;
+    if ((monde->tab[(t_y + l) / larg][t_x / larg].etats >= JOUEUR || monde->tab[(t_y + l) / larg][t_x / larg].etats <= BOSSFINALE)) {
+        if (monde->tab[(t_y + l) / larg][t_x / larg].indice < 0 || monde->tab[(t_y + l) / larg][t_x / larg].indice > monde->nb_vaisseaux_max)
+            return 0;
+        tir.coord_t.tir_y += l;
+        x1 = monde->vaisseaux[monde->tab[(t_y + l) / larg][t_x / larg].indice].x - larg / 2;
+        y1 = monde->vaisseaux[monde->tab[(t_y + l) / larg][t_x / larg].indice].y - larg / 2;
+        x2 = x1 + larg;
+        y2 = y1 + larg;
+        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(&(monde->tab[(t_y + l) / larg][t_x / larg]), &(monde->tab[y][x]));
     }
+    
 
-    else if (monde->tab[y + 1][x - 1].etats != VIDE && monde->tab[y][x].vie > 0 && (y + 1 < monde->taille_y && x - 1 >= 0)) {
-        if (coord_tir_touche(monde->tab[y][x].tir, (x - 1) * larg, (y + 1) * larg, x * larg, (y + 1)  * larg + larg))
-            controle_vie(&(monde->tab[y + 1][x - 1]), monde->tab[y][x].vie);
-        return 1;
+    if ((monde->tab[(t_y + l) / larg][(t_x + l) / larg].etats >= JOUEUR || monde->tab[(t_y + l) / larg][(t_x + l) / larg].etats <= BOSSFINALE)) {
+        if (monde->tab[(t_y + l) / larg][(t_x + l) / larg].indice < 0 || monde->tab[(t_y + l) / larg][(t_x + l) / larg].indice > monde->nb_vaisseaux_max)
+            return 0;
+        tir.coord_t.tir_x += l;
+        tir.coord_t.tir_y += l;
+        x1 = monde->vaisseaux[monde->tab[(t_y + l) / larg][(t_x + l) / larg].indice].x - larg / 2;
+        y1 = monde->vaisseaux[monde->tab[(t_y + l) / larg][(t_x + l) / larg].indice].y - larg / 2;
+        x2 = x1 + larg;
+        y2 = y1 + larg;
+        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(&(monde->tab[(t_y + l) / larg][(t_x + l) / larg]), &(monde->tab[y][x]));
     }
+    return 0;
+}
 
-    else if (monde->tab[y + 1][x + 1].etats != VIDE && monde->tab[y][x].vie > 0 && (y + 1 < monde->taille_y && x + 1 < monde->taille_x)) { 
-        if (coord_tir_touche(monde->tab[y][x].tir, (x + 1) * larg, (y - 1) * larg, (x + 1) * larg + larg, (y + 1)  * larg + larg))
-            controle_vie(&(monde->tab[y + 1][x + 1]), monde->tab[y][x].vie);
-        return 1;
-    }
+static int condition_tir(Monde* monde, int x, int y, const int larg) {
+    int t_x, t_y, l;
+    assert(NULL != monde);
+    assert(x >= 0);
+    assert(y >= 0);
+    assert(x < monde->taille_x);
+    assert(y < monde->taille_y);
+    t_x = (int)monde->tab[y][x].tir.coord_t.tir_x - larg / 4;
+    t_y = (int)monde->tab[y][x].tir.coord_t.tir_y - larg / 4;
+    l = larg / 2;
+
+   
+
+    if ((monde->tab[t_y / larg][t_x / larg].etats != VIDE) &&
+        (monde->tab[t_y / larg][t_x / larg].etats > TIR || monde->tab[t_y / larg][t_x / larg].etats < TIR))
+        return controle_vie(&(monde->tab[t_y / larg][t_x / larg]), &(monde->tab[y][x]));
+
+    if ((monde->tab[t_y / larg][(t_x + l) / larg].etats != VIDE) &&
+        (monde->tab[t_y / larg][(t_x + l) / larg].etats < TIR || monde->tab[t_y / larg][(t_x + l) / larg].etats > TIR))
+        return controle_vie(&(monde->tab[t_y / larg][(t_x + l) / larg]), &(monde->tab[y][x]));
+    
+    if ((monde->tab[(t_y + l) / larg][t_x / larg].etats != VIDE) &&
+        (monde->tab[(t_y + l) / larg][t_x / larg].etats < TIR || monde->tab[(t_y + l) / larg][t_x / larg].etats > TIR))
+        return controle_vie(&(monde->tab[(t_y + l) / larg][t_x / larg]), &(monde->tab[y][x]));
+    
+
+    if ((monde->tab[(t_y + l) / larg][(t_x + l) / larg].etats != VIDE) &&
+        (monde->tab[(t_y + l) / larg][(t_x + l) / larg].etats < TIR || monde->tab[(t_y + l) / larg][(t_x + l) / larg].etats > TIR))
+        return controle_vie(&(monde->tab[(t_y + l) / larg][(t_x + l) / larg]), &(monde->tab[y][x]));
     
     return 0;
 }
@@ -103,7 +160,7 @@ void initialiser_monde(Monde* monde, const int t_x, const int t_y, const int lar
             monde->tab[i][j].indice = -1;
         }
     }
-    monde->vaisseaux = allouer_vaisseaux(BLOC_VAISSEAUX, (t_x / 2) * larg, (t_y / 2) * larg, larg);
+    monde->vaisseaux = allouer_vaisseaux(BLOC_VAISSEAUX, (t_x / 2) * larg + larg / 2, (t_y / 2) * larg + larg / 2, larg);
     monde->tab[t_y / 2][t_x / 2].etats = JOUEUR;
     monde->tab[t_y / 2][t_x / 2].vie = 500;
     monde->tab[t_y / 2][t_x / 2].indice = 0;
@@ -183,8 +240,8 @@ void ajouter_vaisseau_monde(Monde* monde, const int x, const int y, const int vi
     monde->tab[y][x].vie = vie;
     monde->tab[y][x].indice = monde->nb_vaisseaux;
     
-    monde->vaisseaux[monde->nb_vaisseaux].x = x * larg;
-    monde->vaisseaux[monde->nb_vaisseaux].y = y * larg;
+    monde->vaisseaux[monde->nb_vaisseaux].x = x * larg + larg / 2;
+    monde->vaisseaux[monde->nb_vaisseaux].y = y * larg + larg / 2;
     monde->vaisseaux[monde->nb_vaisseaux].dep = STOP;
     monde->vaisseaux[monde->nb_vaisseaux].vi = LENT;
 
@@ -201,16 +258,16 @@ int ajouter_tir_monde(Monde* monde, const int x, const int y, const int larg, co
 
     tir2 = init_tirs(monde->vaisseaux[indice_v].x, monde->vaisseaux[indice_v].y, x, y);
     tir = tir2;
-    if (!calculer_tir(&(tir2.coord_t), larg))
+    if (!calculer_tir(&(tir2.coord_t), larg + larg / 5))
         return 0;
 
     if (!configure_tir_monde(monde, tir2, TIR, larg))
         return 0; 
     
-    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.d_x = tir2.coord_t.d_x;
-    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.d_y = tir2.coord_t.d_y;
-    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.x_f = tir2.coord_t.x_f;
-    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.y_f = tir2.coord_t.y_f;
+    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.d_x = tir.coord_t.d_x;
+    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.d_y = tir.coord_t.d_y;
+    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.x_f = tir.coord_t.x_f;
+    monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.y_f = tir.coord_t.y_f;
     monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.tir_x = tir.coord_t.tir_x;
     monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].tir.coord_t.tir_y = tir.coord_t.tir_y;
     return 1;
@@ -223,14 +280,15 @@ int tir_touche_element(Monde *monde, const int x, const int y, const int larg) {
     assert(x < monde->taille_x);
     assert(y < monde->taille_y);
 
-    if (monde->tab[y][x].etats <= OBSTACLE && monde->tab[y][x].etats > TIR)
+    if (monde->tab[y][x].etats < TIR && monde->tab[y][x].etats > TIR)
         return 0;
+
+    if (condition_tir_vaisseau(monde, x, y, larg))
+        return 1;
 
     if (condition_tir(monde, x, y, larg))
         return 1;
     
-    if (condition_tir(monde, y, x, larg))
-        return 1;
     return 0;
 }
 

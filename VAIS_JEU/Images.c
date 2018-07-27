@@ -9,7 +9,8 @@ void charger_image(MLV_Image** image, const char* nom_image, const int largeur) 
 	assert(NULL != nom_image);
 
 	*image = MLV_load_image(nom_image);
-	MLV_resize_image_with_proportions(*image, largeur, largeur);
+	/*MLV_resize_image_with_proportions(*image, largeur, largeur);*/
+	MLV_resize_image(*image, largeur, largeur);
 }
 
 void dessiner_image(MLV_Image** image, const char* nom_image, const int x, const int y, const int largeur) {

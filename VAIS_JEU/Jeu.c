@@ -43,6 +43,8 @@ static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
 
 	switch (mo->tab[y][x].etats) {
 		case TIR:
+			tir_touche_element(mo, x, y, larg);
+			MLV_draw_rectangle((int)mo->tab[y][x].tir.coord_t.tir_x - larg/4, (int)mo->tab[y][x].tir.coord_t.tir_y - larg/4, larg / 2, larg / 2, MLV_COLOR_GREEN);
 		
 			if(validation_tir(&(mo->tab[y][x].tir.coord_t), larg / 2, larg / 2, mo->taille_x * larg - larg / 2, mo->taille_y * larg - larg / 2)) {
 				if (configure_tir_monde(mo, mo->tab[y][x].tir, TIR, larg)) {
@@ -73,6 +75,8 @@ static void vaisseaux_monde(Monde *mo, const int x, const int y, const int larg)
 
 	switch (mo->tab[y][x].etats) {
 		case JOUEUR:
+			MLV_draw_rectangle(mo->vaisseaux[0].x - larg / 2, mo->vaisseaux[0].y - larg / 2, larg, larg, MLV_COLOR_YELLOW);
+
 			if ( MLV_get_keyboard_state(MLV_KEYBOARD_z) == MLV_PRESSED )
 				mo->vaisseaux[0].dep = NORD;
 			if ( MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED )
@@ -85,6 +89,7 @@ static void vaisseaux_monde(Monde *mo, const int x, const int y, const int larg)
 		case BOT:
 		case MIBOSS:
 		case BOSSFINALE:
+			MLV_draw_rectangle(mo->vaisseaux[mo->tab[y][x].indice].x - larg / 2, mo->vaisseaux[mo->tab[y][x].indice].y - larg / 2, larg, larg, MLV_COLOR_YELLOW);
 			changer_direction_aleatoirement(mo, i_vaisseau);
 			break;
 		default: return;
@@ -171,6 +176,8 @@ void jouer(int taille_x, int taille_y) {
 			for (x = 0; x < monde.taille_x; ++x) {
 				dessiner_element(&monde, x, y, larg);
 				action_element(&monde, x, y, larg);
+				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
+
 			}
 			
 		}
