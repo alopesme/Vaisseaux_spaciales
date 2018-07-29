@@ -19,6 +19,7 @@ typedef enum {
 	VIDE,
 	MUR,
 	OBSTACLE,
+	MUR_CASSE,
 	TIR,
 	JOUEUR,
     BOT,
@@ -81,7 +82,7 @@ void deplacer_vaisseau(Monde* monde, const int x, const int y, const int larg);
 void libere_monde(Monde* monde);
 
 
-void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie);
+void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie, const int bvie);
 
 /* Ajoute un mur dans le monde aux coordonnées (x, y) dont le type et sa vie est donné.
  * Si la vie est negatif le mur est indestrutible.*/

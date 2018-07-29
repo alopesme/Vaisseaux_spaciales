@@ -194,12 +194,14 @@ void afficher_monde(Monde mo) {
     afficher_vaisseaux_details(mo.vaisseaux, mo.nb_vaisseaux);
 }
 
-void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie) {
+void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie, const int bvie) {
     assert(NULL != monde);
     assert(x > 0);
     assert(y > 0);
     assert(vie > 0);
     if (etats <= OBSTACLE) {
+        if (vie > 0 && vie < bvie)
+            etats += 2;
         monde->tab[x][y].etats = etats;
         monde->tab[x][y].vie = vie;
         monde->tab[x][y].indice = -1;
@@ -209,7 +211,7 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
 
 int configure_tir_monde(Monde* monde, Tir tir, Etats etats, const int larg) {
     assert(NULL != monde);
-    if (etats <= TIR && etats >= OBSTACLE) {
+    if (etats <= TIR && etats >= TIR) {
         if (monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].etats == VIDE) {
             monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].etats = etats;
             monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].indice = -1;
@@ -395,9 +397,7 @@ void ajouter_mur_monde(Monde *monde, const int x, const int y, const int vie, co
     assert(x < monde->taille_x);
     assert(y >= 0);
     assert(y < monde->taille_y);
-    if (type <= MUR && type >= MUR) {
-        monde->tab[y][x].etats = type;
-        monde->tab[y][x].vie = vie;
-        monde->tab[y][x].indice = -1;
-    }
+    if (type <= MUR && type >= MUR) 
+        configure_matiere_monde(monde, type, x, y, vie, 5);
+    
 }

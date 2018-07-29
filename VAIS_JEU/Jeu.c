@@ -24,6 +24,8 @@ static void matiere_monde(Monde *mo, const int x, const int y) {
 			break;
 		/* Si c'est un mur ou un obstacle, on vérifie sa vie, et si elle est négative on le détruit. */
 		case MUR:
+			configure_matiere_monde(mo, mo->tab[y][x].etats, x, y, mo->tab[y][x].vie, 5);
+			break;
 		case OBSTACLE:
 			if (mo->tab[y][x].vie <= 0)
 				mo->tab[y][x].etats = VIDE;
