@@ -83,6 +83,10 @@ void libere_monde(Monde* monde);
 
 void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie);
 
+/* Ajoute un mur dans le monde aux coordonnées (x, y) dont le type et sa vie est donné.
+ * Si la vie est negatif le mur est indestrutible.*/
+void ajouter_mur_monde(Monde *monde, const int x, const int y, const int vie, const Etats type);
+
 /* Ajoute un bonus aléatoire dans le monde en fonction d'un taux de probabilité. */
 void ajouter_bonus_aleatoire(Monde* monde);
 

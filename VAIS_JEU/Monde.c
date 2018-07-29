@@ -199,7 +199,7 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
     assert(x > 0);
     assert(y > 0);
     assert(vie > 0);
-    if (etats < TIR) {
+    if (etats <= OBSTACLE) {
         monde->tab[x][y].etats = etats;
         monde->tab[x][y].vie = vie;
         monde->tab[x][y].indice = -1;
@@ -209,7 +209,7 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
 
 int configure_tir_monde(Monde* monde, Tir tir, Etats etats, const int larg) {
     assert(NULL != monde);
-    if (etats <= TIR && etats > OBSTACLE) {
+    if (etats <= TIR && etats >= OBSTACLE) {
         if (monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].etats == VIDE) {
             monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].etats = etats;
             monde->tab[(int)(tir.coord_t.tir_y / larg)][(int)(tir.coord_t.tir_x / larg)].indice = -1;
@@ -385,5 +385,19 @@ void ajouter_bonus_aleatoire(Monde* monde) {
         } while ( monde->tab[y][x].etats != VIDE );
 
         monde->tab[y][x] = elem;
+    }
+}
+
+
+void ajouter_mur_monde(Monde *monde, const int x, const int y, const int vie, const Etats type) {
+    assert(NULL != monde);
+    assert(x >= 0);
+    assert(x < monde->taille_x);
+    assert(y >= 0);
+    assert(y < monde->taille_y);
+    if (type <= MUR && type >= MUR) {
+        monde->tab[y][x].etats = type;
+        monde->tab[y][x].vie = vie;
+        monde->tab[y][x].indice = -1;
     }
 }

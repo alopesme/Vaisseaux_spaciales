@@ -27,9 +27,12 @@ void dessiner_element(Monde* monde, int x, int y, const int larg) {
 
 	switch ( monde->tab[y][x].etats ) {
 		case MUR:
-			return;
+			dessin_x += larg / 2;
+			dessin_y += larg / 2;
+			strcat(nom_image, "v_wall.png");
+			break;
 		case OBSTACLE:
-			return;
+			break;
 		case TIR:
 			dessin_x = (int)monde->tab[y][x].tir.coord_t.tir_x;
 			dessin_y = (int)monde->tab[y][x].tir.coord_t.tir_y;
