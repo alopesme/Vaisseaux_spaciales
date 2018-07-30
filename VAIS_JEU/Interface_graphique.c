@@ -9,7 +9,9 @@
 #include "Vaisseaux.h"
 #include "Monde.h"
 #include "Images.h"
+#include "Music_Sons.h"
 #include "Interface_graphique.h"
+
 
 void afficher_background() {
 	MLV_clear_window(FOND);
