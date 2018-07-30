@@ -125,6 +125,7 @@ void test_deplacement_vaisseau(const int l_fen, const int h_fen) {
 
 void test_monde(const int l_fen, const int h_fen, const int larg) {
 	Monde monde;
+	MLV_Sound* son = NULL;
 	int x, y, tir_x, tir_y;
 	assert(l_fen > 0);
 	assert(h_fen > 0);
@@ -149,7 +150,7 @@ void test_monde(const int l_fen, const int h_fen, const int larg) {
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
 				dessiner_element(&monde, x, y, larg);
-				action_element(&monde, x, y, larg);
+				action_element(&monde, &son, x, y, larg);
 				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 			}
 			

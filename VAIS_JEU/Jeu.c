@@ -36,7 +36,7 @@ static void matiere_monde(Monde *mo, const int x, const int y) {
 			break;
 	}
 }
-static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
+static void tir_monde(Monde *mo, MLV_Sound** son, const int x, const int y, const int larg) {
 	int t_x, t_y;
 	assert(NULL != mo);
 	assert(x >= 0);
@@ -49,7 +49,7 @@ static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
 			t_x = (int)mo->tab[y][x].tir.coord_t.tir_x - larg/4;
 			t_y = (int)mo->tab[y][x].tir.coord_t.tir_y - larg/4;
 			if (tir_touche_element(mo, x, y, larg))
-				effets_speciaux("../Images/explosion.png", "../SONS_MUSIC/small_blast.ogg", t_x + larg / 4, t_y + larg / 4, larg / 2);
+				effets_speciaux(son, "../Images/explosion.png", "../SONS_MUSIC/small_blast.ogg", t_x + larg / 4, t_y + larg / 4, larg / 2);
 			
 
 			MLV_draw_rectangle(t_x, t_y, larg / 2, larg / 2, MLV_COLOR_GREEN);
@@ -131,7 +131,7 @@ static void bonus_monde(Monde *mo, const int x, const int y) {
 	}
 }
 
-void action_element(Monde *mo, const int x, const int y, const int larg) {
+void action_element(Monde *mo, MLV_Sound** son, const int x, const int y, const int larg) {
 	assert(NULL != mo);
 	assert(x >= 0);
 	assert(x < mo->taille_x);
@@ -142,7 +142,7 @@ void action_element(Monde *mo, const int x, const int y, const int larg) {
 		matiere_monde(mo, x, y);
 
 	if (mo->tab[y][x].etats > OBSTACLE && mo->tab[y][x].etats <= TIR) 
-		tir_monde(mo, x, y, larg);
+		tir_monde(mo, son, x, y, larg);
 				
 	if (mo->tab[y][x].etats > TIR && mo->tab[y][x].etats <= BOSSFINALE) 
 		vaisseaux_monde(mo, x, y, larg);
@@ -153,6 +153,7 @@ void action_element(Monde *mo, const int x, const int y, const int larg) {
 
 void jouer(int taille_x, int taille_y) {
 	Monde monde;
+	MLV_Sound* son = NULL;
 	int x, y, tir_x, tir_y, larg = 30;
 	int debut, temps1, temps2;
 
@@ -183,7 +184,7 @@ void jouer(int taille_x, int taille_y) {
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
 				dessiner_element(&monde, x, y, larg);
-				action_element(&monde, x, y, larg);
+				action_element(&monde, &son, x, y, larg);
 				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 
 			}
