@@ -32,8 +32,11 @@ static Element **initialise_tab(const int t_x, const int t_y) {
 static int controle_vie(Element *elem, Element *elem_modifiable) {
     int temp;
     assert(NULL != elem);
-    if (elem->vie < 0 || elem_modifiable->vie < 0)
-        return 0;
+    if (elem->vie < 0 || elem_modifiable->vie < 0) {
+        elem_modifiable->vie = 0;
+        elem_modifiable->etats = VIDE;
+        return 1;
+    }
     temp = elem->vie;
 
     elem->vie -= elem_modifiable->vie;
@@ -198,7 +201,6 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
     assert(NULL != monde);
     assert(x > 0);
     assert(y > 0);
-    assert(vie > 0);
     if (etats <= OBSTACLE) {
         if (vie > 0 && vie < bvie)
             etats += 2;
