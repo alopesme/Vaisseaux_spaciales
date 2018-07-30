@@ -20,4 +20,6 @@ void afficher_background();
 /* Déssine l'élément dont le centre est situé aux coordonnées (x, y). */
 void dessiner_element(Monde* monde, int x, int y, const int larg);
 
+void effets_speciaux(const char* nom_im, const char* nom_son, int x, int y, const int larg);
+
 #endif

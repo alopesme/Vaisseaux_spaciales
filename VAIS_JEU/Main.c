@@ -9,6 +9,8 @@
 #include "Monde.h"
 #include "Test.h"
 #include "Test_grap.h"
+#include "Images.h"
+#include "Music_Sons.h"
 #include "Interface_graphique.h"
 #include "Jeu.h"
 #include <MLV/MLV_all.h>
@@ -26,14 +28,14 @@ int main(int argc, char const *argv[]) {
 	test_deplacement_vaisseau(atoi(argv[1]), atoi(argv[1]));
 
 	test_monde_tir(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]), atoi(argv[3])); 
-*/
+
 	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", atoi(argv[1]), atoi(argv[1]));
 
 	jouer(atoi(argv[1]), atoi(argv[1]));
 
 	MLV_free_window();
-
-	/*test_monde(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]));*/
+*/
+	test_monde(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
 	
 	return 0;
 }

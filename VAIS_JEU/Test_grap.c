@@ -10,6 +10,7 @@
 #include "Monde.h"
 #include "Images.h"
 #include "Interface_graphique.h"
+#include "Music_Sons.h"
 #include "Test_grap.h"
 #include "Jeu.h"
 
@@ -129,8 +130,9 @@ void test_monde(const int l_fen, const int h_fen, const int larg) {
 	assert(h_fen > 0);
 	initialiser_monde(&monde, l_fen / larg, h_fen / larg, larg);
 	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", l_fen, h_fen);
+	MLV_init_audio();
 	/*ajouter_vaisseau_monde(&monde, 4, 1, 10, larg, BOT);*/
-	ajouter_mur_monde(&monde, 1, 1, 10, MUR);
+	ajouter_mur_monde(&monde, 1, 1, -1, MUR);
 	while(MLV_get_mouse_button_state( MLV_BUTTON_RIGHT ) != MLV_PRESSED)  {
 		afficher_background();
 		if( MLV_get_keyboard_state( MLV_KEYBOARD_k ) == MLV_PRESSED ) {
