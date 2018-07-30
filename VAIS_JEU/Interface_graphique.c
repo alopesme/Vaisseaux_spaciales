@@ -84,3 +84,13 @@ void dessiner_element(Monde* monde, int x, int y, const int larg) {
 
 	liberer_image(&image);*/
 }
+
+void effets_speciaux(const char* nom_im, const char* nom_son, int x, int y, const int larg) {
+	MLV_Image* image;
+	MLV_Sound* son;
+	jouer_son(&son, nom_son);
+	if (nom_im != NULL) {
+		dessiner_image(&image, nom_im, x, y, larg);
+	}
+	/*MLV_free_sound(son);*/
+}
