@@ -15,13 +15,13 @@ void ajouter_vaisseau_bot(Monde* monde, int larg) {
 
 	do {
 		if ( MLV_get_random_boolean() ) { /* Bords supérieur et inférieur. */
-			x = MLV_get_random_integer(0, monde->taille_x - 1);
+			x = MLV_get_random_integer(0, monde->taille_x);
 			if ( MLV_get_random_boolean() ) /* Bord supérieur. */
 				y = 0;
 			else /* Bord inférieur. */
 				y = monde->taille_y - 1;
 		} else { /* Bords gauche et droit. */
-			y = MLV_get_random_integer(0, monde->taille_y - 1);
+			y = MLV_get_random_integer(0, monde->taille_y);
 			if ( MLV_get_random_boolean() ) /* Bord gauche. */
 				x = 0;
 			else /* Bord droit. */

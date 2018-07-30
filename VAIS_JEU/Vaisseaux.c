@@ -48,8 +48,9 @@ Vaisseau* allouer_vaisseaux(const int nb_vaisseaux, const int x, const int y, co
     return vaisseaux;
 }
 
-void calculer_prochaine_case_vaisseau(Vaisseau *v) {
+void calculer_prochaine_case_vaisseau(Vaisseau *v, int* out_x, int* out_y, int larg) {
     assert(NULL != v);
+
     switch ( v->dep ) {
         case NORD:
             v->y -= v->vi;
@@ -70,6 +71,9 @@ void calculer_prochaine_case_vaisseau(Vaisseau *v) {
         default:
             break;
     }
+
+    *out_x = v->x / larg;
+    *out_y = v->y / larg;
 }
 
 

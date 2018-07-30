@@ -29,8 +29,8 @@ void afficher_vaisseaux_details(const Vaisseau* vaisseaux, const int nb_vaisseau
 /*Cette fonction alloue les vaisseaux.*/
 Vaisseau* allouer_vaisseaux(const int nb_vaisseaux, const int x, const int y, const int larg);
 
-/* Cette fonction deplace le vaisseau (par rapport aux coordonnees fenetre graphique).*/
-void calculer_prochaine_case_vaisseau(Vaisseau *v);
+/* Calcule les coordonnées de la case du vaisseau après un déplacement (elle peut rester la même).*/
+void calculer_prochaine_case_vaisseau(Vaisseau *v, int* out_x, int* out_y, int larg);
 
 /* Libere les vaisseaux.*/
 void libere_vaisseaux(Vaisseau* vaisseaux, const int nb_vaisseaux);

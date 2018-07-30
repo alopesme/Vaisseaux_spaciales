@@ -46,6 +46,13 @@ typedef struct {
 	int nb_vaisseaux_max;
 }Monde;
 
+typedef struct {
+	int x;
+	int y;
+	int largeur;
+	int hauteur;
+}Rectangle;
+
 
 /* Initialise un Monde.*/
 void initialiser_monde(Monde* monde, const int t_x, const int t_y, const int larg);
@@ -90,5 +97,8 @@ void ajouter_mur_monde(Monde *monde, const int x, const int y, const int vie, co
 
 /* Ajoute un bonus aléatoire dans le monde en fonction d'un taux de probabilité. */
 void ajouter_bonus_aleatoire(Monde* monde);
+
+/* Renvoie 1 si l'intersection entre les deux rectangles est non nulle. */
+int intersection(Rectangle rect1, Rectangle rect2);
 
 #endif

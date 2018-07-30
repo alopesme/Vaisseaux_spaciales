@@ -242,8 +242,8 @@ void ajouter_vaisseau_monde(Monde* monde, const int x, const int y, const int vi
     monde->tab[y][x].vie = vie;
     monde->tab[y][x].indice = monde->nb_vaisseaux;
     
-    monde->vaisseaux[monde->nb_vaisseaux].x = x * larg + larg / 2;
-    monde->vaisseaux[monde->nb_vaisseaux].y = y * larg + larg / 2;
+    monde->vaisseaux[monde->nb_vaisseaux].x = x * larg;
+    monde->vaisseaux[monde->nb_vaisseaux].y = y * larg;
     monde->vaisseaux[monde->nb_vaisseaux].dep = STOP;
     monde->vaisseaux[monde->nb_vaisseaux].vi = LENT;
 
@@ -312,38 +312,41 @@ void libere_monde(Monde* monde) {
 
 int peut_se_deplacer(Monde* monde, const int x, const int y, const int indice_vaisseau, const int larg) {
     int nouvelle_case_x, nouvelle_case_y;
-    Vaisseau v;
+    int i;
+    Vaisseau copie = {monde->vaisseaux[indice_vaisseau].x, monde->vaisseaux[indice_vaisseau].y, monde->vaisseaux[indice_vaisseau].dep, monde->vaisseaux[indice_vaisseau].vi};
+    Rectangle hitbox1, hitbox2;
 
     assert(NULL != monde);
     assert(indice_vaisseau >= 0);
 
+    calculer_prochaine_case_vaisseau(&copie, &nouvelle_case_x, &nouvelle_case_y, larg);
+
     /* On vérifie si on ne va pas en hors map. */
-    v = monde->vaisseaux[indice_vaisseau];
-    calculer_prochaine_case_vaisseau(&(v));
-    nouvelle_case_x = v.x / larg;
-    nouvelle_case_y = v.y / larg;
+
     if ( nouvelle_case_x < 0 || nouvelle_case_x >= monde->taille_x ||
          nouvelle_case_y < 0 || nouvelle_case_y >= monde->taille_y )
 
         return 0;
 
-    /* On regarde case par case si il n'y a pas quelque chose qui barre la route du vaisseau. */
-    /*switch ( monde->vaisseaux[indice_vaisseau].dep ) {
-        case NORD: for (i=1; i < monde->vaisseaux[indice_vaisseau].vi + 1; i++) {
-            if ( monde->tab[y - i][x].etats != VIDE ) return 0; }
-            break;
-        case OUEST: for (i=1; i < monde->vaisseaux[indice_vaisseau].vi + 1; i++) {
-            if ( monde->tab[y][x + i].etats != VIDE ) return 0; }
-            break;
-        case SUD: for (i=1; i < monde->vaisseaux[indice_vaisseau].vi + 1; i++) {
-            if ( monde->tab[y + i][x].etats != VIDE ) return 0; }
-            break;
-        case EST: for (i=1; i < monde->vaisseaux[indice_vaisseau].vi + 1; i++) {
-            if ( monde->tab[y][x - i].etats != VIDE ) return 0; }
-            break;
-        default:
+    hitbox1.x = copie.x - larg / 2;
+    hitbox1.y = copie.y - larg / 2;
+    hitbox1.largeur = larg;
+    hitbox1.hauteur = larg;
+
+    /* On vérifie s'il n'y a pas un vaisseau sur la prochaine case. */
+    for (i = 0; i < monde->nb_vaisseaux; i++) {
+        if ( i == indice_vaisseau )
+            continue;
+
+        hitbox2.x = monde->vaisseaux[i].x - larg / 2;
+        hitbox2.y = monde->vaisseaux[i].y - larg / 2;
+        hitbox2.largeur = larg;
+        hitbox2.hauteur = larg;
+
+        if ( intersection(hitbox1, hitbox2) )
             return 0;
-    }*/
+
+    }
 
     return 1;
 }
@@ -353,9 +356,7 @@ void deplacer_vaisseau(Monde* monde, const int x, const int y, const int larg) {
 
     assert(NULL != monde);
 
-    calculer_prochaine_case_vaisseau(&(monde->vaisseaux[monde->tab[y][x].indice]));
-    nouvelle_case_x = monde->vaisseaux[monde->tab[y][x].indice].x / larg;
-    nouvelle_case_y = monde->vaisseaux[monde->tab[y][x].indice].y / larg;
+    calculer_prochaine_case_vaisseau(&(monde->vaisseaux[monde->tab[y][x].indice]), &nouvelle_case_x, &nouvelle_case_y, larg);
 
     if (nouvelle_case_x != x || nouvelle_case_y != y) {
         /* On déplace le vaisseau vers sa nouvelle case. */
@@ -365,6 +366,8 @@ void deplacer_vaisseau(Monde* monde, const int x, const int y, const int larg) {
         monde->tab[y][x].etats = VIDE;
         monde->tab[y][x].vie = 0;
         monde->tab[y][x].indice = -1;
+
+
     }
 }
 
@@ -400,4 +403,13 @@ void ajouter_mur_monde(Monde *monde, const int x, const int y, const int vie, co
     if (type <= MUR && type >= MUR) 
         configure_matiere_monde(monde, type, x, y, vie, 5);
     
+}
+
+int intersection(Rectangle rect1, Rectangle rect2) {
+    int horizontal, vertical;
+
+    horizontal = (rect1.x  < rect2.x + rect2.largeur) && (rect2.x < rect1.x + rect1.largeur);
+    vertical = (rect1.y < rect2.y + rect2.hauteur) && (rect2.y < rect1.y + rect1.hauteur);
+
+    return horizontal && vertical;
 }
