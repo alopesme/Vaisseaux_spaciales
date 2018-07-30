@@ -10,6 +10,7 @@
 #include "Interface_graphique.h"
 #include "Jeu.h"
 #include "Bonus.h"
+#include "Music_Sons.h"
 #include "Ia.h"
 
 static void matiere_monde(Monde *mo, const int x, const int y) {
