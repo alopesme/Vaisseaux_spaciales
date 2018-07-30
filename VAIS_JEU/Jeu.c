@@ -35,8 +35,8 @@ static void matiere_monde(Monde *mo, const int x, const int y) {
 			break;
 	}
 }
-
 static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
+	int t_x, t_y;
 	assert(NULL != mo);
 	assert(x >= 0);
 	assert(x < mo->taille_x);
@@ -45,8 +45,13 @@ static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
 
 	switch (mo->tab[y][x].etats) {
 		case TIR:
-			tir_touche_element(mo, x, y, larg);
-			MLV_draw_rectangle((int)mo->tab[y][x].tir.coord_t.tir_x - larg/4, (int)mo->tab[y][x].tir.coord_t.tir_y - larg/4, larg / 2, larg / 2, MLV_COLOR_GREEN);
+			t_x = (int)mo->tab[y][x].tir.coord_t.tir_x - larg/4;
+			t_y = (int)mo->tab[y][x].tir.coord_t.tir_y - larg/4;
+			if (tir_touche_element(mo, x, y, larg))
+				effets_speciaux("../Images/explosion.png", "../SONS_MUSIC/small_blast.ogg", t_x + larg / 4, t_y + larg / 4, larg / 2);
+			
+
+			MLV_draw_rectangle(t_x, t_y, larg / 2, larg / 2, MLV_COLOR_GREEN);
 		
 			if(validation_tir(&(mo->tab[y][x].tir.coord_t), larg / 2, larg / 2, mo->taille_x * larg - larg / 2, mo->taille_y * larg - larg / 2)) {
 				if (configure_tir_monde(mo, mo->tab[y][x].tir, TIR, larg)) {
