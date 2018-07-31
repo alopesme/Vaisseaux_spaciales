@@ -199,8 +199,10 @@ void afficher_monde(Monde mo) {
 
 void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie, const int bvie) {
     assert(NULL != monde);
-    assert(x > 0);
-    assert(y > 0);
+    assert(x >= 0);
+    assert(x < monde->taille_x);
+    assert(y >= 0);
+    assert(y < monde->taille_y);
     if (etats <= OBSTACLE) {
         if (vie > 0 && vie < bvie)
             etats += 2;

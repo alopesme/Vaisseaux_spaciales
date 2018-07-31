@@ -17,10 +17,9 @@ void afficher_background() {
 	MLV_clear_window(FOND);
 }
 
-void dessiner_element(Monde* monde, int x, int y, const int larg) {
+void dessiner_element(Monde* monde, MLV_Image** image, int x, int y, const int larg) {
 	int dessin_x = 0, dessin_y = 0;
 	char nom_image[20] = "../Images/";
-	MLV_Image* image = NULL;
 	/*int largeur_image, hauteur_image;*/
 
 	assert(NULL != monde);	
@@ -49,7 +48,7 @@ void dessiner_element(Monde* monde, int x, int y, const int larg) {
 			dessin_x = monde->vaisseaux[monde->tab[y][x].indice].x;
 			dessin_y = monde->vaisseaux[monde->tab[y][x].indice].y;
 			strcat(nom_image, "v_joueur.png");
-			dessiner_vaisseau(&image, nom_image, dessin_x, dessin_y, larg);
+			dessiner_vaisseau(image, nom_image, dessin_x, dessin_y, larg);
 			return;
 		case BOT:
 			dessin_x = monde->vaisseaux[monde->tab[y][x].indice].x;
@@ -72,7 +71,7 @@ void dessiner_element(Monde* monde, int x, int y, const int larg) {
 		default:
 			return;
 	}
-	dessiner_image(&image, nom_image, dessin_x, dessin_y, larg);
+	dessiner_image(image, nom_image, dessin_x, dessin_y, larg);
 	/*image = MLV_load_image(nom_image);
 	
 	MLV_resize_image_with_proportions(image, (int) monde->taille_x * (dim / 100.0), (int) monde->taille_y * (dim / 100.0));
@@ -88,9 +87,7 @@ void dessiner_element(Monde* monde, int x, int y, const int larg) {
 }
 
 void effets_speciaux(MLV_Sound** son, const char* nom_im, const char* nom_son, int x, int y, const int larg) {
-	MLV_Image* image;
-	if(NULL != *son)
-		MLV_free_sound(*son);
+	MLV_Image* image = NULL;
 	jouer_son(son, nom_son);
 	
 

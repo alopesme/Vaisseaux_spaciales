@@ -7,6 +7,7 @@
 #include "Deplacement.h"
 #include "Vaisseaux.h"
 #include "Monde.h"
+#include "Images.h"
 #include "Interface_graphique.h"
 #include "Jeu.h"
 #include "Bonus.h"
@@ -154,6 +155,7 @@ void action_element(Monde *mo, MLV_Sound** son, const int x, const int y, const 
 void jouer(int taille_x, int taille_y) {
 	Monde monde;
 	MLV_Sound* son = NULL;
+	MLV_Image* images[BONUS3 + 1] = {NULL};
 	int x, y, tir_x, tir_y, larg = 30;
 	int debut, temps1, temps2;
 
@@ -183,7 +185,7 @@ void jouer(int taille_x, int taille_y) {
 
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
-				dessiner_element(&monde, x, y, larg);
+				dessiner_element(&monde, &(images[monde.tab[y][x].etats]), x, y, larg);
 				action_element(&monde, &son, x, y, larg);
 				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 
@@ -193,6 +195,11 @@ void jouer(int taille_x, int taille_y) {
 
 		MLV_actualise_window();
 	}
+	MLV_free_sound(son);
 
+	for (x = 0; x < BONUS3 + 1; ++x) {
+		if (NULL != images[x])
+			liberer_image(&(images[x]));
+	}
 	libere_monde(&monde);
 }

@@ -25,6 +25,7 @@ void dessiner_image(MLV_Image** image, const char* nom_image, const int x, const
 /* Fonction qui va dessiner un vaisseau avec la rotation aussi.*/
 void dessiner_vaisseau(MLV_Image** image, const char* nom_image, const int x, const int y, const int largeur);
 
+
 /* Tourne l'image par rapport à la position de la souris.*/
 void rotation_vaisseau(MLV_Image** image, const int x, const int y);
 

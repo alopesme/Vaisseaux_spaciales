@@ -126,14 +126,19 @@ void test_deplacement_vaisseau(const int l_fen, const int h_fen) {
 void test_monde(const int l_fen, const int h_fen, const int larg) {
 	Monde monde;
 	MLV_Sound* son = NULL;
-	int x, y, tir_x, tir_y;
+	MLV_Image* images[BONUS3 + 1] = {NULL};
+	int x, y, tir_x, tir_y, debut, temps1, temps2, c1 = 0, c2 = 0;
 	assert(l_fen > 0);
 	assert(h_fen > 0);
 	initialiser_monde(&monde, l_fen / larg, h_fen / larg, larg);
 	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", l_fen, h_fen);
 	MLV_init_audio();
 	/*ajouter_vaisseau_monde(&monde, 4, 1, 10, larg, BOT);*/
-	ajouter_mur_monde(&monde, 1, 1, -1, MUR);
+	ajouter_mur_monde(&monde, 1, 1, 1, MUR);
+	debut = MLV_get_time() / 1000;
+	temps1 = debut;
+	printf("%p\n", images[MUR]);
+
 	while(MLV_get_mouse_button_state( MLV_BUTTON_RIGHT ) != MLV_PRESSED)  {
 		afficher_background();
 		if( MLV_get_keyboard_state( MLV_KEYBOARD_k ) == MLV_PRESSED ) {
@@ -144,12 +149,26 @@ void test_monde(const int l_fen, const int h_fen, const int larg) {
 		if (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED) {
 			MLV_get_mouse_position(&tir_x, &tir_y);
 			ajouter_tir_monde(&monde, tir_x, tir_y, larg, 0);
+		}
 
+		temps2 = MLV_get_time() / 1000;
+		if ( temps2 != temps1 ) {
+			temps1 = temps2;
+			if (c1 >= monde.taille_x - 1) {
+				c1 = 0;
+				++c2;
+			}
+
+			if (c2 >= monde.taille_y - 1)
+				break;
+			ajouter_mur_monde(&monde, c1, c2, 1, MUR);
+			++c1;
 		}
 
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
-				dessiner_element(&monde, x, y, larg);
+				dessiner_element(&monde, &(images[monde.tab[y][x].etats]), x, y, larg);
+
 				action_element(&monde, &son, x, y, larg);
 				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 			}
@@ -157,8 +176,15 @@ void test_monde(const int l_fen, const int h_fen, const int larg) {
 		}
 		MLV_actualise_window();
 	}
+	for (x = 0; x < BONUS3 + 1; ++x) {
+		if (NULL != images[x])
+			liberer_image(&(images[x]));
+	}
+	MLV_free_sound(son);
+
 	libere_monde(&monde);
 	MLV_free_window();
+
 
 
 }

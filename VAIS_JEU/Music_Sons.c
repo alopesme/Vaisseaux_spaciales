@@ -6,7 +6,8 @@
 
 void jouer_son(MLV_Sound** son, const char* nom_son) {
 	if (nom_son != NULL) {
-		*son = MLV_load_sound(nom_son);
+		if (NULL == *son)
+			*son = MLV_load_sound(nom_son);
 		MLV_play_sound(*son, 1.0);
 		
 	}

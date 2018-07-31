@@ -34,7 +34,8 @@ int main(int argc, char const *argv[]) {
 	jouer(atoi(argv[1]), atoi(argv[1]));
 
 	MLV_free_window();
-*/
+	*/
+
 	test_monde(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
 	
 	return 0;
