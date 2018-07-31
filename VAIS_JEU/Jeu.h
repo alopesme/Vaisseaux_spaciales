@@ -4,6 +4,8 @@
 Espace commentaire : pas fini la partie tir encore des bugs
 */
 
+#define FPS 60
+
 void action_element(Monde *mo, MLV_Sound** son, const int x, const int y, const int larg);
 
 

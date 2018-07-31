@@ -163,6 +163,7 @@ void jouer(int taille_x, int taille_y) {
 	assert(taille_y > 0);
 
 	initialiser_monde(&monde, taille_x / larg, taille_y / larg, larg);
+	MLV_change_frame_rate(FPS);
 
 	debut = MLV_get_time() / 1000;
 	temps1 = debut;
@@ -194,12 +195,15 @@ void jouer(int taille_x, int taille_y) {
 		}
 
 		MLV_actualise_window();
+		MLV_delay_according_to_frame_rate();
 	}
+
 	MLV_free_sound(son);
 
 	for (x = 0; x < BONUS3 + 1; ++x) {
 		if (NULL != images[x])
 			liberer_image(&(images[x]));
 	}
+
 	libere_monde(&monde);
 }
