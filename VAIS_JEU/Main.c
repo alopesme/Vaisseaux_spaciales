@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
+#include "Menu_Option.h"
+#include "Clic_Menu_Option.h"
+#include "Couleur.h"
+#include "Page_Accueil.h"
 #include "Vitesse.h"
 #include "Tires.h"
 #include "Deplacement.h"

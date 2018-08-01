@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <MLV/MLV_all.h>
 #include <string.h>
+#include "Couleur.h"
 #include "Vitesse.h"
 #include "Tires.h"
 #include "Deplacement.h"
