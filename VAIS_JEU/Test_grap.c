@@ -189,12 +189,14 @@ void test_monde(const int l_fen, const int h_fen, const int larg) {
 }
 
 void test_jeu(const int l_fen, const int h_fen, const int larg) {
+	int veri;
 	MLV_Music* musique;
 	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", l_fen, h_fen);
 	MLV_init_audio( );
 	init_music(&musique, "../SONS_MUSIC/you-say-run-the-real-orchestral-my-hero-academia-deku.ogg");
-	cliquer_sur_menu_depart(l_fen, h_fen);
-	test_monde(l_fen, h_fen, larg);
+	veri = cliquer_sur_menu_depart(l_fen, h_fen);
+	if (veri == 1)
+		test_monde(l_fen, h_fen, larg);
 	libere_musique(&musique);
 	MLV_free_window();
 }

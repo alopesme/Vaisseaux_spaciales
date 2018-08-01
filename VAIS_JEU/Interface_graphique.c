@@ -45,6 +45,13 @@ void dessiner_element(Monde* monde, MLV_Image** image, int x, int y, const int l
 			dessin_y = (int)monde->tab[y][x].tir.coord_t.tir_y;
 			strcat(nom_image, "v_beam.png");
 			break;
+		case EXPLOSION:
+			dessin_x = (int)monde->tab[y][x].tir.coord_t.tir_x;
+			dessin_y = (int)monde->tab[y][x].tir.coord_t.tir_y;
+			strcat(nom_image, "explosion.png");
+			monde->tab[y][x].etats = VIDE;
+
+			break;
 		case JOUEUR:
 			dessin_x = monde->vaisseaux[monde->tab[y][x].indice].x;
 			dessin_y = monde->vaisseaux[monde->tab[y][x].indice].y;
@@ -87,13 +94,6 @@ void dessiner_element(Monde* monde, MLV_Image** image, int x, int y, const int l
 	liberer_image(&image);*/
 }
 
-void effets_speciaux(MLV_Sound** son, const char* nom_im, const char* nom_son, int x, int y, const int larg) {
-	MLV_Image* image = NULL;
+void effets_speciaux(MLV_Sound** son, const char* nom_son) {
 	jouer_son(son, nom_son);
-	
-
-	if (nom_im != NULL) {
-		dessiner_image(&image, nom_im, x, y, larg);
-		liberer_image(&image);
-	}
 }

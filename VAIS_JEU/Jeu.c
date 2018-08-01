@@ -51,10 +51,14 @@ static void tir_monde(Monde *mo, MLV_Sound** son, const int x, const int y, cons
 
 	switch (mo->tab[y][x].etats) {
 		case TIR:
-			t_x = (int)mo->tab[y][x].tir.coord_t.tir_x - larg/4;
-			t_y = (int)mo->tab[y][x].tir.coord_t.tir_y - larg/4;
-			if (tir_touche_element(mo, x, y, larg))
-				effets_speciaux(son, "../Images/explosion.png", "../SONS_MUSIC/small_blast.ogg", t_x + larg / 4, t_y + larg / 4, larg / 2);
+			t_x = (int)mo->tab[y][x].tir.coord_t.tir_x - larg / 4;
+			t_y = (int)mo->tab[y][x].tir.coord_t.tir_y - larg / 4;
+			if (tir_touche_element(mo, x, y, larg)) {
+				mo->tab[y][x].tir.coord_t.tir_x = t_x + larg / 4;
+				mo->tab[y][x].tir.coord_t.tir_y = t_y + larg / 4;
+				mo->tab[y][x].etats = EXPLOSION;
+				effets_speciaux(son, "../SONS_MUSIC/small_blast.ogg");
+			}
 			
 
 			MLV_draw_rectangle(t_x, t_y, larg / 2, larg / 2, MLV_COLOR_GREEN);
@@ -209,9 +213,12 @@ void jouer(int taille_x, int taille_y) {
 }
 
 void jeu(int taille_x, int taille_y) {
+	int veri;
 	MLV_Music* musique;
 	MLV_init_audio( );
 	init_music(&musique, "../SONS_MUSIC/overlord-iii-official-opening.ogg");
-	jouer(taille_x, taille_y);
+	veri = cliquer_sur_menu_depart(taille_x, taille_y);
+	if (veri == 1)
+		jouer(taille_x, taille_y);
 	libere_musique(&musique);
 }

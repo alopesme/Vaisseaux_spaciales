@@ -21,6 +21,7 @@ typedef enum {
 	OBSTACLE,
 	MUR_CASSE,
 	TIR,
+	EXPLOSION,
 	JOUEUR,
     BOT,
     MIBOSS,
