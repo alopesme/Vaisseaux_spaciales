@@ -93,5 +93,6 @@ void effets_speciaux(MLV_Sound** son, const char* nom_im, const char* nom_son, i
 
 	if (nom_im != NULL) {
 		dessiner_image(&image, nom_im, x, y, larg);
+		liberer_image(&image);
 	}
 }

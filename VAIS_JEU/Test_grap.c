@@ -132,7 +132,6 @@ void test_monde(const int l_fen, const int h_fen, const int larg) {
 	assert(h_fen > 0);
 	initialiser_monde(&monde, l_fen / larg, h_fen / larg, larg);
 	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", l_fen, h_fen);
-	MLV_init_audio();
 	/*ajouter_vaisseau_monde(&monde, 4, 1, 10, larg, BOT);*/
 	ajouter_mur_monde(&monde, 1, 1, 1, MUR);
 	debut = MLV_get_time() / 1000;
@@ -185,6 +184,12 @@ void test_monde(const int l_fen, const int h_fen, const int larg) {
 	libere_monde(&monde);
 	MLV_free_window();
 
+}
 
-
+void test_jeu(const int l_fen, const int h_fen, const int larg) {
+	MLV_Music* musique;
+	MLV_init_audio( );
+	init_music(&musique, "../SONS_MUSIC/you-say-run-the-real-orchestral-my-hero-academia-deku.ogg");
+	test_monde(l_fen, h_fen, larg);
+	libere_musique(&musique);
 }

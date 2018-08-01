@@ -23,5 +23,6 @@ void test_deplacement_vaisseau(const int l_fen, const int h_fen);
 
 void test_monde(const int l_fen, const int h_fen, const int larg);
 
+void test_jeu(const int l_fen, const int h_fen, const int larg);
 
 #endif

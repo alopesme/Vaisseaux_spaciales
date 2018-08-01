@@ -15,7 +15,7 @@ void jouer_son(MLV_Sound** son, const char* nom_son) {
 
 void init_music(MLV_Music** musique, const char *nom_mu) {
 	*musique = MLV_load_music(nom_mu);
-	MLV_play_music(*musique, 0.5, -1 );
+	MLV_play_music(*musique, 1.0, -1 );
 
 }
 

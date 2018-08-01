@@ -31,12 +31,14 @@ int main(int argc, char const *argv[]) {
 
 	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", atoi(argv[1]), atoi(argv[1]));
 
-	jouer(atoi(argv[1]), atoi(argv[1]));
+	jeu(atoi(argv[1]), atoi(argv[1]));
 
 	MLV_free_window();
 	*/
 
-	test_monde(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+	/*test_monde(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));*/
+
+	test_jeu(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]));
 	
 	return 0;
 }

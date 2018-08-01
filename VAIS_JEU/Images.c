@@ -43,14 +43,14 @@ void dessiner_vaisseau(MLV_Image** image, const char* nom_image, const int x, co
 	rotation_vaisseau(&im, x, y);
 	MLV_get_image_size(im, &largeur_image, &hauteur_image);
 	
-	MLV_draw_image(im, (x - largeur_image/2), (y - hauteur_image/2));
-
 	/*MLV_draw_filled_rectangle_on_image(
 		x - largeur_image/2, y -hauteur_image/2, 
-		largeur_image, hauteur_image, 
+		largeur_image + largeur_image/4 , hauteur_image + hauteur_image/4, 
 		MLV_rgba(0, 4, 40, 255), 
 		im
     );*/
+
+	MLV_draw_image(im, (x - largeur_image/2), (y - hauteur_image/2));
 
 	liberer_image(&im);
 
