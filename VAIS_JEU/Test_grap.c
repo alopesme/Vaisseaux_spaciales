@@ -16,6 +16,7 @@
 #include "Interface_graphique.h"
 #include "Music_Sons.h"
 #include "Test_grap.h"
+#include "Ia.h"
 #include "Jeu.h"
 
 
@@ -127,19 +128,17 @@ void test_deplacement_vaisseau(const int l_fen, const int h_fen) {
 }
 
 
-void test_monde(const int l_fen, const int h_fen, const int larg) {
+void test_monde(const int l_fen, const int h_fen, const int larg, const int nb_vaisseaux) {
 	Monde monde;
 	MLV_Sound* son = NULL;
 	MLV_Image* images[BONUS3 + 1] = {NULL};
-	int x, y, tir_x, tir_y, debut, temps1, temps2, c1 = 0, c2 = 0;
+	int x, y, tir_x, tir_y, debut, temps1, temps2, nb = 0;
 	assert(l_fen > 0);
 	assert(h_fen > 0);
 	initialiser_monde(&monde, l_fen / larg, h_fen / larg, larg);
-	/*ajouter_vaisseau_monde(&monde, 4, 1, 10, larg, BOT);*/
 	ajouter_mur_monde(&monde, 1, 1, 1, MUR);
 	debut = MLV_get_time() / 1000;
 	temps1 = debut;
-	printf("%p\n", images[MUR]);
 
 	while(MLV_get_mouse_button_state( MLV_BUTTON_RIGHT ) != MLV_PRESSED)  {
 		afficher_background();
@@ -154,17 +153,9 @@ void test_monde(const int l_fen, const int h_fen, const int larg) {
 		}
 
 		temps2 = MLV_get_time() / 1000;
-		if ( temps2 != temps1 ) {
+		if ( temps2 != temps1 && nb < nb_vaisseaux) {
 			temps1 = temps2;
-			if (c1 >= monde.taille_x - 1) {
-				c1 = 0;
-				++c2;
-			}
-
-			if (c2 >= monde.taille_y - 1)
-				break;
-			ajouter_mur_monde(&monde, c1, c2, 1, MUR);
-			++c1;
+			nb += ajouter_vaisseau_ennemi(&monde, larg, 1, BOT);
 		}
 
 		for (y = 0; y < monde.taille_y; ++y) {
@@ -188,7 +179,7 @@ void test_monde(const int l_fen, const int h_fen, const int larg) {
 
 }
 
-void test_jeu(const int l_fen, const int h_fen, const int larg) {
+void test_jeu(const int l_fen, const int h_fen, const int larg, const int n_v) {
 	int veri;
 	MLV_Music* musique;
 	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", l_fen, h_fen);
@@ -196,7 +187,7 @@ void test_jeu(const int l_fen, const int h_fen, const int larg) {
 	init_music(&musique, "../SONS_MUSIC/you-say-run-the-real-orchestral-my-hero-academia-deku.ogg");
 	veri = cliquer_sur_menu_depart(l_fen, h_fen);
 	if (veri == 1)
-		test_monde(l_fen, h_fen, larg);
+		test_monde(l_fen, h_fen, larg, n_v);
 	libere_musique(&musique);
 	MLV_free_window();
 }

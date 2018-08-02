@@ -55,13 +55,13 @@ void dessiner_element(Monde* monde, MLV_Image** image, int x, int y, const int l
 		case JOUEUR:
 			dessin_x = monde->vaisseaux[monde->tab[y][x].indice].x;
 			dessin_y = monde->vaisseaux[monde->tab[y][x].indice].y;
-			strcat(nom_image, "v_joueur.png");
+			strcat(nom_image, "v_miboss.png");
 			dessiner_vaisseau(image, nom_image, dessin_x, dessin_y, larg);
 			return;
 		case BOT:
 			dessin_x = monde->vaisseaux[monde->tab[y][x].indice].x;
 			dessin_y = monde->vaisseaux[monde->tab[y][x].indice].y;
-			strcat(nom_image, "v_joueur.png");
+			strcat(nom_image, "v_bot.png");
 			break;
 		case MIBOSS:
 			return;

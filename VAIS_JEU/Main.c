@@ -38,11 +38,12 @@ int main(int argc, char const *argv[]) {
 	jeu(atoi(argv[1]), atoi(argv[1]));
 
 	MLV_free_window();
+
+	test_monde(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
 	*/
 
-	/*test_monde(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));*/
-
-	test_jeu(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]));
+	test_jeu(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+	
 	
 	return 0;
 }

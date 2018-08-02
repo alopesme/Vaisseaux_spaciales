@@ -14,7 +14,7 @@ Monde.o: Monde.c Monde.h Bonus.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
 
 Test.o: Test.c Test.h Monde.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
 
-Test_grap.o: Test_grap.c Test_grap.h Interface_graphique.h Vaisseaux.h Deplacement.h Tires.h Vitesse.h Images.h Monde.h Jeu.h Music_Sons.h Page_Accueil.h Clic_Menu_Option.h Menu_Option.h Couleur.h
+Test_grap.o: Test_grap.c Test_grap.h Interface_graphique.h Vaisseaux.h Deplacement.h Tires.h Vitesse.h Images.h Monde.h Jeu.h Music_Sons.h Page_Accueil.h Clic_Menu_Option.h Menu_Option.h Couleur.h Ia.h
 
 Tires.o: Tires.c Tires.h
 

@@ -32,11 +32,14 @@ static Element **initialise_tab(const int t_x, const int t_y) {
 static int controle_vie(Element *elem, Element *elem_modifiable) {
     int temp;
     assert(NULL != elem);
-    if (elem->vie < 0 || elem_modifiable->vie < 0) {
+    if (elem_modifiable->vie <= 0) {
+        if (elem->vie <= 0)
+            elem->etats = VIDE;
         elem_modifiable->vie = 0;
         elem_modifiable->etats = VIDE;
         return 1;
     }
+
     temp = elem->vie;
 
     elem->vie -= elem_modifiable->vie;
@@ -246,8 +249,8 @@ void ajouter_vaisseau_monde(Monde* monde, const int x, const int y, const int vi
     monde->tab[y][x].vie = vie;
     monde->tab[y][x].indice = monde->nb_vaisseaux;
     
-    monde->vaisseaux[monde->nb_vaisseaux].x = x * larg;
-    monde->vaisseaux[monde->nb_vaisseaux].y = y * larg;
+    monde->vaisseaux[monde->nb_vaisseaux].x = x * larg + larg / 2;
+    monde->vaisseaux[monde->nb_vaisseaux].y = y * larg + larg / 2;
     monde->vaisseaux[monde->nb_vaisseaux].dep = STOP;
     monde->vaisseaux[monde->nb_vaisseaux].vi = LENT;
 
@@ -332,6 +335,10 @@ int peut_se_deplacer(Monde* monde, const int x, const int y, const int indice_va
 
         return 0;
 
+    if ((copie.x < larg / 2 || copie.x + larg / 2 > monde->taille_x * larg) ||
+        (copie.y < larg / 2 || copie.y + larg / 2 > monde->taille_y * larg))
+        return 0;
+
     hitbox1.x = copie.x - larg / 2;
     hitbox1.y = copie.y - larg / 2;
     hitbox1.largeur = larg;
@@ -347,7 +354,7 @@ int peut_se_deplacer(Monde* monde, const int x, const int y, const int indice_va
         hitbox2.largeur = larg;
         hitbox2.hauteur = larg;
 
-        if ( intersection(hitbox1, hitbox2) )
+        if (intersection(hitbox1, hitbox2))
             return 0;
 
     }

@@ -3,15 +3,19 @@
 #include <stdio.h>
 #include <MLV/MLV_random.h>
 #include "Ia.h"
+#include "Vitesse.h"
+#include "Tires.h"
+#include "Deplacement.h"
+#include "Vaisseaux.h"
 #include "Monde.h"
 
-void ajouter_vaisseau_bot(Monde* monde, int larg) {
+int ajouter_vaisseau_ennemi(Monde* monde, const int larg, const int vie, const Etats type) {
 	int x, y;
 
 	assert(NULL != monde);
 
 	if ( PROBA_BOT < MLV_get_random_integer(0, 100) )
-		return;
+		return 0;
 
 	do {
 		if ( MLV_get_random_boolean() ) { /* Bords supérieur et inférieur. */
@@ -29,7 +33,8 @@ void ajouter_vaisseau_bot(Monde* monde, int larg) {
 		}
 	} while ( monde->tab[y][x].etats != VIDE );
 
-	ajouter_vaisseau_monde(monde, x, y, 50, larg, BOT);
+	ajouter_vaisseau_monde(monde, x, y, vie * type, larg, type);
+	return 1;
 }
 
 void changer_direction_aleatoirement(Monde* monde, int i_vaisseau) {

@@ -164,7 +164,7 @@ void jouer(int taille_x, int taille_y) {
 	Monde monde;
 	MLV_Sound* son = NULL;
 	MLV_Image* images[BONUS3 + 1] = {NULL};
-	int x, y, tir_x, tir_y, larg = 30;
+	int x, y, tir_x, tir_y, larg = 30, nb = 0;
 	int debut, temps1, temps2;
 
 	assert(taille_x > 0);
@@ -185,10 +185,10 @@ void jouer(int taille_x, int taille_y) {
 
 		/* On tente d'ajouter un bonus et un bot toutes les secondes. */
 		temps2 = MLV_get_time() / 1000;
-		if ( temps2 != temps1 ) {
+		if ( temps2 != temps1 && nb < 10) {
 			temps1 = temps2;
 			ajouter_bonus_aleatoire(&monde);
-			ajouter_vaisseau_bot(&monde, larg);
+			nb += ajouter_vaisseau_ennemi(&monde, larg, 1, BOT);
 		}
 
 		for (y = 0; y < monde.taille_y; ++y) {
