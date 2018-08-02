@@ -102,4 +102,7 @@ void ajouter_bonus_aleatoire(Monde* monde);
 /* Renvoie 1 si l'intersection entre les deux rectangles est non nulle. */
 int intersection(Rectangle rect1, Rectangle rect2);
 
+/* Supprime le vaisseau à l'indice `i_vaisseau` dans le tableau de vaisseau. */
+void supprimer_vaisseau_monde(Monde* monde, int i_vaisseau);
+
 #endif
