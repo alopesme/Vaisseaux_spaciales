@@ -424,3 +424,18 @@ int intersection(Rectangle rect1, Rectangle rect2) {
 
     return horizontal && vertical;
 }
+
+void supprimer_vaisseau_monde(Monde* monde, int i_vaisseau) {
+    int i;
+
+    assert(NULL != monde);
+    assert(i_vaisseau >= 0);
+
+    /* On décale les vaisseaux en écrasant celui qu'on veut supprimer. */
+    for (i = i_vaisseau; i < monde->nb_vaisseaux - 1; i++) {
+        monde->vaisseaux[i] = monde->vaisseaux[i+1];
+    }
+
+    /* On réduit le nombre de vaisseaux. */
+    monde->nb_vaisseaux--;
+}
