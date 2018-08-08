@@ -78,9 +78,17 @@ int tir_touche_element(Monde *monde, const int x, const int y, const int larg);
 /* Ajoute un vaisseau aux coordonnées (x, y) dont le type et sa vie est donné. */
 void ajouter_vaisseau_monde(Monde* monde, const int x, const int y, const int vie, const int larg, const Etats type);
 
+/* Renvoie 1 si l'intersection entre les deux rectangles est non nulle. */
+int intersection(Rectangle rect1, Rectangle rect2);
+
+/* Supprime le vaisseau à l'indice `i_vaisseau` dans le tableau de vaisseau. */
+void supprimer_vaisseau_monde(Monde* monde, int *i_vaisseau);
 
 
-/* Renvoie 1 si le vaisseau à l'indice `indice_vaisseau` et aux coordonnées (x, y) peut se déplacer dans sa direction et 0 sinon. */
+
+
+/* Renvoie 1 si le vaisseau à l'indice `indice_vaisseau` et aux coordonnées (x, y) peut se déplacer dans sa direction et 0 sinon.
+ * Gere si le vaisseau a touche un element aussi. */
 int peut_se_deplacer(Monde* monde, const int x, const int y, const int indice_vaisseau, const int larg);
 
 /* Déplace d'un cran le vaisseau situé aux coordonnées (x, y). */
@@ -99,10 +107,5 @@ void ajouter_mur_monde(Monde *monde, const int x, const int y, const int vie, co
 /* Ajoute un bonus aléatoire dans le monde en fonction d'un taux de probabilité. */
 void ajouter_bonus_aleatoire(Monde* monde);
 
-/* Renvoie 1 si l'intersection entre les deux rectangles est non nulle. */
-int intersection(Rectangle rect1, Rectangle rect2);
-
-/* Supprime le vaisseau à l'indice `i_vaisseau` dans le tableau de vaisseau. */
-void supprimer_vaisseau_monde(Monde* monde, int i_vaisseau);
 
 #endif

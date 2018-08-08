@@ -41,7 +41,8 @@ static void matiere_monde(Monde *mo, const int x, const int y) {
 			break;
 	}
 }
-static void tir_monde(Monde *mo, MLV_Sound** son, const int x, const int y, const int larg) {
+
+static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
 	int t_x, t_y;
 	assert(NULL != mo);
 	assert(x >= 0);
@@ -53,12 +54,7 @@ static void tir_monde(Monde *mo, MLV_Sound** son, const int x, const int y, cons
 		case TIR:
 			t_x = (int)mo->tab[y][x].tir.coord_t.tir_x - larg / 4;
 			t_y = (int)mo->tab[y][x].tir.coord_t.tir_y - larg / 4;
-			if (tir_touche_element(mo, x, y, larg)) {
-				mo->tab[y][x].tir.coord_t.tir_x = t_x + larg / 4;
-				mo->tab[y][x].tir.coord_t.tir_y = t_y + larg / 4;
-				mo->tab[y][x].etats = EXPLOSION;
-				effets_speciaux(son, "../SONS_MUSIC/small_blast.ogg");
-			}
+			tir_touche_element(mo, x, y, larg);
 			
 
 			MLV_draw_rectangle(t_x, t_y, larg / 2, larg / 2, MLV_COLOR_GREEN);
@@ -107,7 +103,7 @@ static void vaisseaux_monde(Monde *mo, const int x, const int y, const int larg)
 		case MIBOSS:
 		case BOSSFINALE:
 			MLV_draw_rectangle(mo->vaisseaux[mo->tab[y][x].indice].x - larg / 2, mo->vaisseaux[mo->tab[y][x].indice].y - larg / 2, larg, larg, MLV_COLOR_YELLOW);
-			changer_direction_aleatoirement(mo, i_vaisseau);
+			/*changer_direction_aleatoirement(mo, i_vaisseau);*/
 			break;
 		default: return;
 	}
@@ -140,7 +136,7 @@ static void bonus_monde(Monde *mo, const int x, const int y) {
 	}
 }
 
-void action_element(Monde *mo, MLV_Sound** son, const int x, const int y, const int larg) {
+void action_element(Monde *mo, const int x, const int y, const int larg) {
 	assert(NULL != mo);
 	assert(x >= 0);
 	assert(x < mo->taille_x);
@@ -151,7 +147,7 @@ void action_element(Monde *mo, MLV_Sound** son, const int x, const int y, const 
 		matiere_monde(mo, x, y);
 
 	if (mo->tab[y][x].etats > OBSTACLE && mo->tab[y][x].etats <= TIR) 
-		tir_monde(mo, son, x, y, larg);
+		tir_monde(mo, x, y, larg);
 				
 	if (mo->tab[y][x].etats > TIR && mo->tab[y][x].etats <= BOSSFINALE) 
 		vaisseaux_monde(mo, x, y, larg);
@@ -193,8 +189,8 @@ void jouer(int taille_x, int taille_y) {
 
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
-				dessiner_element(&monde, &(images[monde.tab[y][x].etats]), x, y, larg);
-				action_element(&monde, &son, x, y, larg);
+				dessiner_element(&monde, &son, &(images[monde.tab[y][x].etats]), x, y, larg);
+				action_element(&monde, x, y, larg);
 				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 
 			}

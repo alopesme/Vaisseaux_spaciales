@@ -17,7 +17,7 @@ Espace commentaire : Utilise les fontions d'Images directement
 void afficher_background();
 
 /* Déssine l'élément dont le centre est situé aux coordonnées (x, y). */
-void dessiner_element(Monde* monde, MLV_Image** image, int x, int y, const int larg);
+void dessiner_element(Monde* monde, MLV_Sound **son, MLV_Image** image, int x, int y, const int larg);
 
 void effets_speciaux(MLV_Sound** son, const char* nom_son);
 

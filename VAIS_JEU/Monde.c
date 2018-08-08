@@ -29,14 +29,23 @@ static Element **initialise_tab(const int t_x, const int t_y) {
     return tab;
 }
 
-static int controle_vie(Monde* monde, Element *elem, Element *elem_modifiable) {
-    int temp;
+/* Gere la vie des element.
+ * Pour effacer les vaisseaux verifie l'indice et echange avec le dernier vaisseau puis diinue le nombre.*/
+static int controle_vie(Monde *monde, Element *elem, Element *elem_modifiable, const int larg) {
+    int temp, x, y;
     assert(NULL != elem);
-    if (elem_modifiable->vie <= 0) {
-        if (elem->vie <= 0)
-            elem->etats = VIDE;
+    x = monde->vaisseaux[monde->nb_vaisseaux - 1].x / larg;
+    y = monde->vaisseaux[monde->nb_vaisseaux - 1].y / larg;
+    if (elem_modifiable->vie <= 0 || elem->vie < 0) {
         elem_modifiable->vie = 0;
-        elem_modifiable->etats = VIDE;
+        elem_modifiable->etats = EXPLOSION;
+        /* V*/
+        if (elem_modifiable->indice > -1 && elem_modifiable->indice < monde->nb_vaisseaux) {
+            monde->vaisseaux[elem_modifiable->indice] = monde->vaisseaux[monde->nb_vaisseaux - 1];
+            monde->tab[y][x].indice = elem_modifiable->indice;
+            elem_modifiable->indice = -1;
+            monde->nb_vaisseaux--;
+        }
         return 1;
     }
 
@@ -45,22 +54,31 @@ static int controle_vie(Monde* monde, Element *elem, Element *elem_modifiable) {
     elem->vie -= elem_modifiable->vie;
     elem_modifiable->vie -= temp;
     if (elem->vie <= 0) {
-        /* Si c'est un vaisseau et qu'il n'a plus de vie, on le supprime. */
-        if ( elem->etats == BOT || elem->etats == MIBOSS || elem->etats == BOSSFINALE )
-            supprimer_vaisseau_monde(monde, elem->indice);
         elem->vie = 0;
-        elem->etats = VIDE;
-        elem->indice = -1;
+        elem->etats = EXPLOSION;
+        if (elem->indice > -1 && elem->indice < monde->nb_vaisseaux) {
+            monde->vaisseaux[elem->indice] = monde->vaisseaux[monde->nb_vaisseaux - 1];
+            monde->tab[y][x].indice = elem->indice;
+            elem->indice = -1;
+            monde->nb_vaisseaux--;
+        }
     }
+
     if (elem_modifiable->vie <= 0) {
-        elem_modifiable->etats = VIDE;
+        elem_modifiable->etats = EXPLOSION;
         elem_modifiable->vie = 0;
-        elem_modifiable->indice = -1;
+        if (elem_modifiable->indice > -1 && elem_modifiable->indice < monde->nb_vaisseaux) {
+            monde->vaisseaux[elem_modifiable->indice] = monde->vaisseaux[monde->nb_vaisseaux - 1];
+            monde->tab[y][x].indice = elem_modifiable->indice;
+            elem_modifiable->indice = -1;
+            monde->nb_vaisseaux--;
+        }
 
     }
     return 1;
 }
 
+/* Verifie si un des points du tir à touche un vaisseau.*/
 static int condition_tir_vaisseau(Monde* monde, int x, int y, const int larg) {
     Tir tir;
     int t_x, t_y, l, x1, x2, y1, y2;
@@ -83,7 +101,7 @@ static int condition_tir_vaisseau(Monde* monde, int x, int y, const int larg) {
         y1 = monde->vaisseaux[monde->tab[t_y / larg][t_x / larg].indice].y - larg / 2;
         x2 = x1 + larg;
         y2 = y1 + larg;
-        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(monde, &(monde->tab[t_y / larg][t_x / larg]), &(monde->tab[y][x]));
+        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(monde, &(monde->tab[t_y / larg][t_x / larg]), &(monde->tab[y][x]), larg);
     }
 
     if ((monde->tab[t_y / larg][(t_x + l) / larg].etats >= JOUEUR || monde->tab[t_y / larg][(t_x + l) / larg].etats <= BOSSFINALE)) {
@@ -94,7 +112,7 @@ static int condition_tir_vaisseau(Monde* monde, int x, int y, const int larg) {
         y1 = monde->vaisseaux[monde->tab[t_y / larg][(t_x + l) / larg].indice].y - larg / 2;
         x2 = x1 + larg;
         y2 = y1 + larg;
-        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(monde, &(monde->tab[t_y / larg][(t_x + l) / larg]), &(monde->tab[y][x]));
+        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(monde, &(monde->tab[t_y / larg][(t_x + l) / larg]), &(monde->tab[y][x]), larg);
     }
     
     if ((monde->tab[(t_y + l) / larg][t_x / larg].etats >= JOUEUR || monde->tab[(t_y + l) / larg][t_x / larg].etats <= BOSSFINALE)) {
@@ -105,7 +123,7 @@ static int condition_tir_vaisseau(Monde* monde, int x, int y, const int larg) {
         y1 = monde->vaisseaux[monde->tab[(t_y + l) / larg][t_x / larg].indice].y - larg / 2;
         x2 = x1 + larg;
         y2 = y1 + larg;
-        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(monde, &(monde->tab[(t_y + l) / larg][t_x / larg]), &(monde->tab[y][x]));
+        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(monde, &(monde->tab[(t_y + l) / larg][t_x / larg]), &(monde->tab[y][x]), larg);
     }
     
 
@@ -118,11 +136,12 @@ static int condition_tir_vaisseau(Monde* monde, int x, int y, const int larg) {
         y1 = monde->vaisseaux[monde->tab[(t_y + l) / larg][(t_x + l) / larg].indice].y - larg / 2;
         x2 = x1 + larg;
         y2 = y1 + larg;
-        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(monde, &(monde->tab[(t_y + l) / larg][(t_x + l) / larg]), &(monde->tab[y][x]));
+        return coord_tir_touche(tir, x1, x2, y1, y2) && controle_vie(monde, &(monde->tab[(t_y + l) / larg][(t_x + l) / larg]), &(monde->tab[y][x]), larg);
     }
     return 0;
 }
 
+/* Verifie si le tire touche un element.*/
 static int condition_tir(Monde* monde, int x, int y, const int larg) {
     int t_x, t_y, l;
     assert(NULL != monde);
@@ -138,22 +157,98 @@ static int condition_tir(Monde* monde, int x, int y, const int larg) {
 
     if ((monde->tab[t_y / larg][t_x / larg].etats != VIDE) &&
         (monde->tab[t_y / larg][t_x / larg].etats > TIR || monde->tab[t_y / larg][t_x / larg].etats < TIR))
-        return controle_vie(monde, &(monde->tab[t_y / larg][t_x / larg]), &(monde->tab[y][x]));
+        return controle_vie(monde, &(monde->tab[t_y / larg][t_x / larg]), &(monde->tab[y][x]), larg);
 
     if ((monde->tab[t_y / larg][(t_x + l) / larg].etats != VIDE) &&
         (monde->tab[t_y / larg][(t_x + l) / larg].etats < TIR || monde->tab[t_y / larg][(t_x + l) / larg].etats > TIR))
-        return controle_vie(monde, &(monde->tab[t_y / larg][(t_x + l) / larg]), &(monde->tab[y][x]));
+        return controle_vie(monde, &(monde->tab[t_y / larg][(t_x + l) / larg]), &(monde->tab[y][x]), larg);
     
     if ((monde->tab[(t_y + l) / larg][t_x / larg].etats != VIDE) &&
         (monde->tab[(t_y + l) / larg][t_x / larg].etats < TIR || monde->tab[(t_y + l) / larg][t_x / larg].etats > TIR))
-        return controle_vie(monde, &(monde->tab[(t_y + l) / larg][t_x / larg]), &(monde->tab[y][x]));
+        return controle_vie(monde, &(monde->tab[(t_y + l) / larg][t_x / larg]), &(monde->tab[y][x]), larg);
     
 
     if ((monde->tab[(t_y + l) / larg][(t_x + l) / larg].etats != VIDE) &&
         (monde->tab[(t_y + l) / larg][(t_x + l) / larg].etats < TIR || monde->tab[(t_y + l) / larg][(t_x + l) / larg].etats > TIR))
-        return controle_vie(monde, &(monde->tab[(t_y + l) / larg][(t_x + l) / larg]), &(monde->tab[y][x]));
+        return controle_vie(monde, &(monde->tab[(t_y + l) / larg][(t_x + l) / larg]), &(monde->tab[y][x]), larg);
     
     return 0;
+}
+
+/* Definie les coordonnees de `hitbox2` à la case de `temp_x, temp_y` si element n'est pas un tir ou vide.*/
+static int condition_contact_vaisseau(Monde *monde, Rectangle *hitbox2, const Rectangle hitbox1, const int temp_x, const int temp_y, const int x, const int y) {
+    assert(NULL != monde);
+    assert(NULL != hitbox2);
+    assert(temp_x >= 0);
+    assert(temp_x < monde->taille_x); 
+    assert(temp_y >= 0);
+    assert(temp_y < monde->taille_y);
+    assert(x >= 0);
+    assert(x < monde->taille_x);
+    assert(y >= 0);
+    assert(y < monde->taille_y);
+
+    if (monde->tab[temp_y][temp_x].etats != VIDE) {
+        if (monde->tab[temp_y][temp_x].etats <= MUR_CASSE && monde->tab[temp_y][temp_x].etats >= MUR) {
+            hitbox2->x = temp_x * hitbox1.largeur;
+            hitbox2->y = temp_y * hitbox1.hauteur;
+            hitbox2->largeur = hitbox1.largeur;
+            hitbox2->hauteur = hitbox1.hauteur;
+            return 1;
+        }
+
+        if ((monde->tab[temp_y][temp_x].etats <= BOSSFINALE && monde->tab[temp_y][temp_x].etats >= JOUEUR)
+            && monde->tab[temp_y][temp_x].indice != monde->tab[y][x].indice) {
+            hitbox2->x = monde->vaisseaux[monde->tab[temp_y][temp_x].indice].x - hitbox1.largeur / 2;
+            hitbox2->y = monde->vaisseaux[monde->tab[temp_y][temp_x].indice].y - hitbox1.hauteur / 2;
+            hitbox2->largeur = hitbox1.largeur;
+            hitbox2->hauteur = hitbox1.hauteur;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/* Verifie si un des point de `hitbox1` est dans une case non vide ou qui n'est pas un tir avec `condition_contact_vaisseau`.
+ * Renvoye `hitbox2`.*/
+static Rectangle contact_vaisseau(Monde* monde, const Rectangle hitbox1, const int x, const int y) {
+    Rectangle hitbox2 = {-1, -1, -1, -1};
+    int temp_x, temp_y;
+    assert(NULL != monde);
+    assert(x >= 0);
+    assert(x < monde->taille_x);
+    assert(y >= 0);
+    assert(y < monde->taille_y);
+
+    temp_x = (hitbox1.x / hitbox1.largeur);
+    temp_y = (hitbox1.y / hitbox1.hauteur);
+    if (condition_contact_vaisseau(monde, &hitbox2, hitbox1, temp_x, temp_y, x, y))
+        return hitbox2;
+
+    temp_x = ((hitbox1.x + hitbox1.largeur) / hitbox1.largeur);
+    if (temp_x >= monde->taille_x || temp_x < 0)
+        temp_x--;
+    temp_y = (hitbox1.y / hitbox1.hauteur);
+    if (condition_contact_vaisseau(monde, &hitbox2, hitbox1, temp_x, temp_y, x, y))
+        return hitbox2;
+
+    temp_x = (hitbox1.x / hitbox1.largeur);
+    temp_y = ((hitbox1.y + hitbox1.hauteur) / hitbox1.hauteur);
+    if (temp_y >= monde->taille_y || temp_y < 0)
+        temp_y--;
+    if (condition_contact_vaisseau(monde, &hitbox2, hitbox1, temp_x, temp_y, x, y))
+        return hitbox2;
+
+    temp_x = ((hitbox1.x + hitbox1.largeur) / hitbox1.largeur);
+    temp_y = ((hitbox1.y + hitbox1.hauteur) / hitbox1.hauteur);
+    if (temp_x >= monde->taille_x || temp_x < 0 || temp_y >= monde->taille_y || temp_y < 0) {
+        temp_x--;temp_y--;
+    }
+        
+    if (condition_contact_vaisseau(monde, &hitbox2, hitbox1, temp_x, temp_y, x, y))
+        return hitbox2;
+
+    return hitbox2;
 }
 
 void initialiser_monde(Monde* monde, const int t_x, const int t_y, const int larg) {
@@ -216,7 +311,6 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
         monde->tab[x][y].vie = vie;
         monde->tab[x][y].indice = -1;
     }
-
 }
 
 int configure_tir_monde(Monde* monde, Tir tir, Etats etats, const int larg) {
@@ -316,14 +410,12 @@ void libere_monde(Monde* monde) {
 
     free(monde->tab);
     monde->tab = NULL;
-
 }
 
 
 int peut_se_deplacer(Monde* monde, const int x, const int y, const int indice_vaisseau, const int larg) {
     int nouvelle_case_x, nouvelle_case_y;
-    int i;
-    Vaisseau copie = {monde->vaisseaux[indice_vaisseau].x, monde->vaisseaux[indice_vaisseau].y, monde->vaisseaux[indice_vaisseau].dep, monde->vaisseaux[indice_vaisseau].vi};
+    Vaisseau copie = monde->vaisseaux[indice_vaisseau];
     Rectangle hitbox1, hitbox2;
 
     assert(NULL != monde);
@@ -342,26 +434,18 @@ int peut_se_deplacer(Monde* monde, const int x, const int y, const int indice_va
         (copie.y < larg / 2 || copie.y + larg / 2 > monde->taille_y * larg))
         return 0;
 
+
     hitbox1.x = copie.x - larg / 2;
     hitbox1.y = copie.y - larg / 2;
     hitbox1.largeur = larg;
     hitbox1.hauteur = larg;
+    hitbox2 = contact_vaisseau(monde, hitbox1, x, y);
 
-    /* On vérifie s'il n'y a pas un vaisseau sur la prochaine case. */
-    for (i = 0; i < monde->nb_vaisseaux; i++) {
-        if ( i == indice_vaisseau )
-            continue;
-
-        hitbox2.x = monde->vaisseaux[i].x - larg / 2;
-        hitbox2.y = monde->vaisseaux[i].y - larg / 2;
-        hitbox2.largeur = larg;
-        hitbox2.hauteur = larg;
-
-        if (intersection(hitbox1, hitbox2))
-            return 0;
-
+    if (intersection(hitbox1, hitbox2)) {
+        controle_vie(monde, &(monde->tab[hitbox2.y / hitbox2.hauteur][hitbox2.x / hitbox2.largeur]), &(monde->tab[y][x]), larg);
+        return 0;
     }
-
+    
     return 1;
 }
 
@@ -380,8 +464,6 @@ void deplacer_vaisseau(Monde* monde, const int x, const int y, const int larg) {
         monde->tab[y][x].etats = VIDE;
         monde->tab[y][x].vie = 0;
         monde->tab[y][x].indice = -1;
-
-
     }
 }
 
@@ -428,26 +510,13 @@ int intersection(Rectangle rect1, Rectangle rect2) {
     return horizontal && vertical;
 }
 
-void supprimer_vaisseau_monde(Monde* monde, int i_vaisseau) {
-    int i, j;
+void supprimer_vaisseau_monde(Monde* monde, int *i_vaisseau) {
 
     assert(NULL != monde);
-    assert(i_vaisseau >= 0);
+    assert(NULL != i_vaisseau);
 
-    /* On décale les vaisseaux en écrasant celui qu'on veut supprimer. */
-    for (i = i_vaisseau; i < monde->nb_vaisseaux - 1; i++) {
-        monde->vaisseaux[i] = monde->vaisseaux[i+1];
-    }
-
-    /* On actualise l'indice des vaisseaux. */
-    for (i = 0; i < monde->taille_y; i++) {
-        for (j = 0; j < monde->taille_x; j++) {
-            if ( (monde->tab[i][j].etats == BOT || monde->tab[i][j].etats == MIBOSS || monde->tab[i][j].etats == BOSSFINALE) && monde->tab[i][j].indice > i_vaisseau ) {
-                monde->tab[i][j].indice--;
-            }
-        }
-    }
-
-    /* On réduit le nombre de vaisseaux. */
+    monde->vaisseaux[*i_vaisseau] = monde->vaisseaux[monde->nb_vaisseaux - 1];
     monde->nb_vaisseaux--;
+    *i_vaisseau = -1;
+
 }

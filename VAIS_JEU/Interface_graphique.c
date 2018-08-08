@@ -18,7 +18,7 @@ void afficher_background() {
 	MLV_clear_window(FOND);
 }
 
-void dessiner_element(Monde* monde, MLV_Image** image, int x, int y, const int larg) {
+void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, int y, const int larg) {
 	int dessin_x = 0, dessin_y = 0;
 	char nom_image[20] = "../Images/";
 	/*int largeur_image, hauteur_image;*/
@@ -46,16 +46,17 @@ void dessiner_element(Monde* monde, MLV_Image** image, int x, int y, const int l
 			strcat(nom_image, "v_beam.png");
 			break;
 		case EXPLOSION:
-			dessin_x = (int)monde->tab[y][x].tir.coord_t.tir_x;
-			dessin_y = (int)monde->tab[y][x].tir.coord_t.tir_y;
+			dessin_x += larg / 2;
+			dessin_y += larg / 2;
 			strcat(nom_image, "explosion.png");
+			effets_speciaux(son, "../SONS_MUSIC/small_blast.ogg");
 			monde->tab[y][x].etats = VIDE;
 
 			break;
 		case JOUEUR:
 			dessin_x = monde->vaisseaux[monde->tab[y][x].indice].x;
 			dessin_y = monde->vaisseaux[monde->tab[y][x].indice].y;
-			strcat(nom_image, "v_miboss.png");
+			strcat(nom_image, "v_joueur.png");
 			dessiner_vaisseau(image, nom_image, dessin_x, dessin_y, larg);
 			return;
 		case BOT:

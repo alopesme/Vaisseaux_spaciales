@@ -160,9 +160,9 @@ void test_monde(const int l_fen, const int h_fen, const int larg, const int nb_v
 
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
-				dessiner_element(&monde, &(images[monde.tab[y][x].etats]), x, y, larg);
+				dessiner_element(&monde, &son, &(images[monde.tab[y][x].etats]), x, y, larg);
 
-				action_element(&monde, &son, x, y, larg);
+				action_element(&monde, x, y, larg);
 				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 			}
 			
