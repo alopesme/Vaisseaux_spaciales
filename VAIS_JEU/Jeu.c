@@ -27,6 +27,7 @@ static void matiere_monde(Monde *mo, const int x, const int y) {
 
 	switch (mo->tab[y][x].etats) {
 		case VIDE:
+			mo->tab[y][x].vie = 0;
 			break;
 		/* Si c'est un mur ou un obstacle, on vérifie sa vie, et si elle est négative on le détruit. */
 		case MUR:
@@ -103,7 +104,7 @@ static void vaisseaux_monde(Monde *mo, const int x, const int y, const int larg)
 		case MIBOSS:
 		case BOSSFINALE:
 			MLV_draw_rectangle(mo->vaisseaux[mo->tab[y][x].indice].x - larg / 2, mo->vaisseaux[mo->tab[y][x].indice].y - larg / 2, larg, larg, MLV_COLOR_YELLOW);
-			/*changer_direction_aleatoirement(mo, i_vaisseau);*/
+			changer_direction_aleatoirement(mo, i_vaisseau);
 			break;
 		default: return;
 	}

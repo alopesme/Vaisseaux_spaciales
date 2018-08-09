@@ -82,7 +82,7 @@ void ajouter_vaisseau_monde(Monde* monde, const int x, const int y, const int vi
 int intersection(Rectangle rect1, Rectangle rect2);
 
 /* Supprime le vaisseau à l'indice `i_vaisseau` dans le tableau de vaisseau. */
-void supprimer_vaisseau_monde(Monde* monde, int *i_vaisseau);
+void supprimer_vaisseau_monde(Monde* monde, int *i_vaisseau, const int larg);
 
 
 

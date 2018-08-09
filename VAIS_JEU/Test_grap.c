@@ -155,6 +155,7 @@ void test_monde(const int l_fen, const int h_fen, const int larg, const int nb_v
 		temps2 = MLV_get_time() / 1000;
 		if ( temps2 != temps1 && nb < nb_vaisseaux) {
 			temps1 = temps2;
+			ajouter_bonus_aleatoire(&monde);
 			nb += ajouter_vaisseau_ennemi(&monde, larg, 1, BOT);
 		}
 

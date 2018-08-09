@@ -24,20 +24,17 @@ void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, i
 	/*int largeur_image, hauteur_image;*/
 
 	assert(NULL != monde);	
-	dessin_x = x * larg;
-	dessin_y = y * larg;
+	dessin_x = x * larg + larg / 2;
+	dessin_y = y * larg + larg / 2;
 
 	switch ( monde->tab[y][x].etats ) {
 		case MUR:
-			dessin_x += larg / 2;
-			dessin_y += larg / 2;
 			strcat(nom_image, "v_wall.png");
 			break;
 		case OBSTACLE:
 			break;
 		case MUR_CASSE:
-			dessin_x += larg / 2;
-			dessin_y += larg / 2;
+
 			strcat(nom_image, "v_crack2.png");
 			break;
 		case TIR:
@@ -46,8 +43,7 @@ void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, i
 			strcat(nom_image, "v_beam.png");
 			break;
 		case EXPLOSION:
-			dessin_x += larg / 2;
-			dessin_y += larg / 2;
+
 			strcat(nom_image, "explosion.png");
 			effets_speciaux(son, "../SONS_MUSIC/small_blast.ogg");
 			monde->tab[y][x].etats = VIDE;

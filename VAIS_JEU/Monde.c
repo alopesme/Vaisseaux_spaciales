@@ -32,20 +32,14 @@ static Element **initialise_tab(const int t_x, const int t_y) {
 /* Gere la vie des element.
  * Pour effacer les vaisseaux verifie l'indice et echange avec le dernier vaisseau puis diinue le nombre.*/
 static int controle_vie(Monde *monde, Element *elem, Element *elem_modifiable, const int larg) {
-    int temp, x, y;
+    int temp;
     assert(NULL != elem);
-    x = monde->vaisseaux[monde->nb_vaisseaux - 1].x / larg;
-    y = monde->vaisseaux[monde->nb_vaisseaux - 1].y / larg;
     if (elem_modifiable->vie <= 0 || elem->vie < 0) {
+        if (elem_modifiable->etats >= JOUEUR && elem_modifiable->etats <= BOSSFINALE) 
+            supprimer_vaisseau_monde(monde, &(elem_modifiable->indice), larg);
+        
         elem_modifiable->vie = 0;
         elem_modifiable->etats = EXPLOSION;
-        /* V*/
-        if (elem_modifiable->indice > -1 && elem_modifiable->indice < monde->nb_vaisseaux) {
-            monde->vaisseaux[elem_modifiable->indice] = monde->vaisseaux[monde->nb_vaisseaux - 1];
-            monde->tab[y][x].indice = elem_modifiable->indice;
-            elem_modifiable->indice = -1;
-            monde->nb_vaisseaux--;
-        }
         return 1;
     }
 
@@ -54,26 +48,19 @@ static int controle_vie(Monde *monde, Element *elem, Element *elem_modifiable, c
     elem->vie -= elem_modifiable->vie;
     elem_modifiable->vie -= temp;
     if (elem->vie <= 0) {
+        if (elem->etats >= JOUEUR && elem->etats <= BOSSFINALE) 
+            supprimer_vaisseau_monde(monde, &(elem->indice), larg);
+        
         elem->vie = 0;
         elem->etats = EXPLOSION;
-        if (elem->indice > -1 && elem->indice < monde->nb_vaisseaux) {
-            monde->vaisseaux[elem->indice] = monde->vaisseaux[monde->nb_vaisseaux - 1];
-            monde->tab[y][x].indice = elem->indice;
-            elem->indice = -1;
-            monde->nb_vaisseaux--;
-        }
     }
 
     if (elem_modifiable->vie <= 0) {
+        if (elem_modifiable->etats >= JOUEUR && elem_modifiable->etats <= BOSSFINALE) 
+            supprimer_vaisseau_monde(monde, &(elem_modifiable->indice), larg);
+        
         elem_modifiable->etats = EXPLOSION;
         elem_modifiable->vie = 0;
-        if (elem_modifiable->indice > -1 && elem_modifiable->indice < monde->nb_vaisseaux) {
-            monde->vaisseaux[elem_modifiable->indice] = monde->vaisseaux[monde->nb_vaisseaux - 1];
-            monde->tab[y][x].indice = elem_modifiable->indice;
-            elem_modifiable->indice = -1;
-            monde->nb_vaisseaux--;
-        }
-
     }
     return 1;
 }
@@ -414,7 +401,7 @@ void libere_monde(Monde* monde) {
 
 
 int peut_se_deplacer(Monde* monde, const int x, const int y, const int indice_vaisseau, const int larg) {
-    int nouvelle_case_x, nouvelle_case_y;
+    int nouvelle_case_x, nouvelle_case_y, ind_x, ind_y;
     Vaisseau copie = monde->vaisseaux[indice_vaisseau];
     Rectangle hitbox1, hitbox2;
 
@@ -441,8 +428,10 @@ int peut_se_deplacer(Monde* monde, const int x, const int y, const int indice_va
     hitbox1.hauteur = larg;
     hitbox2 = contact_vaisseau(monde, hitbox1, x, y);
 
+    ind_x = (hitbox2.x + hitbox2.largeur / 2) / hitbox2.largeur;
+    ind_y = (hitbox2.y + hitbox2.hauteur / 2) / hitbox2.hauteur;
     if (intersection(hitbox1, hitbox2)) {
-        controle_vie(monde, &(monde->tab[hitbox2.y / hitbox2.hauteur][hitbox2.x / hitbox2.largeur]), &(monde->tab[y][x]), larg);
+        controle_vie(monde, &(monde->tab[ind_y][ind_x]), &(monde->tab[y][x]), larg);
         return 0;
     }
     
@@ -510,12 +499,14 @@ int intersection(Rectangle rect1, Rectangle rect2) {
     return horizontal && vertical;
 }
 
-void supprimer_vaisseau_monde(Monde* monde, int *i_vaisseau) {
-
+void supprimer_vaisseau_monde(Monde* monde, int *i_vaisseau, const int larg) {
+    int x, y;
     assert(NULL != monde);
     assert(NULL != i_vaisseau);
-
+    x = monde->vaisseaux[monde->nb_vaisseaux - 1].x / larg;
+    y = monde->vaisseaux[monde->nb_vaisseaux - 1].y / larg;
     monde->vaisseaux[*i_vaisseau] = monde->vaisseaux[monde->nb_vaisseaux - 1];
+    monde->tab[y][x].indice = *i_vaisseau;
     monde->nb_vaisseaux--;
     *i_vaisseau = -1;
 
