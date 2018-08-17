@@ -22,13 +22,13 @@ void afficher_vaisseaux_details(const Vaisseau* vaisseaux, const int nb_vaisseau
     
 }
 
-Vaisseau* allouer_vaisseaux(const int nb_vaisseaux, const int x, const int y, const int larg) {
+Vaisseau* allouer_vaisseaux(const int nb_vaisseaux, const int x, const int y, const int larg, const int haut) {
     int i;
     Vaisseau vais_defaut = {x, y, STOP, LENT};
     Vaisseau* vaisseaux = NULL;
     assert(larg > 0);
     assert(x >= larg / 2);
-    assert(y >= larg / 2);
+    assert(y >= haut / 2);
 
     assert(nb_vaisseaux > 0);
 
@@ -42,13 +42,13 @@ Vaisseau* allouer_vaisseaux(const int nb_vaisseaux, const int x, const int y, co
     for (i = 1; i < nb_vaisseaux; ++i) {
         vaisseaux[i] = vais_defaut;
         vaisseaux[i].x = i * larg;
-        vaisseaux[i].y = larg;
+        vaisseaux[i].y = haut;
     }
 
     return vaisseaux;
 }
 
-void calculer_prochaine_case_vaisseau(Vaisseau *v, int* out_x, int* out_y, int larg) {
+void calculer_prochaine_case_vaisseau(Vaisseau *v, int* out_x, int* out_y, int larg, int haut) {
     assert(NULL != v);
 
     switch ( v->dep ) {
@@ -73,12 +73,11 @@ void calculer_prochaine_case_vaisseau(Vaisseau *v, int* out_x, int* out_y, int l
     }
 
     *out_x = v->x / larg;
-    *out_y = v->y / larg;
+    *out_y = v->y / haut;
 }
 
 
-void libere_vaisseaux(Vaisseau* vaisseaux, const int nb_vaisseaux) {
-    assert(nb_vaisseaux > 0);
+void libere_vaisseaux(Vaisseau* vaisseaux) {
     assert(NULL != vaisseaux);
 
     free(vaisseaux);

@@ -17,13 +17,13 @@ Espace commentaire : `dessiner_image` utilise charger_image et liberer_image aus
 
 
 /* Cette fois permet de charger l'image et la redimisionner.*/
-void charger_image(MLV_Image** image, const char* nom_image, const int largeur);
+void charger_image(MLV_Image** image, const char* nom_image, const int larg, const int haut);
 
 /* Cette fonction dessine l'image.*/
-void dessiner_image(MLV_Image** image, const char* nom_image, const int x, const int y, const int largeur);
+void dessiner_image(MLV_Image** image, const char* nom_image, const int x, const int y, const int larg, const int haut);
 
 /* Fonction qui va dessiner un vaisseau avec la rotation aussi.*/
-void dessiner_vaisseau(MLV_Image** image, const char* nom_image, const int x, const int y, const int largeur);
+void dessiner_vaisseau(MLV_Image** image, const char* nom_image, const int x, const int y, const int larg, const int haut);
 
 
 /* Tourne l'image par rapport à la position de la souris.*/

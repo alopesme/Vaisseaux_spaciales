@@ -5,7 +5,6 @@
 
 void afficher_deplacement(Deplacement dep) {
     switch(dep) {
-        case ROTATION : printf("ROTATION "); break;
 
         case NORD : printf("NORD "); break;
 
@@ -29,8 +28,7 @@ int action_deplacement(const Deplacement *dep, int *dep_x, int *dep_y) {
 	assert(NULL != dep);
 
 	switch(*dep) {
-		case ROTATION : var = 2; break;
-
+        
         case NORD : *dep_y = 1; break;
 
         case SUD : *dep_y = -1; break;

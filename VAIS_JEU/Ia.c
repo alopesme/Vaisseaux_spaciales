@@ -9,7 +9,7 @@
 #include "Vaisseaux.h"
 #include "Monde.h"
 
-int ajouter_vaisseau_ennemi(Monde* monde, const int larg, const int vie, const Etats type) {
+int ajouter_vaisseau_ennemi(Monde* monde, const int vie, const Etats type) {
 	int x, y;
 
 	assert(NULL != monde);
@@ -33,7 +33,7 @@ int ajouter_vaisseau_ennemi(Monde* monde, const int larg, const int vie, const E
 		}
 	} while ( monde->tab[y][x].etats != VIDE );
 
-	ajouter_vaisseau_monde(monde, x, y, vie * type, larg, type);
+	ajouter_vaisseau_monde(monde, x, y, vie * type, type);
 	return 1;
 }
 

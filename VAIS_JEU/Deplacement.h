@@ -9,7 +9,6 @@
 Espace commentaire : Rien
 */
 typedef enum {   
-    ROTATION,
     NORD,
     SUD,
     EST,

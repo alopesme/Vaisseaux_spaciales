@@ -7,7 +7,7 @@
 #define PROBA_DEPLACEMENT_BOT 2 /* Probabilité qu'un bot change de direction chaque seconde. */
 
 /* Ajoute aléatoirement un vaisseau dans le monde. */
-int ajouter_vaisseau_ennemi(Monde* monde, const int larg, const int vie, const Etats type);
+int ajouter_vaisseau_ennemi(Monde* monde, const int vie, const Etats type);
 
 /* Change aléatoirement la direction d'un vaisseau. */
 void changer_direction_aleatoirement(Monde* monde, int i_vaisseau);

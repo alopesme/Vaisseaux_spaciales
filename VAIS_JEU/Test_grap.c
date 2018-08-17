@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <MLV/MLV_all.h>
 #include <string.h>
+#include "Bonus.h"
 #include "Menu_Option.h"
 #include "Clic_Menu_Option.h"
 #include "Couleur.h"
@@ -26,7 +27,7 @@ void test_affichage_image(const int l_fen, const int h_fen, const char* nom_im) 
 	assert(h_fen > 0);
 
 	MLV_create_window("affichage_image", "affichage_image", l_fen, h_fen);
-	dessiner_image(&image, nom_im, l_fen / 2, h_fen / 2, 0);
+	dessiner_image(&image, nom_im, l_fen / 2, h_fen / 2, 0, 0);
 	MLV_actualise_window();
 
 	MLV_wait_mouse(NULL, NULL);
@@ -42,7 +43,7 @@ void test_rotation_image(const int l_fen, const int h_fen, const char* nom_im) {
 	MLV_create_window("rotation_image", "rotation_image", l_fen, h_fen);
 	while (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) != MLV_PRESSED) {
 		afficher_background();
-		dessiner_vaisseau(&image, nom_im, l_fen / 2, h_fen / 2, h_fen / 15);
+		dessiner_vaisseau(&image, nom_im, l_fen / 2, h_fen / 2, l_fen / 15, h_fen / 15);
 		MLV_actualise_window();
 	}
 
@@ -72,7 +73,7 @@ void test_un_tir_image(const int l_fen, const int h_fen, const int larg, const c
 
 		if ((tir.coord_t.tir_x < l_fen && tir.coord_t.tir_x >= larg / 2) && (tir.coord_t.tir_y < l_fen && tir.coord_t.tir_y >= larg / 2)) {
 			afficher_background();
-			dessiner_image(&im, nom_im ,(int)(tir.coord_t.tir_x), (int)(tir.coord_t.tir_y), larg);
+			dessiner_image(&im, nom_im ,(int)(tir.coord_t.tir_x), (int)(tir.coord_t.tir_y), larg, larg);
 			calculer_tir(&(tir.coord_t), 1);
 			MLV_actualise_window();
 		}
@@ -90,7 +91,7 @@ void test_deplacement_vaisseau(const int l_fen, const int h_fen) {
 	assert(l_fen > 0);
 	assert(h_fen > 0);
 
-	initialiser_monde(&monde, l_fen, h_fen, 20);
+	initialiser_monde(&monde, l_fen, h_fen, 20, 20);
 
 	MLV_create_window("Déplacement vaisseau", "Déplacement vaisseau", l_fen, h_fen);
 
@@ -109,10 +110,10 @@ void test_deplacement_vaisseau(const int l_fen, const int h_fen) {
 		for (y = 0; y < monde.taille_y; y++) {
 			for (x = 0; x < monde.taille_x; x++) {
 				if ( monde.tab[y][x].etats == JOUEUR ) {
-					dessiner_image(&im, "../Images/v_joueur.png", x, y, 0);
+					dessiner_image(&im, "../Images/v_joueur.png", x, y, 0, 0);
 					if ( monde.vaisseaux[0].dep != STOP ) {
-						if (peut_se_deplacer(&monde, x, y, monde.tab[y][x].indice, 20) ) {
-							deplacer_vaisseau(&monde, x, y, 20);
+						if (peut_se_deplacer(&monde, x, y, monde.tab[y][x].indice) ) {
+							deplacer_vaisseau(&monde, x, y);
 							monde.vaisseaux[0].dep = STOP;
 						}
 					}
@@ -135,7 +136,7 @@ void test_monde(const int l_fen, const int h_fen, const int larg, const int nb_v
 	int x, y, tir_x, tir_y, debut, temps1, temps2, nb = 0;
 	assert(l_fen > 0);
 	assert(h_fen > 0);
-	initialiser_monde(&monde, l_fen / larg, h_fen / larg, larg);
+	initialiser_monde(&monde, l_fen / larg, h_fen / larg, larg, larg);
 	ajouter_mur_monde(&monde, 1, 1, 1, MUR);
 	debut = MLV_get_time() / 1000;
 	temps1 = debut;
@@ -149,21 +150,21 @@ void test_monde(const int l_fen, const int h_fen, const int larg, const int nb_v
 		
 		if (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED) {
 			MLV_get_mouse_position(&tir_x, &tir_y);
-			ajouter_tir_monde(&monde, tir_x, tir_y, larg, 0);
+			ajouter_tir_monde(&monde, tir_x, tir_y, 0);
 		}
 
 		temps2 = MLV_get_time() / 1000;
 		if ( temps2 != temps1 && nb < nb_vaisseaux) {
 			temps1 = temps2;
 			ajouter_bonus_aleatoire(&monde);
-			nb += ajouter_vaisseau_ennemi(&monde, larg, 1, BOT);
+			nb += ajouter_vaisseau_ennemi(&monde, 1, BOT);
 		}
 
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
-				dessiner_element(&monde, &son, &(images[monde.tab[y][x].etats]), x, y, larg);
+				dessiner_element(&monde, &son, &(images[monde.tab[y][x].etats]), x, y);
 
-				action_element(&monde, x, y, larg);
+				action_element(&monde, x, y);
 				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 			}
 			

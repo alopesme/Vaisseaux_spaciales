@@ -10,11 +10,11 @@ Main.o: Main.c Test.h Monde.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h Interf
 
 Deplacement.o: Deplacement.c Deplacement.h
 
-Monde.o: Monde.c Monde.h Bonus.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
+Monde.o: Monde.c Monde.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
 
 Test.o: Test.c Test.h Monde.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
 
-Test_grap.o: Test_grap.c Test_grap.h Interface_graphique.h Vaisseaux.h Deplacement.h Tires.h Vitesse.h Images.h Monde.h Jeu.h Music_Sons.h Page_Accueil.h Clic_Menu_Option.h Menu_Option.h Couleur.h Ia.h
+Test_grap.o: Test_grap.c Test_grap.h Interface_graphique.h Vaisseaux.h Deplacement.h Tires.h Vitesse.h Images.h Monde.h Jeu.h Music_Sons.h Page_Accueil.h Clic_Menu_Option.h Menu_Option.h Couleur.h Ia.h Bonus.h
 
 Tires.o: Tires.c Tires.h
 
@@ -26,7 +26,7 @@ Vaisseaux.o: Vaisseaux.c Vaisseaux.h Deplacement.h Tires.h Vitesse.h
 
 Vitesse.o: Vitesse.c Vitesse.h
 
-Bonus.o: Bonus.c Bonus.h
+Bonus.o: Bonus.c Bonus.h Monde.h Vaisseaux.h Vitesse.h Deplacement.h Tires.h
 
 Interface_graphique.o: Interface_graphique.c Interface_graphique.h Vaisseaux.h Deplacement.h Tires.h Vitesse.h Images.h Monde.h Music_Sons.h Couleur.h
 

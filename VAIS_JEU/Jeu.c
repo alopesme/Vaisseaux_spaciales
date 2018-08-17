@@ -43,8 +43,8 @@ static void matiere_monde(Monde *mo, const int x, const int y) {
 	}
 }
 
-static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
-	int t_x, t_y;
+static void tir_monde(Monde *mo, const int x, const int y) {
+	int t_x, t_y, x1, x2, y1, y2;
 	assert(NULL != mo);
 	assert(x >= 0);
 	assert(x < mo->taille_x);
@@ -53,15 +53,16 @@ static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
 
 	switch (mo->tab[y][x].etats) {
 		case TIR:
-			t_x = (int)mo->tab[y][x].tir.coord_t.tir_x - larg / 4;
-			t_y = (int)mo->tab[y][x].tir.coord_t.tir_y - larg / 4;
-			tir_touche_element(mo, x, y, larg);
+			t_x = (int)mo->tab[y][x].tir.coord_t.tir_x - mo->larg / 4;
+			t_y = (int)mo->tab[y][x].tir.coord_t.tir_y - mo->haut / 4;
+			tir_touche_element(mo, x, y);
 			
-
-			MLV_draw_rectangle(t_x, t_y, larg / 2, larg / 2, MLV_COLOR_GREEN);
-		
-			if(validation_tir(&(mo->tab[y][x].tir.coord_t), larg / 2, larg / 2, mo->taille_x * larg - larg / 2, mo->taille_y * larg - larg / 2)) {
-				if (configure_tir_monde(mo, mo->tab[y][x].tir, TIR, larg)) {
+			x1 = mo->larg / 2; x2 = mo->taille_x * mo->larg - x1;
+			y1 = mo->haut / 2; y2 = mo->taille_y * mo->haut - y1;
+			MLV_draw_rectangle(t_x, t_y, x1, mo->haut / 2, MLV_COLOR_GREEN);
+			
+			if(validation_tir(&(mo->tab[y][x].tir.coord_t), x1, y1, x2, y2)) {
+				if (configure_tir_monde(mo, mo->tab[y][x].tir, TIR)) {
 					mo->tab[y][x].etats = VIDE;
 					mo->tab[y][x].vie = VIDE;
 				}
@@ -76,8 +77,8 @@ static void tir_monde(Monde *mo, const int x, const int y, const int larg) {
 	}
 }
 
-static void vaisseaux_monde(Monde *mo, const int x, const int y, const int larg) {
-	int i_vaisseau;
+static void vaisseaux_monde(Monde *mo, const int x, const int y) {
+	int i_vaisseau, x1, y1;
 
 	assert(NULL != mo);
 	assert(x >= 0);
@@ -86,10 +87,13 @@ static void vaisseaux_monde(Monde *mo, const int x, const int y, const int larg)
 	assert(y < mo->taille_y);
 
 	i_vaisseau = mo->tab[y][x].indice;
+	x1 = mo->vaisseaux[i_vaisseau].x - mo->larg / 2; 
+	y1 = mo->vaisseaux[i_vaisseau].y - mo->haut / 2;
 
 	switch (mo->tab[y][x].etats) {
 		case JOUEUR:
-			MLV_draw_rectangle(mo->vaisseaux[0].x - larg / 2, mo->vaisseaux[0].y - larg / 2, larg, larg, MLV_COLOR_YELLOW);
+
+			MLV_draw_rectangle(x1, y1, mo->larg, mo->haut, MLV_COLOR_YELLOW);
 
 			if ( MLV_get_keyboard_state(MLV_KEYBOARD_z) == MLV_PRESSED )
 				mo->vaisseaux[0].dep = NORD;
@@ -103,15 +107,15 @@ static void vaisseaux_monde(Monde *mo, const int x, const int y, const int larg)
 		case BOT:
 		case MIBOSS:
 		case BOSSFINALE:
-			MLV_draw_rectangle(mo->vaisseaux[mo->tab[y][x].indice].x - larg / 2, mo->vaisseaux[mo->tab[y][x].indice].y - larg / 2, larg, larg, MLV_COLOR_YELLOW);
+			MLV_draw_rectangle(x1, y1, mo->larg, mo->haut, MLV_COLOR_YELLOW);
 			changer_direction_aleatoirement(mo, i_vaisseau);
 			break;
 		default: return;
 	}
 
 	if ( mo->vaisseaux[i_vaisseau].dep != STOP ) {
-		if (peut_se_deplacer(mo, x, y, i_vaisseau, larg)) {
-			deplacer_vaisseau(mo, x, y, larg);
+		if (peut_se_deplacer(mo, x, y, i_vaisseau)) {
+			deplacer_vaisseau(mo, x, y);
 		}
 	}
 
@@ -137,7 +141,7 @@ static void bonus_monde(Monde *mo, const int x, const int y) {
 	}
 }
 
-void action_element(Monde *mo, const int x, const int y, const int larg) {
+void action_element(Monde *mo, const int x, const int y) {
 	assert(NULL != mo);
 	assert(x >= 0);
 	assert(x < mo->taille_x);
@@ -148,10 +152,10 @@ void action_element(Monde *mo, const int x, const int y, const int larg) {
 		matiere_monde(mo, x, y);
 
 	if (mo->tab[y][x].etats > OBSTACLE && mo->tab[y][x].etats <= TIR) 
-		tir_monde(mo, x, y, larg);
+		tir_monde(mo, x, y);
 				
-	if (mo->tab[y][x].etats > TIR && mo->tab[y][x].etats <= BOSSFINALE) 
-		vaisseaux_monde(mo, x, y, larg);
+	if (mo->tab[y][x].etats >= JOUEUR && mo->tab[y][x].etats <= BOSSFINALE) 
+		vaisseaux_monde(mo, x, y);
 
 	if (mo->tab[y][x].etats > BOSSFINALE)
 		bonus_monde(mo, x, y);
@@ -167,7 +171,7 @@ void jouer(int taille_x, int taille_y) {
 	assert(taille_x > 0);
 	assert(taille_y > 0);
 
-	initialiser_monde(&monde, taille_x / larg, taille_y / larg, larg);
+	initialiser_monde(&monde, taille_x / larg, taille_y / larg, larg, larg);
 
 	debut = MLV_get_time() / 1000;
 	temps1 = debut;
@@ -177,7 +181,7 @@ void jouer(int taille_x, int taille_y) {
 
 		if (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED) {
 			MLV_get_mouse_position(&tir_x, &tir_y);
-			ajouter_tir_monde(&monde, tir_x, tir_y, larg, 0);
+			ajouter_tir_monde(&monde, tir_x, tir_y, 0);
 		}
 
 		/* On tente d'ajouter un bonus et un bot toutes les secondes. */
@@ -185,13 +189,13 @@ void jouer(int taille_x, int taille_y) {
 		if ( temps2 != temps1 && nb < 10) {
 			temps1 = temps2;
 			ajouter_bonus_aleatoire(&monde);
-			nb += ajouter_vaisseau_ennemi(&monde, larg, 1, BOT);
+			nb += ajouter_vaisseau_ennemi(&monde, 1, BOT);
 		}
 
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
-				dessiner_element(&monde, &son, &(images[monde.tab[y][x].etats]), x, y, larg);
-				action_element(&monde, x, y, larg);
+				dessiner_element(&monde, &son, &(images[monde.tab[y][x].etats]), x, y);
+				action_element(&monde, x, y);
 				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 
 			}

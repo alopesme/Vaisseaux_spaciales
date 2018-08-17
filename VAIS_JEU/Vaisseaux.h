@@ -27,12 +27,12 @@ void afficher_vaisseau_details(const Vaisseau vaisseau);
 void afficher_vaisseaux_details(const Vaisseau* vaisseaux, const int nb_vaisseaux);
 
 /*Cette fonction alloue les vaisseaux.*/
-Vaisseau* allouer_vaisseaux(const int nb_vaisseaux, const int x, const int y, const int larg);
+Vaisseau* allouer_vaisseaux(const int nb_vaisseaux, const int x, const int y, const int larg, const int haut);
 
 /* Calcule les coordonnées de la case du vaisseau après un déplacement (elle peut rester la même).*/
-void calculer_prochaine_case_vaisseau(Vaisseau *v, int* out_x, int* out_y, int larg);
+void calculer_prochaine_case_vaisseau(Vaisseau *v, int* out_x, int* out_y, int larg, int haut);
 
 /* Libere les vaisseaux.*/
-void libere_vaisseaux(Vaisseau* vaisseaux, const int nb_vaisseaux);
+void libere_vaisseaux(Vaisseau* vaisseaux);
 
 #endif

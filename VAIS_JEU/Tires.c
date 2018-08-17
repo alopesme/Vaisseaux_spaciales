@@ -27,9 +27,6 @@ void init_coord_tir(const int x, const int y, const int x_f, const int y_f, Coor
     coord_t->tir_y = (float)y;
     coord_t->d_y = y;
     coord_t->y_f = y_f;
-
-
-
 }
 
 

@@ -9,8 +9,11 @@
 #include "Monde.h"
 
 /*
-Espace commentaire : On utilise plus un tableau dynamique pour les bonus.
+Espace commentaire : 
 */
+
+/* Ajoute un bonus aléatoire dans le monde en fonction d'un taux de probabilité. */
+void ajouter_bonus_aleatoire(Monde* monde);
 
 int doit_detruire_bonus(Element bonus);
 
