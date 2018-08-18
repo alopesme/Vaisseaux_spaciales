@@ -51,8 +51,6 @@ static void tir_monde(Monde *mo, const int x, const int y) {
 	assert(y >= 0);
 	assert(y < mo->taille_y);
 
-	switch (mo->tab[y][x].etats) {
-		case TIR:
 			t_x = (int)mo->tab[y][x].tir.coord_t.tir_x - mo->larg / 4;
 			t_y = (int)mo->tab[y][x].tir.coord_t.tir_y - mo->haut / 4;
 			tir_touche_element(mo, x, y);
@@ -62,7 +60,7 @@ static void tir_monde(Monde *mo, const int x, const int y) {
 			MLV_draw_rectangle(t_x, t_y, x1, mo->haut / 2, MLV_COLOR_GREEN);
 			
 			if(validation_tir(&(mo->tab[y][x].tir.coord_t), x1, y1, x2, y2)) {
-				if (configure_tir_monde(mo, mo->tab[y][x].tir, TIR)) {
+				if (configure_tir_obstacle_monde(mo, mo->tab[y][x].tir, mo->tab[y][x].etats)) {
 					mo->tab[y][x].etats = VIDE;
 					mo->tab[y][x].vie = VIDE;
 				}
@@ -71,10 +69,7 @@ static void tir_monde(Monde *mo, const int x, const int y) {
 				mo->tab[y][x].etats = VIDE;
 				mo->tab[y][x].vie = VIDE;
 			}
-			break;
 			
-		default: break;
-	}
 }
 
 static void vaisseaux_monde(Monde *mo, const int x, const int y) {
@@ -148,10 +143,10 @@ void action_element(Monde *mo, const int x, const int y) {
 	assert(y >= 0);
 	assert(y < mo->taille_y);
 
-	if (mo->tab[y][x].etats <= OBSTACLE)
+	if (mo->tab[y][x].etats <= MUR_CASSE)
 		matiere_monde(mo, x, y);
 
-	if (mo->tab[y][x].etats > OBSTACLE && mo->tab[y][x].etats <= TIR) 
+	if (mo->tab[y][x].etats >= OBSTACLE && mo->tab[y][x].etats <= TIR) 
 		tir_monde(mo, x, y);
 				
 	if (mo->tab[y][x].etats >= JOUEUR && mo->tab[y][x].etats <= BOSSFINALE) 

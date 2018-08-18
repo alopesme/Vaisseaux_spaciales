@@ -55,7 +55,7 @@ int test_monde_tir(const int t_x, const int t_y, const int x_f, const int y_f) {
 	initialiser_monde(&mo, t_x + 1, t_y + 1, 20, 20);
 
 	tir = init_tirs(t_x / 2, t_y, x_f, y_f);
-	configure_tir_monde(&mo, tir, TIR);
+	configure_tir_obstacle_monde(&mo, tir, TIR);
 	printf("\n\n\n\n\n\n\n");
 	afficher_monde(mo);
 
@@ -64,7 +64,7 @@ int test_monde_tir(const int t_x, const int t_y, const int x_f, const int y_f) {
 			for (j = 0; j < mo.taille_y; ++j) {
 				if(mo.tab[i][j].etats == TIR) {
 					var = validation_tir(&(mo.tab[i][j].tir.coord_t), 0, 0, mo.taille_x, mo.taille_y);
-					configure_tir_monde(&mo, mo.tab[i][j].tir, TIR);
+					configure_tir_obstacle_monde(&mo, mo.tab[i][j].tir, TIR);
 					afficher_tir(mo.tab[i][j].tir);
 					mo.tab[i][j].etats = VIDE;
 					mo.tab[i][j].vie = VIDE;

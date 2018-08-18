@@ -18,8 +18,8 @@ Espace commentaire : Modifie `configure_tir_monde`.
 typedef enum {
 	VIDE,
 	MUR,
-	OBSTACLE,
 	MUR_CASSE,
+	OBSTACLE,
 	TIR,
 	EXPLOSION,
 	JOUEUR,
@@ -66,7 +66,7 @@ void afficher_monde_details(Monde monde);
 
 
 
-int configure_tir_monde(Monde* monde, Tir tir, Etats etats);
+int configure_tir_obstacle_monde(Monde* monde, Tir tir, Etats etats);
 
 /* Permet d'ajouter un tir dans monde. Ajoute d'abord dans le tableau.
  * Puis converti les coordonnees aux coordonnees de la fenetre graĥique.*/

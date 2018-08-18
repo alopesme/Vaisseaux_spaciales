@@ -32,6 +32,9 @@ void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, i
 			strcat(nom_image, "v_wall.png");
 			break;
 		case OBSTACLE:
+			dessin_x = (int)monde->tab[y][x].tir.coord_t.tir_x;
+			dessin_y = (int)monde->tab[y][x].tir.coord_t.tir_y;
+			strcat(nom_image, "asteroid.png");
 			break;
 		case MUR_CASSE:
 

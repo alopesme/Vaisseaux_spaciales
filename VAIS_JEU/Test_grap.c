@@ -157,6 +157,7 @@ void test_monde(const int l_fen, const int h_fen, const int larg, const int nb_v
 		if ( temps2 != temps1 && nb < nb_vaisseaux) {
 			temps1 = temps2;
 			ajouter_bonus_aleatoire(&monde);
+			ajouter_obstacle(&monde, 1, OBSTACLE);
 			nb += ajouter_vaisseau_ennemi(&monde, 1, BOT);
 		}
 

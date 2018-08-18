@@ -33,8 +33,11 @@ static int controle_vie(Monde *monde, Element *elem, Element *elem_modifiable) {
     int temp;
     assert(NULL != elem);
     if (elem->etats >= BONUS1) {
-        if (elem_modifiable->etats >= JOUEUR && elem_modifiable->etats <= BOSSFINALE) 
+        if (elem_modifiable->etats >= JOUEUR && elem_modifiable->etats <= BOSSFINALE) {
             elem_modifiable->vie += elem->etats;
+            elem->etats = VIDE;
+            elem->vie = 0;
+        } 
         return 0;
     }
 
@@ -133,7 +136,7 @@ static int condition_tir_vaisseau(Monde* monde, int x, int y) {
 }
 
 /* Verifie si le tire touche un element.*/
-static int condition_tir(Monde* monde, int x, int y) {
+static int condition_tir(Monde* monde, int x, int y, Etats type1, Etats type2) {
     int t_x, t_y, l, h;
     assert(NULL != monde);
     assert(x >= 0);
@@ -147,20 +150,20 @@ static int condition_tir(Monde* monde, int x, int y) {
    
 
     if ((monde->tab[t_y / monde->haut][t_x / monde->larg].etats != VIDE) &&
-        (monde->tab[t_y / monde->haut][t_x / monde->larg].etats > TIR || monde->tab[t_y / monde->haut][t_x / monde->larg].etats < TIR))
+        (monde->tab[t_y / monde->haut][t_x / monde->larg].etats > type2 || monde->tab[t_y / monde->haut][t_x / monde->larg].etats < type1))
         return controle_vie(monde, &(monde->tab[t_y / monde->haut][t_x / monde->larg]), &(monde->tab[y][x]));
 
     if ((monde->tab[t_y / monde->haut][(t_x + l) / monde->larg].etats != VIDE) &&
-        (monde->tab[t_y / monde->haut][(t_x + l) / monde->larg].etats < TIR || monde->tab[t_y / monde->haut][(t_x + l) / monde->larg].etats > TIR))
+        (monde->tab[t_y / monde->haut][(t_x + l) / monde->larg].etats < type1 || monde->tab[t_y / monde->haut][(t_x + l) / monde->larg].etats > type2))
         return controle_vie(monde, &(monde->tab[t_y / monde->haut][(t_x + l) / monde->larg]), &(monde->tab[y][x]));
     
     if ((monde->tab[(t_y + h) / monde->haut][t_x / monde->larg].etats != VIDE) &&
-        (monde->tab[(t_y + h) / monde->haut][t_x / monde->larg].etats < TIR || monde->tab[(t_y + h) / monde->haut][t_x / monde->larg].etats > TIR))
+        (monde->tab[(t_y + h) / monde->haut][t_x / monde->larg].etats < type1 || monde->tab[(t_y + h) / monde->haut][t_x / monde->larg].etats > type2))
         return controle_vie(monde, &(monde->tab[(t_y + h) / monde->haut][t_x / monde->larg]), &(monde->tab[y][x]));
     
 
     if ((monde->tab[(t_y + h) / monde->haut][(t_x + l) / monde->larg].etats != VIDE) &&
-        (monde->tab[(t_y + h) / monde->haut][(t_x + l) / monde->larg].etats < TIR || monde->tab[(t_y + h) / monde->haut][(t_x + l) / monde->larg].etats > TIR))
+        (monde->tab[(t_y + h) / monde->haut][(t_x + l) / monde->larg].etats < type1 || monde->tab[(t_y + h) / monde->haut][(t_x + l) / monde->larg].etats > type2))
         return controle_vie(monde, &(monde->tab[(t_y + h) / monde->haut][(t_x + l) / monde->larg]), &(monde->tab[y][x]));
     
     return 0;
@@ -180,7 +183,7 @@ static int condition_contact_vaisseau(Monde *monde, Rectangle *hitbox2, const Re
     assert(y < monde->taille_y);
 
     if (monde->tab[temp_y][temp_x].etats != VIDE) {
-        if ((monde->tab[temp_y][temp_x].etats <= MUR_CASSE && monde->tab[temp_y][temp_x].etats >= MUR) 
+        if ((monde->tab[temp_y][temp_x].etats <= OBSTACLE && monde->tab[temp_y][temp_x].etats >= MUR) 
             || (monde->tab[temp_y][temp_x].etats <= BONUS3 && monde->tab[temp_y][temp_x].etats >= BONUS1)){
             hitbox2->x = temp_x * hitbox1.largeur;
             hitbox2->y = temp_y * hitbox1.hauteur;
@@ -298,18 +301,18 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
     assert(x < monde->taille_x);
     assert(y >= 0);
     assert(y < monde->taille_y);
-    if (etats <= OBSTACLE) {
+    if (etats <= MUR_CASSE) {
         if (vie > 0 && vie < bvie)
-            etats += 2;
+            etats += 1;
         monde->tab[x][y].etats = etats;
         monde->tab[x][y].vie = vie;
         monde->tab[x][y].indice = -1;
     }
 }
 
-int configure_tir_monde(Monde* monde, Tir tir, Etats etats) {
+int configure_tir_obstacle_monde(Monde* monde, Tir tir, Etats etats) {
     assert(NULL != monde);
-    if ((etats <= TIR && etats >= TIR)) {
+    if ((etats <= TIR && etats >= OBSTACLE)) {
         if (monde->tab[(int)(tir.coord_t.tir_y / monde->haut)][(int)(tir.coord_t.tir_x / monde->larg)].etats == VIDE) {
             monde->tab[(int)(tir.coord_t.tir_y / monde->haut)][(int)(tir.coord_t.tir_x / monde->larg)].etats = etats;
             monde->tab[(int)(tir.coord_t.tir_y / monde->haut)][(int)(tir.coord_t.tir_x / monde->larg)].indice = -1;
@@ -360,7 +363,7 @@ int ajouter_tir_monde(Monde* monde, const int x, const int y, const int indice_v
     if (!calculer_tir(&(tir2.coord_t), monde->larg + monde->larg / 5))
         return 0;
 
-    if (!configure_tir_monde(monde, tir2, TIR))
+    if (!configure_tir_obstacle_monde(monde, tir2, TIR))
         return 0; 
     
     monde->tab[(int)(tir.coord_t.tir_y / monde->haut)][(int)(tir.coord_t.tir_x / monde->larg)].tir.coord_t.d_x = tir.coord_t.d_x;
@@ -378,14 +381,17 @@ int tir_touche_element(Monde *monde, const int x, const int y) {
     assert(x < monde->taille_x);
     assert(y < monde->taille_y);
 
-    if (monde->tab[y][x].etats < TIR && monde->tab[y][x].etats > TIR)
+    if (monde->tab[y][x].etats < OBSTACLE && monde->tab[y][x].etats > TIR)
         return 0;
 
     if (condition_tir_vaisseau(monde, x, y))
         return 1;
 
-    if (condition_tir(monde, x, y))
+    if (condition_tir(monde, x, y, OBSTACLE, TIR))
         return 1;
+
+    /*if (condition_tir(monde, x, y, TIR, TIR))
+        return 1;*/
     
     return 0;
 }
