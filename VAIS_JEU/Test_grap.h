@@ -21,8 +21,8 @@ void test_un_tir_image(const int l_fen, const int h_fen, const int larg, const c
 /* Déplace le vaisseau avec les flèches directionnelles. */
 void test_deplacement_vaisseau(const int l_fen, const int h_fen);
 
-void test_monde(const int l_fen, const int h_fen, const int larg, const int nb_vaisseaux);
+void test_monde(const int l_fen, const int h_fen, const int nb_vaisseaux);
 
-void test_jeu(const int l_fen, const int h_fen, const int larg, const int n_v);
+void test_jeu(const int l_fen, const int h_fen, const int n_v);
 
 #endif

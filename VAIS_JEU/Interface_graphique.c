@@ -20,7 +20,7 @@ void afficher_background() {
 
 void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, int y) {
 	int dessin_x = 0, dessin_y = 0;
-	char nom_image[20] = "../Images/";
+	char nom_image[50] = "../Images/";
 	/*int largeur_image, hauteur_image;*/
 
 	assert(NULL != monde);	
@@ -28,17 +28,16 @@ void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, i
 	dessin_y = y * monde->haut + monde->haut / 2;
 
 	switch ( monde->tab[y][x].etats ) {
-		case MUR:
-			strcat(nom_image, "v_wall.png");
+		case PLANETE:
+			strcat(nom_image, "planete1.png");
 			break;
 		case OBSTACLE:
 			dessin_x = (int)monde->tab[y][x].tir.coord_t.tir_x;
 			dessin_y = (int)monde->tab[y][x].tir.coord_t.tir_y;
 			strcat(nom_image, "asteroid.png");
 			break;
-		case MUR_CASSE:
-
-			strcat(nom_image, "v_crack2.png");
+		case PLANETE_CASSE:
+			strcat(nom_image, "planete_casse2.png");
 			break;
 		case TIR:
 			dessin_x = (int)monde->tab[y][x].tir.coord_t.tir_x;

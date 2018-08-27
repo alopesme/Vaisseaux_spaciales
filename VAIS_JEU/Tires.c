@@ -16,7 +16,7 @@ void afficher_tir(Tir tir) {
     afficher_coord_tir(tir.coord_t);  
 }
 
-void init_coord_tir(const int x, const int y, const int x_f, const int y_f, Coord_Tir *coord_t) {
+void init_coord_tir(const int x, const int y, const int x_f, const int y_f, const int larg, Coord_Tir *coord_t) {
     assert(x >= 0);
     assert(y >= 0);
     assert(NULL != coord_t);
@@ -30,7 +30,7 @@ void init_coord_tir(const int x, const int y, const int x_f, const int y_f, Coor
 }
 
 
-Tir init_tirs(const int x, const int y, const int x_f, const int y_f) {
+Tir init_tirs(const int x, const int y, const int x_f, const int y_f, const int larg) {
     Tir tir;
     assert(x >= 0);
     assert(y >= 0);
@@ -38,7 +38,7 @@ Tir init_tirs(const int x, const int y, const int x_f, const int y_f) {
     assert(y_f >= 0);
     
     tir.degat = LEGER;
-    init_coord_tir(x, y, x_f, y_f, &(tir.coord_t));    
+    init_coord_tir(x, y, x_f, y_f, larg, &(tir.coord_t));    
 
     return tir;
 }

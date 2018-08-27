@@ -40,11 +40,12 @@ int ajouter_obstacle(Monde* monde, const int vie, const Etats type) {
 	if (!position_element(monde, &x1, &y1, PROBA_OBSTACLE))
 		return 0;
 
-	if (!position_element(monde, &x2, &y2, 100))
-		return 0;
-	x1 = x1 * monde->larg + monde->larg / 2; y1 = y1 * monde->haut + monde->haut / 2;
-	x2 = x2 * monde->larg + monde->larg / 2; y2 = y2 * monde->haut + monde->haut / 2;
-    tir = init_tirs(x1, y1, x2, y2);
+	do {
+		x2 = MLV_get_random_integer(0, monde->taille_x * monde->larg);
+		y2 = MLV_get_random_integer(0, monde->taille_y * monde->haut);
+	}while(x1 == x2 && y2 == y1);
+	x1 = x1 * monde->larg + monde->larg / 2; 
+	y1 = y1 * monde->haut + monde->haut / 2; 
     configure_tir_obstacle_monde(monde, tir, type);
     return 1;
 }

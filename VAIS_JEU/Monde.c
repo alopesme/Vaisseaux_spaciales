@@ -183,7 +183,7 @@ static int condition_contact_vaisseau(Monde *monde, Rectangle *hitbox2, const Re
     assert(y < monde->taille_y);
 
     if (monde->tab[temp_y][temp_x].etats != VIDE) {
-        if ((monde->tab[temp_y][temp_x].etats <= OBSTACLE && monde->tab[temp_y][temp_x].etats >= MUR) 
+        if ((monde->tab[temp_y][temp_x].etats <= OBSTACLE && monde->tab[temp_y][temp_x].etats >= PLANETE) 
             || (monde->tab[temp_y][temp_x].etats <= BONUS3 && monde->tab[temp_y][temp_x].etats >= BONUS1)){
             hitbox2->x = temp_x * hitbox1.largeur;
             hitbox2->y = temp_y * hitbox1.hauteur;
@@ -301,7 +301,7 @@ void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y
     assert(x < monde->taille_x);
     assert(y >= 0);
     assert(y < monde->taille_y);
-    if (etats <= MUR_CASSE) {
+    if (etats <= PLANETE_CASSE) {
         if (vie > 0 && vie < bvie)
             etats += 1;
         monde->tab[x][y].etats = etats;
@@ -358,7 +358,7 @@ int ajouter_tir_monde(Monde* monde, const int x, const int y, const int indice_v
     assert(x >= 0);
     assert(y >= 0);
 
-    tir2 = init_tirs(monde->vaisseaux[indice_v].x, monde->vaisseaux[indice_v].y, x, y);
+    tir2 = init_tirs(monde->vaisseaux[indice_v].x, monde->vaisseaux[indice_v].y, x, y, 0);
     tir = tir2;
     if (!calculer_tir(&(tir2.coord_t), monde->larg + monde->larg / 5))
         return 0;
@@ -387,11 +387,11 @@ int tir_touche_element(Monde *monde, const int x, const int y) {
     if (condition_tir_vaisseau(monde, x, y))
         return 1;
 
-    if (condition_tir(monde, x, y, OBSTACLE, TIR))
+    if ((monde->tab[y][x].etats <= OBSTACLE && monde->tab[y][x].etats >= OBSTACLE) && condition_tir(monde, x, y, OBSTACLE, OBSTACLE))
         return 1;
 
-    /*if (condition_tir(monde, x, y, TIR, TIR))
-        return 1;*/
+    if ((monde->tab[y][x].etats <= TIR && monde->tab[y][x].etats >= TIR) && condition_tir(monde, x, y, TIR, TIR))
+        return 1;
     
     return 0;
 }
@@ -465,13 +465,13 @@ void deplacer_vaisseau(Monde* monde, const int x, const int y) {
 }
 
 
-void ajouter_mur_monde(Monde *monde, const int x, const int y, const int vie, const Etats type) {
+void ajouter_planete_monde(Monde *monde, const int x, const int y, const int vie, const Etats type) {
     assert(NULL != monde);
     assert(x >= 0);
     assert(x < monde->taille_x);
     assert(y >= 0);
     assert(y < monde->taille_y);
-    if (type <= MUR && type >= MUR) 
+    if (type <= PLANETE && type >= PLANETE) 
         configure_matiere_monde(monde, type, x, y, vie, 5);    
 }
 
@@ -488,10 +488,10 @@ void supprimer_vaisseau_monde(Monde* monde, int *i_vaisseau) {
     int x, y;
     assert(NULL != monde);
     assert(NULL != i_vaisseau);
+
     x = monde->vaisseaux[monde->nb_vaisseaux - 1].x / monde->larg;
     y = monde->vaisseaux[monde->nb_vaisseaux - 1].y / monde->haut;
     monde->vaisseaux[*i_vaisseau] = monde->vaisseaux[monde->nb_vaisseaux - 1];
     monde->tab[y][x].indice = *i_vaisseau;
     monde->nb_vaisseaux--;
-    *i_vaisseau = -1;
 }

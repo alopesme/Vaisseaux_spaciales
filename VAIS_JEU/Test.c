@@ -25,7 +25,7 @@ int test_tirs(const int x, const int y) {
 	assert(x >= 0);
 	assert(y >= 0);
 
-	tir = init_tirs(x, y, x + 10, y + 10);
+	tir = init_tirs(x, y, x + 10, y + 10, 0);
 	afficher_tir(tir);
 	return 1;
 }
@@ -54,7 +54,7 @@ int test_monde_tir(const int t_x, const int t_y, const int x_f, const int y_f) {
 	int i, j, var = 1;
 	initialiser_monde(&mo, t_x + 1, t_y + 1, 20, 20);
 
-	tir = init_tirs(t_x / 2, t_y, x_f, y_f);
+	tir = init_tirs(t_x / 2, t_y, x_f, y_f, 0);
 	configure_tir_obstacle_monde(&mo, tir, TIR);
 	printf("\n\n\n\n\n\n\n");
 	afficher_monde(mo);

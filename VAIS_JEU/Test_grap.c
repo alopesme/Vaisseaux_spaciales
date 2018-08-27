@@ -64,11 +64,11 @@ void test_un_tir_image(const int l_fen, const int h_fen, const int larg, const c
 
 
 	MLV_wait_mouse(&x, &y);
-	tir = init_tirs(l_fen / 2, h_fen / 2, x, y);
+	tir = init_tirs(l_fen / 2, h_fen / 2, x, y, 0);
 	while (MLV_get_mouse_button_state( MLV_BUTTON_RIGHT ) != MLV_PRESSED) {
 		if (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED) {
 			MLV_get_mouse_position(&x, &y);
-			tir = init_tirs(l_fen / 2, h_fen / 2, x, y);
+			tir = init_tirs(l_fen / 2, h_fen / 2, x, y, 0);
 		}
 
 		if ((tir.coord_t.tir_x < l_fen && tir.coord_t.tir_x >= larg / 2) && (tir.coord_t.tir_y < l_fen && tir.coord_t.tir_y >= larg / 2)) {
@@ -129,19 +129,20 @@ void test_deplacement_vaisseau(const int l_fen, const int h_fen) {
 }
 
 
-void test_monde(const int l_fen, const int h_fen, const int larg, const int nb_vaisseaux) {
+void test_monde(const int l_fen, const int h_fen, const int nb_vaisseaux) {
 	Monde monde;
 	MLV_Sound* son = NULL;
 	MLV_Image* images[BONUS3 + 1] = {NULL};
-	int x, y, tir_x, tir_y, debut, temps1, temps2, nb = 0;
+	int x, y, tir_x, tir_y, debut, temps1, temps2, nb = 0, larg = 30;
 	assert(l_fen > 0);
 	assert(h_fen > 0);
 	initialiser_monde(&monde, l_fen / larg, h_fen / larg, larg, larg);
-	ajouter_mur_monde(&monde, 1, 1, 1, MUR);
+	ajouter_planete_monde(&monde, 1, 1, 1, PLANETE);
+
 	debut = MLV_get_time() / 1000;
 	temps1 = debut;
 
-	while(MLV_get_mouse_button_state( MLV_BUTTON_RIGHT ) != MLV_PRESSED)  {
+	while(nb < nb_vaisseaux)  {
 		afficher_background();
 		if( MLV_get_keyboard_state( MLV_KEYBOARD_k ) == MLV_PRESSED ) {
 			afficher_monde(monde);
@@ -164,7 +165,6 @@ void test_monde(const int l_fen, const int h_fen, const int larg, const int nb_v
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
 				dessiner_element(&monde, &son, &(images[monde.tab[y][x].etats]), x, y);
-
 				action_element(&monde, x, y);
 				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 			}
@@ -182,15 +182,22 @@ void test_monde(const int l_fen, const int h_fen, const int larg, const int nb_v
 
 }
 
-void test_jeu(const int l_fen, const int h_fen, const int larg, const int n_v) {
+void test_jeu(const int l_fen, const int h_fen, const int n_v) {
 	int veri;
 	MLV_Music* musique;
 	MLV_create_window("Vaisseaux spatiales", "Vaisseaux spatiales", l_fen, h_fen);
 	MLV_init_audio( );
 	init_music(&musique, "../SONS_MUSIC/you-say-run-the-real-orchestral-my-hero-academia-deku.ogg");
-	veri = cliquer_sur_menu_depart(l_fen, h_fen);
-	if (veri == 1)
-		test_monde(l_fen, h_fen, larg, n_v);
+	do {
+		veri = cliquer_sur_menu_depart(l_fen, h_fen);
+		switch (veri) {
+			case 1 : test_monde(l_fen, h_fen, n_v); break;
+			case 2 : break;
+			case 3 : break;
+			default: break;
+		}
+	}while(veri != 4);
+
 	libere_musique(&musique);
 	MLV_free_window();
 }

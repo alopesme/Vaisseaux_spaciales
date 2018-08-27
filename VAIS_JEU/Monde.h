@@ -17,8 +17,8 @@ Espace commentaire : Modifie `configure_tir_monde`.
 
 typedef enum {
 	VIDE,
-	MUR,
-	MUR_CASSE,
+	PLANETE,
+	PLANETE_CASSE,
 	OBSTACLE,
 	TIR,
 	EXPLOSION,
@@ -102,8 +102,8 @@ void libere_monde(Monde* monde);
 
 void configure_matiere_monde(Monde* monde, Etats etats, const int x, const int y, const int vie, const int bvie);
 
-/* Ajoute un mur dans le monde aux coordonnées (x, y) dont le type et sa vie est donné.
- * Si la vie est negatif le mur est indestrutible.*/
-void ajouter_mur_monde(Monde *monde, const int x, const int y, const int vie, const Etats type);
+/* Ajoute un PLANETE dans le monde aux coordonnées (x, y) dont le type et sa vie est donné.
+ * Si la vie est negatif le PLANETE est indestrutible.*/
+void ajouter_planete_monde(Monde *monde, const int x, const int y, const int vie, const Etats type);
 
 #endif

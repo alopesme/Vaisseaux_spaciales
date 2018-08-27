@@ -18,6 +18,7 @@ typedef struct {
     int y_f;
     float tir_x;
     float tir_y;
+    int larg;
 }Coord_Tir;
 
 typedef enum {
@@ -40,10 +41,10 @@ void afficher_tir(Tir tir);
 void afficher_coord_tir(Coord_Tir coord_t);
 
 /* Initialise les variables dans `coord_t`*/
-void init_coord_tir(const int x, const int y, const int x_f, const int y_f, Coord_Tir *coord_t);
+void init_coord_tir(const int x, const int y, const int x_f, const int y_f, const int larg, Coord_Tir *coord_t);
 
 /* Initialise tirs.*/
-Tir init_tirs(const int x, const int y, const int x_f, const int y_f);
+Tir init_tirs(const int x, const int y, const int x_f, const int y_f, const int larg);
 
 /* Calculer l'équation de la droite `y=ax+b`.
  * Obtient `a` et `b` decale les tir_x et tir_y de 1.

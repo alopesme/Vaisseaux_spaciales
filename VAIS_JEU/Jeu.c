@@ -29,14 +29,10 @@ static void matiere_monde(Monde *mo, const int x, const int y) {
 		case VIDE:
 			mo->tab[y][x].vie = 0;
 			break;
-		/* Si c'est un mur ou un obstacle, on vérifie sa vie, et si elle est négative on le détruit. */
-		case MUR:
+		/* Si c'est une planete ou un obstacle, on vérifie sa vie, et si elle est négative on le détruit. */
+		case PLANETE:
 			configure_matiere_monde(mo, mo->tab[y][x].etats, x, y, mo->tab[y][x].vie, 5);
 			break;
-		case OBSTACLE:
-			if (mo->tab[y][x].vie <= 0)
-				mo->tab[y][x].etats = VIDE;
-				break;
 					/* Si c'est un tir, ... */
 		default:
 			break;
@@ -51,24 +47,24 @@ static void tir_monde(Monde *mo, const int x, const int y) {
 	assert(y >= 0);
 	assert(y < mo->taille_y);
 
-			t_x = (int)mo->tab[y][x].tir.coord_t.tir_x - mo->larg / 4;
-			t_y = (int)mo->tab[y][x].tir.coord_t.tir_y - mo->haut / 4;
-			tir_touche_element(mo, x, y);
+	t_x = (int)mo->tab[y][x].tir.coord_t.tir_x - mo->larg / 4;
+	t_y = (int)mo->tab[y][x].tir.coord_t.tir_y - mo->haut / 4;
+	tir_touche_element(mo, x, y);
 			
-			x1 = mo->larg / 2; x2 = mo->taille_x * mo->larg - x1;
-			y1 = mo->haut / 2; y2 = mo->taille_y * mo->haut - y1;
-			MLV_draw_rectangle(t_x, t_y, x1, mo->haut / 2, MLV_COLOR_GREEN);
+	x1 = mo->larg / 2; x2 = mo->taille_x * mo->larg - x1;
+	y1 = mo->haut / 2; y2 = mo->taille_y * mo->haut - y1;
+	MLV_draw_rectangle(t_x, t_y, x1, mo->haut / 2, MLV_COLOR_GREEN);
 			
-			if(validation_tir(&(mo->tab[y][x].tir.coord_t), x1, y1, x2, y2)) {
-				if (configure_tir_obstacle_monde(mo, mo->tab[y][x].tir, mo->tab[y][x].etats)) {
-					mo->tab[y][x].etats = VIDE;
-					mo->tab[y][x].vie = VIDE;
-				}
-			}
-			else {
-				mo->tab[y][x].etats = VIDE;
-				mo->tab[y][x].vie = VIDE;
-			}
+	if(validation_tir(&(mo->tab[y][x].tir.coord_t), x1, y1, x2, y2)) {
+		if (configure_tir_obstacle_monde(mo, mo->tab[y][x].tir, mo->tab[y][x].etats)) {
+			mo->tab[y][x].etats = VIDE;
+			mo->tab[y][x].vie = VIDE;
+		}
+	}
+	else {
+		mo->tab[y][x].etats = VIDE;
+		mo->tab[y][x].vie = VIDE;
+	}
 			
 }
 
@@ -143,7 +139,7 @@ void action_element(Monde *mo, const int x, const int y) {
 	assert(y >= 0);
 	assert(y < mo->taille_y);
 
-	if (mo->tab[y][x].etats <= MUR_CASSE)
+	if (mo->tab[y][x].etats <= PLANETE_CASSE)
 		matiere_monde(mo, x, y);
 
 	if (mo->tab[y][x].etats >= OBSTACLE && mo->tab[y][x].etats <= TIR) 

@@ -20,6 +20,9 @@
 #include <MLV/MLV_all.h>
 
 int main(int argc, char const *argv[]) {
+	int x, y;
+	y = atoi(argv[2]);
+	x = atoi(argv[1]);
 	/*
 	test_monde_vide(atoi(argv[1]), atoi(argv[2]));
 
@@ -42,7 +45,7 @@ int main(int argc, char const *argv[]) {
 	test_monde(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
 	*/
 
-	test_jeu(atoi(argv[1]), atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+	test_jeu(x, y, atoi(argv[3]));
 	
 	
 	return 0;
