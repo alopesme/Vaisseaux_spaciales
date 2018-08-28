@@ -25,13 +25,13 @@ static void matiere_monde(Monde *mo, const int x, const int y) {
 	assert(y >= 0);
 	assert(y < mo->taille_y);
 
-	switch (mo->tab[y][x].etats) {
+	switch (mo->tab[x][y].etats) {
 		case VIDE:
-			mo->tab[y][x].vie = 0;
+			mo->tab[x][y].vie = 0;
 			break;
 		/* Si c'est une planete ou un obstacle, on vérifie sa vie, et si elle est négative on le détruit. */
 		case PLANETE:
-			configure_matiere_monde(mo, mo->tab[y][x].etats, x, y, mo->tab[y][x].vie, 5);
+			configure_matiere_monde(mo, mo->tab[x][y].etats, x, y, mo->tab[x][y].vie, 5);
 			break;
 					/* Si c'est un tir, ... */
 		default:
@@ -47,23 +47,23 @@ static void tir_monde(Monde *mo, const int x, const int y) {
 	assert(y >= 0);
 	assert(y < mo->taille_y);
 
-	t_x = (int)mo->tab[y][x].tir.coord_t.tir_x - mo->larg / 4;
-	t_y = (int)mo->tab[y][x].tir.coord_t.tir_y - mo->haut / 4;
+	t_x = (int)mo->tab[x][y].tir.coord_t.tir_x - mo->larg / 4;
+	t_y = (int)mo->tab[x][y].tir.coord_t.tir_y - mo->haut / 4;
 	tir_touche_element(mo, x, y);
 			
 	x1 = mo->larg / 2; x2 = mo->taille_x * mo->larg - x1;
 	y1 = mo->haut / 2; y2 = mo->taille_y * mo->haut - y1;
 	MLV_draw_rectangle(t_x, t_y, x1, mo->haut / 2, MLV_COLOR_GREEN);
 			
-	if(validation_tir(&(mo->tab[y][x].tir.coord_t), x1, y1, x2, y2)) {
-		if (configure_tir_obstacle_monde(mo, mo->tab[y][x].tir, mo->tab[y][x].etats)) {
-			mo->tab[y][x].etats = VIDE;
-			mo->tab[y][x].vie = VIDE;
+	if(validation_tir(&(mo->tab[x][y].tir.coord_t), x1, y1, x2, y2)) {
+		if (configure_tir_obstacle_monde(mo, mo->tab[x][y].tir, mo->tab[x][y].etats)) {
+			mo->tab[x][y].etats = VIDE;
+			mo->tab[x][y].vie = VIDE;
 		}
 	}
 	else {
-		mo->tab[y][x].etats = VIDE;
-		mo->tab[y][x].vie = VIDE;
+		mo->tab[x][y].etats = VIDE;
+		mo->tab[x][y].vie = VIDE;
 	}
 			
 }
@@ -77,11 +77,11 @@ static void vaisseaux_monde(Monde *mo, const int x, const int y) {
 	assert(y >= 0);
 	assert(y < mo->taille_y);
 
-	i_vaisseau = mo->tab[y][x].indice;
+	i_vaisseau = mo->tab[x][y].indice;
 	x1 = mo->vaisseaux[i_vaisseau].x - mo->larg / 2; 
 	y1 = mo->vaisseaux[i_vaisseau].y - mo->haut / 2;
 
-	switch (mo->tab[y][x].etats) {
+	switch (mo->tab[x][y].etats) {
 		case JOUEUR:
 
 			MLV_draw_rectangle(x1, y1, mo->larg, mo->haut, MLV_COLOR_YELLOW);
@@ -119,13 +119,13 @@ static void bonus_monde(Monde *mo, const int x, const int y) {
 	assert(x < mo->taille_x);
 	assert(y >= 0);
 	assert(y < mo->taille_y);
-	switch(mo->tab[y][x].etats) {
+	switch(mo->tab[x][y].etats) {
 		/* Si c'est un bonus. */
 		case BONUS1:
 		case BONUS2:
 		case BONUS3:
-			if ( doit_detruire_bonus(mo->tab[y][x]) )
-				mo->tab[y][x].etats = VIDE;
+			if ( doit_detruire_bonus(mo->tab[x][y]) )
+				mo->tab[x][y].etats = VIDE;
 			break;
 
 		default: break;
@@ -139,16 +139,16 @@ void action_element(Monde *mo, const int x, const int y) {
 	assert(y >= 0);
 	assert(y < mo->taille_y);
 
-	if (mo->tab[y][x].etats <= PLANETE_CASSE)
+	if (mo->tab[x][y].etats <= PLANETE_CASSE)
 		matiere_monde(mo, x, y);
 
-	if (mo->tab[y][x].etats >= OBSTACLE && mo->tab[y][x].etats <= TIR) 
+	if (mo->tab[x][y].etats >= OBSTACLE && mo->tab[x][y].etats <= TIR) 
 		tir_monde(mo, x, y);
 				
-	if (mo->tab[y][x].etats >= JOUEUR && mo->tab[y][x].etats <= BOSSFINALE) 
+	if (mo->tab[x][y].etats >= JOUEUR && mo->tab[x][y].etats <= BOSSFINALE) 
 		vaisseaux_monde(mo, x, y);
 
-	if (mo->tab[y][x].etats > BOSSFINALE)
+	if (mo->tab[x][y].etats > BOSSFINALE)
 		bonus_monde(mo, x, y);
 }
 
@@ -185,7 +185,7 @@ void jouer(int taille_x, int taille_y) {
 
 		for (y = 0; y < monde.taille_y; ++y) {
 			for (x = 0; x < monde.taille_x; ++x) {
-				dessiner_element(&monde, &son, &(images[monde.tab[y][x].etats]), x, y);
+				dessiner_element(&monde, &son, &(images[monde.tab[x][y].etats]), x, y);
 				action_element(&monde, x, y);
 				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 

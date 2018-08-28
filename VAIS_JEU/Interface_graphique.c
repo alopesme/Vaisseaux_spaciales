@@ -27,39 +27,38 @@ void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, i
 	dessin_x = x * monde->larg + monde->larg / 2;
 	dessin_y = y * monde->haut + monde->haut / 2;
 
-	switch ( monde->tab[y][x].etats ) {
+	switch ( monde->tab[x][y].etats ) {
 		case PLANETE:
 			strcat(nom_image, "planete1.png");
 			break;
 		case OBSTACLE:
-			dessin_x = (int)monde->tab[y][x].tir.coord_t.tir_x;
-			dessin_y = (int)monde->tab[y][x].tir.coord_t.tir_y;
+			dessin_x = (int)monde->tab[x][y].tir.coord_t.tir_x;
+			dessin_y = (int)monde->tab[x][y].tir.coord_t.tir_y;
 			strcat(nom_image, "asteroid.png");
 			break;
 		case PLANETE_CASSE:
 			strcat(nom_image, "planete_casse2.png");
 			break;
 		case TIR:
-			dessin_x = (int)monde->tab[y][x].tir.coord_t.tir_x;
-			dessin_y = (int)monde->tab[y][x].tir.coord_t.tir_y;
+			dessin_x = (int)monde->tab[x][y].tir.coord_t.tir_x;
+			dessin_y = (int)monde->tab[x][y].tir.coord_t.tir_y;
 			strcat(nom_image, "v_beam.png");
 			break;
 		case EXPLOSION:
-
 			strcat(nom_image, "explosion.png");
 			effets_speciaux(son, "../SONS_MUSIC/small_blast.ogg");
-			monde->tab[y][x].etats = VIDE;
+			monde->tab[x][y].etats = VIDE;
 
 			break;
 		case JOUEUR:
-			dessin_x = monde->vaisseaux[monde->tab[y][x].indice].x;
-			dessin_y = monde->vaisseaux[monde->tab[y][x].indice].y;
+			dessin_x = monde->vaisseaux[monde->tab[x][y].indice].x;
+			dessin_y = monde->vaisseaux[monde->tab[x][y].indice].y;
 			strcat(nom_image, "v_joueur.png");
 			dessiner_vaisseau(image, nom_image, dessin_x, dessin_y, monde->larg, monde->haut);
 			return;
 		case BOT:
-			dessin_x = monde->vaisseaux[monde->tab[y][x].indice].x;
-			dessin_y = monde->vaisseaux[monde->tab[y][x].indice].y;
+			dessin_x = monde->vaisseaux[monde->tab[x][y].indice].x;
+			dessin_y = monde->vaisseaux[monde->tab[x][y].indice].y;
 			strcat(nom_image, "v_bot.png");
 			break;
 		case MIBOSS:
@@ -83,7 +82,7 @@ void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, i
 	
 	MLV_resize_image_with_proportions(image, (int) monde->taille_x * (dim / 100.0), (int) monde->taille_y * (dim / 100.0));
 
-	if ( monde->tab[y][x].etats == JOUEUR )
+	if ( monde->tab[x][y].etats == JOUEUR )
 		rotation_vaisseau(&image, x, y);
 
 	MLV_get_image_size(image, &largeur_image, &hauteur_image);

@@ -162,9 +162,9 @@ void test_monde(const int l_fen, const int h_fen, const int nb_vaisseaux) {
 			nb += ajouter_vaisseau_ennemi(&monde, 1, BOT);
 		}
 
-		for (y = 0; y < monde.taille_y; ++y) {
-			for (x = 0; x < monde.taille_x; ++x) {
-				dessiner_element(&monde, &son, &(images[monde.tab[y][x].etats]), x, y);
+		for (x = 0; x < monde.taille_x; ++x) {
+			for (y = 0; y < monde.taille_y; ++y) {
+				dessiner_element(&monde, &son, &(images[monde.tab[x][y].etats]), x, y);
 				action_element(&monde, x, y);
 				MLV_draw_rectangle(x * larg, y * larg, larg, larg, MLV_COLOR_RED);
 			}
