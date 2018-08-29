@@ -19,6 +19,9 @@ Espace commentaire : `dessiner_image` utilise charger_image et liberer_image aus
 /* Cette fois permet de charger l'image et la redimisionner.*/
 void charger_image(MLV_Image** image, const char* nom_image, const int larg, const int haut);
 
+/* Cette fonction charger et dessiner le fond.*/
+void dessiner_fond(MLV_Image** image, const char* nom_image, const int larg, const int haut);
+
 /* Cette fonction dessine l'image.*/
 void dessiner_image(MLV_Image** image, const char* nom_image, const int x, const int y, const int larg, const int haut);
 

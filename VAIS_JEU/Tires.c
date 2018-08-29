@@ -8,7 +8,8 @@
 void afficher_coord_tir(Coord_Tir coord_t) {
     printf("d_x : %d // d_y : %d\n", coord_t.d_x, coord_t.d_y);
     printf("x_f : %d // y_f : %d\n", coord_t.x_f, coord_t.y_f);
-    printf("tir_x : %f // tir_y : %f\n\n", coord_t.tir_x, coord_t.tir_y);
+    printf("tir_x : %f // tir_y : %f\n", coord_t.tir_x, coord_t.tir_y);
+    printf("larg %d\n\n", coord_t.larg);
 }
 
 void afficher_tir(Tir tir) {
@@ -27,6 +28,7 @@ void init_coord_tir(const int x, const int y, const int x_f, const int y_f, cons
     coord_t->tir_y = (float)y;
     coord_t->d_y = y;
     coord_t->y_f = y_f;
+    coord_t->larg = larg;
 }
 
 

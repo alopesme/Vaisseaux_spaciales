@@ -33,7 +33,7 @@ static int position_element(Monde* monde, int *x, int *y, int proba) {
 	return 1;
 }
 
-int ajouter_obstacle(Monde* monde, const int vie, const Etats type) {
+int ajouter_obstacle(Monde* monde, const int vie, const int larg, const Etats type) {
 	int x1, y1, x2, y2;
 	Tir tir;
 	assert(NULL != monde);
@@ -46,6 +46,7 @@ int ajouter_obstacle(Monde* monde, const int vie, const Etats type) {
 	}while(x1 == x2 && y2 == y1);
 	x1 = x1 * monde->larg + monde->larg / 2; 
 	y1 = y1 * monde->haut + monde->haut / 2; 
+	tir = init_tirs(x1, y1, x2, y2, larg);
     configure_tir_obstacle_monde(monde, tir, type);
     return 1;
 }

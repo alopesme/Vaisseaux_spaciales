@@ -14,16 +14,25 @@
 #include "Interface_graphique.h"
 
 
-void afficher_background() {
-	MLV_clear_window(FOND);
+void afficher_background(Monde* monde, MLV_Image** image) {
+	char nom_image[50] = "../Images/espace2.png";
+	int x, y;
+	assert(NULL != monde);
+	x = MLV_get_window_width();
+	y = MLV_get_window_height();
+	dessiner_fond(image, nom_image, x, y);
 }
 
 void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, int y) {
-	int dessin_x = 0, dessin_y = 0;
+	int dessin_x = 0, dessin_y = 0, l, h;
 	char nom_image[50] = "../Images/";
-	/*int largeur_image, hauteur_image;*/
+	assert(x >= 0);
+	assert(x < monde->taille_x);
+	assert(y >= 0);
+	assert(y < monde->taille_y);
+	assert(NULL != monde);
 
-	assert(NULL != monde);	
+	l = monde->larg; h = monde->haut;
 	dessin_x = x * monde->larg + monde->larg / 2;
 	dessin_y = y * monde->haut + monde->haut / 2;
 
@@ -42,6 +51,7 @@ void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, i
 		case TIR:
 			dessin_x = (int)monde->tab[x][y].tir.coord_t.tir_x;
 			dessin_y = (int)monde->tab[x][y].tir.coord_t.tir_y;
+			l = h = monde->tab[x][y].tir.coord_t.larg;
 			strcat(nom_image, "v_beam.png");
 			break;
 		case EXPLOSION:
@@ -54,7 +64,7 @@ void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, i
 			dessin_x = monde->vaisseaux[monde->tab[x][y].indice].x;
 			dessin_y = monde->vaisseaux[monde->tab[x][y].indice].y;
 			strcat(nom_image, "v_joueur.png");
-			dessiner_vaisseau(image, nom_image, dessin_x, dessin_y, monde->larg, monde->haut);
+			dessiner_vaisseau(image, nom_image, dessin_x, dessin_y, l, h);
 			return;
 		case BOT:
 			dessin_x = monde->vaisseaux[monde->tab[x][y].indice].x;
@@ -77,7 +87,7 @@ void dessiner_element(Monde* monde, MLV_Sound** son, MLV_Image** image, int x, i
 		default:
 			return;
 	}
-	dessiner_image(image, nom_image, dessin_x, dessin_y, monde->larg, monde->haut);
+	dessiner_image(image, nom_image, dessin_x, dessin_y, l, h);
 	/*image = MLV_load_image(nom_image);
 	
 	MLV_resize_image_with_proportions(image, (int) monde->taille_x * (dim / 100.0), (int) monde->taille_y * (dim / 100.0));

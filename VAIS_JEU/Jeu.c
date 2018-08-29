@@ -40,20 +40,17 @@ static void matiere_monde(Monde *mo, const int x, const int y) {
 }
 
 static void tir_monde(Monde *mo, const int x, const int y) {
-	int t_x, t_y, x1, x2, y1, y2;
+	int x1, x2, y1, y2, l;
 	assert(NULL != mo);
 	assert(x >= 0);
 	assert(x < mo->taille_x);
 	assert(y >= 0);
 	assert(y < mo->taille_y);
-
-	t_x = (int)mo->tab[x][y].tir.coord_t.tir_x - mo->larg / 4;
-	t_y = (int)mo->tab[x][y].tir.coord_t.tir_y - mo->haut / 4;
+	l = mo->tab[x][y].tir.coord_t.larg;
 	tir_touche_element(mo, x, y);
 			
-	x1 = mo->larg / 2; x2 = mo->taille_x * mo->larg - x1;
-	y1 = mo->haut / 2; y2 = mo->taille_y * mo->haut - y1;
-	MLV_draw_rectangle(t_x, t_y, x1, mo->haut / 2, MLV_COLOR_GREEN);
+	x1 = mo->larg / 2; x2 = mo->taille_x * mo->larg - (l / 2);
+	y1 = mo->haut / 2; y2 = mo->taille_y * mo->haut - (l / 2);
 			
 	if(validation_tir(&(mo->tab[x][y].tir.coord_t), x1, y1, x2, y2)) {
 		if (configure_tir_obstacle_monde(mo, mo->tab[x][y].tir, mo->tab[x][y].etats)) {
@@ -69,7 +66,7 @@ static void tir_monde(Monde *mo, const int x, const int y) {
 }
 
 static void vaisseaux_monde(Monde *mo, const int x, const int y) {
-	int i_vaisseau, x1, y1;
+	int i_vaisseau;
 
 	assert(NULL != mo);
 	assert(x >= 0);
@@ -78,13 +75,10 @@ static void vaisseaux_monde(Monde *mo, const int x, const int y) {
 	assert(y < mo->taille_y);
 
 	i_vaisseau = mo->tab[x][y].indice;
-	x1 = mo->vaisseaux[i_vaisseau].x - mo->larg / 2; 
-	y1 = mo->vaisseaux[i_vaisseau].y - mo->haut / 2;
 
 	switch (mo->tab[x][y].etats) {
 		case JOUEUR:
 
-			MLV_draw_rectangle(x1, y1, mo->larg, mo->haut, MLV_COLOR_YELLOW);
 
 			if ( MLV_get_keyboard_state(MLV_KEYBOARD_z) == MLV_PRESSED )
 				mo->vaisseaux[0].dep = NORD;
@@ -98,7 +92,6 @@ static void vaisseaux_monde(Monde *mo, const int x, const int y) {
 		case BOT:
 		case MIBOSS:
 		case BOSSFINALE:
-			MLV_draw_rectangle(x1, y1, mo->larg, mo->haut, MLV_COLOR_YELLOW);
 			changer_direction_aleatoirement(mo, i_vaisseau);
 			break;
 		default: return;
@@ -155,7 +148,7 @@ void action_element(Monde *mo, const int x, const int y) {
 void jouer(int taille_x, int taille_y) {
 	Monde monde;
 	MLV_Sound* son = NULL;
-	MLV_Image* images[BONUS3 + 1] = {NULL};
+	MLV_Image* images[BONUS3 + 1] = {NULL}, *fond = NULL;
 	int x, y, tir_x, tir_y, larg = 30, nb = 0;
 	int debut, temps1, temps2;
 
@@ -168,11 +161,12 @@ void jouer(int taille_x, int taille_y) {
 	temps1 = debut;
 
 	while(MLV_get_mouse_button_state( MLV_BUTTON_RIGHT ) != MLV_PRESSED)  {
-		afficher_background();
+		
+		afficher_background(&monde, &fond);
 
 		if (MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED) {
 			MLV_get_mouse_position(&tir_x, &tir_y);
-			ajouter_tir_monde(&monde, tir_x, tir_y, 0);
+			ajouter_tir_monde(&monde, tir_x, tir_y, monde.larg, 0);
 		}
 
 		/* On tente d'ajouter un bonus et un bot toutes les secondes. */

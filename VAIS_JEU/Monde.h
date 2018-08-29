@@ -70,7 +70,7 @@ int configure_tir_obstacle_monde(Monde* monde, Tir tir, Etats etats);
 
 /* Permet d'ajouter un tir dans monde. Ajoute d'abord dans le tableau.
  * Puis converti les coordonnees aux coordonnees de la fenetre graĥique.*/
-int ajouter_tir_monde(Monde* monde, const int x, const int y, const int indice_v);
+int ajouter_tir_monde(Monde* monde, const int x, const int y, const int larg, const int indice_v);
 
 /* Verifie si le tir touche un element.
  * Si la vie de l'element est positif on enleve la vie de l'element avec la vie du tir.

@@ -8,7 +8,7 @@
 #define PROBA_OBSTACLE 70 /* Probabilité de faire apparaitre un obstacle à chaque seconde. */
 
 /* Ajoute aléatoirement un OBSTACLE dans le monde.*/
-int ajouter_obstacle(Monde* monde, const int vie, const Etats type);
+int ajouter_obstacle(Monde* monde, const int vie, const int larg, const Etats type);
 
 /* Ajoute aléatoirement un vaisseau dans le monde. */
 int ajouter_vaisseau_ennemi(Monde* monde, const int vie, const Etats type);

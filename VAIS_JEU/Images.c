@@ -9,12 +9,23 @@ void charger_image(MLV_Image** image, const char* nom_image, const int larg, con
 	assert(NULL != nom_image);
 	assert(larg >= 0);
 	assert(haut >= 0);
-	if (NULL == *image)
+	if (NULL == *image) {
 		*image = MLV_load_image(nom_image);
+		if (NULL == *image)
+			exit(EXIT_FAILURE);
+	}
 	/*MLV_resize_image_with_proportions(*image, larg, haut);*/
 	MLV_resize_image(*image, larg, haut);
 }
 
+void dessiner_fond(MLV_Image** image, const char* nom_image, const int larg, const int haut) {
+	int larg_image, haut_image;
+	assert(larg >= 0);
+	assert(haut >= 0);
+	charger_image(image, nom_image, larg, haut);
+	MLV_get_image_size(*image, &larg_image, &haut_image);
+	MLV_draw_image(*image, 0, 0);
+}
 void dessiner_image(MLV_Image** image, const char* nom_image, const int x, const int y, const int larg, const int haut) {
 	int larg_image, haut_image;
 
